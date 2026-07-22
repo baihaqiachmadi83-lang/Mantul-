@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Unit 3 Reading – Latih kemampuan membaca tanda, label, menu, dan cerita pendek berbahasa Inggris." />
+  <title>Unit 3: Reading | MANTUL</title>
+
+  <link rel="stylesheet" href="css/design-system.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/animations.css" />
+  <link rel="stylesheet" href="css/feedback.css" />
+
+  <style>
+    /* ══════════════════════════════════════════════════════
+       READING PAGE – Page-specific styles
+       ══════════════════════════════════════════════════════ */
+    body { background: var(--surface); }
+
+    /* ── SESSION TABS ── */
+    .sess-tabs {
+      display: flex; gap: var(--space-2); overflow-x: auto;
+      scrollbar-width: none; -webkit-overflow-scrolling: touch;
+      padding-bottom: var(--space-1);
+    }
+    .sess-tabs::-webkit-scrollbar { display: none; }
+    .sess-tab {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: var(--space-2) var(--space-3); border-radius: var(--radius-full);
+      font-size: var(--font-size-sm); font-weight: var(--font-weight-semibold);
+      border: 1.5px solid var(--border); background: var(--card);
+      color: var(--text-muted); cursor: pointer; white-space: nowrap;
+      flex-shrink: 0; transition: all var(--transition-fast);
+      -webkit-tap-highlight-color: transparent;
+    }
+    .sess-tab.active  { background: var(--primary); border-color: var(--primary); color: white; }
+    .sess-tab.done    { background: var(--accent-50); border-color: var(--accent); color: var(--accent-700); }
+    .sess-tab.locked  { opacity: .4; cursor: not-allowed; pointer-events: none; }
+
+    /* ── PHASE STRIP ── */
+    .phase-strip { display: flex; align-items: center; gap: 0; }
+    .phase-node { display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; }
+    .phase-dot {
+      width: 30px; height: 30px; border-radius: 50%; display: flex;
+      align-items: center; justify-content: center; font-size: 13px;
+      font-weight: 700; transition: all var(--transition-base);
+      border: 2px solid transparent;
+    }
+    .phase-dot.done    { background: var(--accent); color: white; }
+    .phase-dot.active  { background: var(--primary); color: white; box-shadow: 0 0 0 4px var(--primary-100); }
+    .phase-dot.upcoming{ background: var(--surface-2); color: var(--text-faint); border-color: var(--border-2); }
+    .phase-label { font-size: 9px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .05em; color: var(--text-faint); text-align: center; }
+    .phase-label.active-label { color: var(--primary); }
+    .phase-line { flex: 1; height: 2px; background: var(--border); margin: 0 -4px;
+      position: relative; top: -10px; transition: background var(--transition-base); }
+    .phase-line.done { background: var(--accent); }
+
+    /* ── HERO CARD ── */
+    .sess-hero {
+      border-radius: var(--radius-2xl); padding: var(--space-5) var(--space-6);
+      color: white; position: relative; overflow: hidden; margin-bottom: var(--space-4);
+    }
+    .sess-hero-deco {
+      position: absolute; right: -10px; top: 50%; transform: translateY(-50%);
+      font-size: 5rem; opacity: .15; pointer-events: none; line-height: 1;
+    }
+
+    /* ── READING TEXT AREA ── */
+    .reading-box {
+      background: white; border-radius: var(--radius-xl);
+      padding: var(--space-6); box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border); position: relative;
+      font-family: var(--font-family);
+    }
+    .reading-box.style-sign {
+      background: #FEF2F2; border: 3px solid #DC2626; text-align: center;
+      color: #991B1B; font-weight: 800; font-size: 2rem;
+    }
+    .reading-box.style-menu {
+      background: #FFFBEB; border: 1px dashed #D97706; color: #78350F;
+    }
+    .reading-box.style-label {
+      background: #ECFDF5; border-left: 6px solid #059669; color: #064E3B;
+    }
+    .reading-box.style-story {
+      line-height: 1.8; font-size: 1.1rem; color: var(--text-main);
+    }
+
+    /* TTS Button & Highlight */
+    .btn-tts-large {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: var(--space-2) var(--space-4); border-radius: var(--radius-full);
+      background: var(--primary-50); color: var(--primary-700);
+      border: 1px solid var(--primary-200); font-weight: 700;
+      font-size: var(--font-size-sm); cursor: pointer; transition: all .2s;
+      margin-bottom: var(--space-4);
+    }
+    .btn-tts-large:hover { background: var(--primary-100); transform: translateY(-1px); }
+    .btn-tts-large.playing {
+      background: var(--primary); color: white; border-color: var(--primary);
+      animation: pulsePlay 1.5s infinite;
+    }
+    @keyframes pulsePlay {
+      0% { box-shadow: 0 0 0 0 rgba(37,99,235,.4); }
+      70% { box-shadow: 0 0 0 8px rgba(37,99,235,0); }
+      100% { box-shadow: 0 0 0 0 rgba(37,99,235,0); }
+    }
+
+    .word-highlight {
+      background: #FEF08A; /* yellow-200 */
+      border-radius: 4px; padding: 0 2px;
+      transition: background .1s;
+    }
+
+    /* ── GLOSSARY ── */
+    .gl-word {
+      border-bottom: 2px dotted var(--accent); cursor: pointer;
+      color: var(--accent-700); font-weight: 600; padding: 0 2px;
+      transition: background .2s;
+    }
+    .gl-word:hover { background: var(--accent-50); }
+    
+    /* Toast for glossary meaning */
+    .gl-toast {
+      position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(100px);
+      background: var(--text-main); color: var(--surface);
+      padding: var(--space-3) var(--space-5); border-radius: var(--radius-lg);
+      font-weight: 700; box-shadow: var(--shadow-lg); opacity: 0;
+      transition: all .3s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 1000;
+      display: flex; flex-direction: column; align-items: center; gap: 4px;
+    }
+    .gl-toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+    .gl-toast-en { font-size: 1.1rem; color: var(--accent); }
+    .gl-toast-id { font-size: var(--font-size-base); }
+
+    /* ── ACTIVITY TAG ── */
+    .act-tag {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 3px var(--space-2); border-radius: var(--radius-full);
+      font-size: 10px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: .07em; margin-bottom: var(--space-3);
+    }
+    .act-read  { background: var(--primary-100); color: var(--primary-700); }
+    .act-quiz  { background: var(--warm-100);    color: var(--warm-700); }
+
+    /* ── SCORE RING ── */
+    .score-ring {
+      width: 110px; height: 110px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto var(--space-4); position: relative;
+    }
+    .score-ring-inner {
+      width: 80px; height: 80px; border-radius: 50%; background: white;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="confetti-container" id="confetti-container" aria-hidden="true"></div>
+
+  <!-- GLOSSARY TOAST -->
+  <div id="gl-toast" class="gl-toast" aria-live="polite">
+    <span class="gl-toast-en" id="gl-en"></span>
+    <span class="gl-toast-id" id="gl-id"></span>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       NAVBAR
+       ══════════════════════════════════════════════════════ -->
+  <nav class="navbar" role="navigation" aria-label="Navigasi halaman">
+    <div class="container">
+      <div style="display: flex; align-items: center; gap: var(--space-4);">
+        <a href="index.html" class="btn-back" aria-label="Kembali ke beranda">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+          Beranda
+        </a>
+        <!-- Quick Tools -->
+        <div style="display: flex; gap: var(--space-2); align-items: center;">
+          <button onclick="toggleTheme()" class="btn" style="background: var(--surface-2); border-radius: var(--radius-full); width: 32px; height: 32px; padding: 0; display: flex; align-items: center; justify-content: center; color: var(--text-main); font-size: 14px; transition: transform 0.2s ease;" title="Ganti Mode (Siang/Malam)" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+            <span id="theme-icon">🌙</span>
+          </button>
+          <button onclick="unlockAllSteps()" class="btn" style="background: var(--surface-2); border-radius: var(--radius-full); height: 32px; padding: 0 10px; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; color: var(--text-main); transition: transform 0.2s ease, color 0.2s ease;" title="Unlock Semua Step" onmouseover="this.style.transform='scale(1.05)'; this.style.color='var(--accent)'" onmouseout="this.style.transform='scale(1)'; this.style.color='var(--text-main)'">
+            🔓 Unlock
+          </button>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:var(--space-2);">
+        <span class="chip" style="background:var(--warm-100);color:var(--warm-700);">Unit 3</span>
+        <span style="font-size:var(--font-size-sm);font-weight:700;color:var(--text-main);">Reading</span>
+      </div>
+      <!-- XP counter -->
+      <div style="display:flex;align-items:center;gap:6px; background:var(--warm-50);border:1px solid var(--warm-200); border-radius:var(--radius-full);padding:4px var(--space-3);">
+        <span style="font-size:.9rem;" aria-hidden="true">⭐</span>
+        <span id="nav-xp" style="font-size:var(--font-size-xs);font-weight:800; color:var(--warm-700);">0 XP</span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ══════════════════════════════════════════════════════
+       MAIN
+       ══════════════════════════════════════════════════════ -->
+  <main class="page-content" id="main-content" style="padding-bottom:90px;">
+    <div class="container">
+
+      <!-- SESSION HERO -->
+      <div class="sess-hero anim-fade-in-up" id="sess-hero"
+        style="background:linear-gradient(135deg,var(--primary),var(--primary-700));">
+        <span class="sess-hero-deco" id="hero-deco" aria-hidden="true">🛑</span>
+        <div style="position:relative;z-index:1;">
+          <p style="font-size:10px;font-weight:800;text-transform:uppercase; letter-spacing:.09em;color:rgba(255,255,255,.65);margin-bottom:2px;">
+            UNIT 3 · READING</p>
+          <h1 id="hero-title" style="font-size:var(--font-size-xl);font-weight:800; color:white;margin-bottom:var(--space-3);">Papan Tanda</h1>
+          <p id="hero-desc" style="font-size:var(--font-size-sm);color:rgba(255,255,255,.8); margin-bottom:var(--space-3);line-height:1.5;">
+            Memahami tanda dan peringatan di tempat umum.</p>
+          <div class="progress-bar-track" style="background:rgba(255,255,255,.2);">
+            <div id="hero-bar" class="progress-bar-fill" style="width:0%;background:white;transition:width .8s ease;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SESSION TABS -->
+      <div class="sess-tabs anim-fade-in-up delay-100" role="tablist"
+        aria-label="Pilih jenis bacaan" style="margin-bottom:var(--space-4);">
+        <button class="sess-tab active" id="tab-0" role="tab" onclick="App.goTo(0)">🛑 Papan Tanda</button>
+        <button class="sess-tab" id="tab-1" role="tab" onclick="App.goTo(1)">📋 Menu & Harga</button>
+        <button class="sess-tab" id="tab-2" role="tab" onclick="App.goTo(2)">🏷️ Label Produk</button>
+        <button class="sess-tab" id="tab-3" role="tab" onclick="App.goTo(3)">📖 Cerita Pendek</button>
+      </div>
+
+      <!-- PHASE PROGRESS -->
+      <div class="card anim-fade-in-up delay-200" style="padding:var(--space-4);margin-bottom:var(--space-4);" id="phase-panel">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--space-3);">
+          <span style="font-size:10px;font-weight:800;color:var(--text-faint); text-transform:uppercase;letter-spacing:.07em;">Tahap Latihan</span>
+          <span id="phase-label-text" style="font-size:var(--font-size-xs);color:var(--primary);font-weight:700;"></span>
+        </div>
+        <div class="phase-strip" id="phase-strip"></div>
+      </div>
+
+      <!-- ACTIVITY AREA -->
+      <div id="activity-area" class="anim-fade-in-up delay-300">
+        <!-- Rendered by JS -->
+      </div>
+
+    </div>
+  </main>
+
+  <script src="js/app.js"></script>
+  <script src="js/quiz-store.js"></script>
+  <script src="js/feedback.js"></script>
+  <script>
+  'use strict';
+
+  /* ════════════════════════════════════════════════════════
+     1. READING DATA (Texts & Comprehension)
+     ════════════════════════════════════════════════════════ */
+  const READING_DATA = [
+    {
+      id: 0, title: 'Papan Tanda', emoji: '🛑', bg: 'linear-gradient(135deg,#DC2626,#991B1B)',
+      desc: 'Memahami tanda dan peringatan di tempat umum.',
+      textType: 'style-sign',
+      textHtml: `
+        <div style="margin-bottom:20px;">
+          <span id="w0">PLEASE</span> <span id="w1">KEEP</span> <span id="w2">THE</span> <span id="w3">DOOR</span> <span id="w4">CLOSED</span>
+        </div>
+        <div style="font-size:1rem;color:#B91C1C;">
+          <span id="w5">NO</span> <span id="w6" class="gl-word" onclick="App.showGlossary('smoking', 'merokok')">SMOKING</span> <span id="w7">IN</span> <span id="w8">THIS</span> <span id="w9">AREA</span>
+        </div>
+      `,
+      plainText: "Please keep the door closed. No smoking in this area.",
+      quiz: [
+        {
+          id:'r0_1', text:'What should we do with the door based on the sign?',
+          options: ['Open it', 'Keep it closed', 'Lock it', 'Fix it'],
+          correct: 1, whyCorrect: '"Keep the door closed" artinya "Biarkan pintu tertutup".',
+          whyWrong: ['"Open" means membuka.', null, 'There is no instruction to lock.', 'There is no instruction to fix.'],
+          example: 'Please keep the door closed.'
+        },
+        {
+          id:'r0_2', text:'Are visitors allowed to smoke in this area?',
+          options: ['Yes, they are', 'Only outside', 'No, they are not', 'Yes, during breaks'],
+          correct: 2, whyCorrect: '"No smoking" artinya dilarang merokok.',
+          whyWrong: ['Contradicts the "No smoking" sign.', 'The sign does not mention outside.', null, 'There is no time exception.'],
+          example: 'No smoking in this area.'
+        }
+      ]
+    },
+    {
+      id: 1, title: 'Menu Makanan', emoji: '📋', bg: 'linear-gradient(135deg,#D97706,#92400E)',
+      desc: 'Membaca daftar menu dan harganya di warung.',
+      textType: 'style-menu',
+      textHtml: `
+        <h3 style="text-align:center;margin-bottom:15px;font-size:1.5rem;">Warung Makan "Suka Rasa"</h3>
+        <ul style="list-style:none;padding:0;margin:0;">
+          <li style="display:flex;justify-content:space-between;margin-bottom:10px;border-bottom:1px dashed #FCD34D;">
+            <span><span id="w0">Fried</span> <span id="w1">Rice</span></span>
+            <span id="w2">Rp 15.000</span>
+          </li>
+          <li style="display:flex;justify-content:space-between;margin-bottom:10px;border-bottom:1px dashed #FCD34D;">
+            <span><span id="w3">Fried</span> <span id="w4">Chicken</span></span>
+            <span id="w5">Rp 20.000</span>
+          </li>
+          <li style="display:flex;justify-content:space-between;margin-bottom:10px;border-bottom:1px dashed #FCD34D;">
+            <span><span id="w6">Ice</span> <span id="w7">Tea</span></span>
+            <span id="w8">Rp 5.000</span>
+          </li>
+          <li style="display:flex;justify-content:space-between;margin-bottom:10px;">
+            <span><span id="w9">Mineral</span> <span id="w10">Water</span></span>
+            <span id="w11">Rp 3.000</span>
+          </li>
+        </ul>
+      `,
+      plainText: "Fried Rice, fifteen thousand rupiah. Fried Chicken, twenty thousand rupiah. Ice Tea, five thousand rupiah. Mineral Water, three thousand rupiah.",
+      quiz: [
+        {
+          id:'r1_1', text:'How much is the Fried Rice?',
+          options: ['Rp 5.000', 'Rp 15.000', 'Rp 20.000', 'Rp 3.000'],
+          correct: 1, whyCorrect: 'Di menu tertulis Fried Rice Rp 15.000.',
+          whyWrong: ['That is the price of Ice Tea.', null, 'That is the price of Fried Chicken.', 'That is the price of Mineral Water.'],
+          example: 'Fried Rice is fifteen thousand rupiah.'
+        }
+      ]
+    },
+    {
+      id: 2, title: 'Label Produk', emoji: '🏷️', bg: 'linear-gradient(135deg,#059669,#065F46)',
+      desc: 'Memahami instruksi dan tanggal kedaluwarsa pada kemasan.',
+      textType: 'style-label',
+      textHtml: `
+        <h3 style="margin-bottom:10px;font-size:1.3rem;">Fresh Milk</h3>
+        <p style="margin-bottom:8px;">
+          <strong id="w0">Ingredients:</strong> <span id="w1">100%</span> <span id="w2" class="gl-word" onclick="App.showGlossary('cow\\'s milk', 'susu sapi')">cow's milk</span>.
+        </p>
+        <p style="margin-bottom:8px;">
+          <strong id="w3">Store</strong> <span id="w4">in</span> <span id="w5">a</span> <span id="w6" class="gl-word" onclick="App.showGlossary('cool', 'dingin')">cool</span> <span id="w7">place</span>.
+        </p>
+        <p style="color:#047857;font-weight:bold;">
+          <span id="w8" class="gl-word" onclick="App.showGlossary('Best before', 'Baik digunakan sebelum')">Best before:</span> <span id="w9">25</span> <span id="w10">October</span> <span id="w11">2026</span>.
+        </p>
+      `,
+      plainText: "Ingredients: 100% cow's milk. Store in a cool place. Best before: 25 October 2026.",
+      quiz: [
+        {
+          id:'r2_1', text:'Where should you store this milk?',
+          options: ['In a hot place', 'Outside', 'In a cool place', 'Under the sunlight'],
+          correct: 2, whyCorrect: '"Store in a cool place" artinya simpan di tempat yang sejuk/dingin (seperti kulkas).',
+          whyWrong: ['A hot place will spoil the milk.', 'Outside is not recommended.', null, 'Sunlight will spoil the milk.'],
+          example: 'Store in a cool place.'
+        },
+        {
+          id:'r2_2', text:'When is the best time to consume this milk?',
+          options: ['On 25 October 2026', 'Before 25 October 2026', 'After 25 October 2026', 'Anytime'],
+          correct: 1, whyCorrect: '"Best before" berarti baik digunakan SEBELUM tanggal yang tertera.',
+          whyWrong: ['The quality might have decreased on that exact date.', null, 'It might be expired after that date.', 'Fresh milk has an expiration date.'],
+          example: 'Best before: 25 October 2026.'
+        }
+      ]
+    },
+    {
+      id: 3, title: 'Cerita Pendek', emoji: '📖', bg: 'linear-gradient(135deg,#7C3AED,#4C1D95)',
+      desc: 'Membaca narasi pendek tentang rutinitas.',
+      textType: 'style-story',
+      textHtml: `
+        <h3 style="margin-bottom:10px;font-size:1.4rem;">Joko the Farmer</h3>
+        <p style="text-align:justify;">
+          <span id="w0">Joko</span> <span id="w1">is</span> <span id="w2">a</span> <span id="w3" class="gl-word" onclick="App.showGlossary('farmer', 'petani')">farmer</span>. 
+          <span id="w4">He</span> <span id="w5">wakes</span> <span id="w6">up</span> <span id="w7">at</span> <span id="w8">4</span> <span id="w9">AM</span> <span id="w10">every</span> <span id="w11">morning</span>. 
+          <span id="w12">He</span> <span id="w13">goes</span> <span id="w14">to</span> <span id="w15">the</span> <span id="w16" class="gl-word" onclick="App.showGlossary('field', 'sawah/ladang')">field</span> 
+          <span id="w17">to</span> <span id="w18">plant</span> <span id="w19">rice</span>. 
+          <span id="w20">He</span> <span id="w21">works</span> <span id="w22" class="gl-word" onclick="App.showGlossary('hard', 'keras/giat')">hard</span> 
+          <span id="w23">to</span> <span id="w24" class="gl-word" onclick="App.showGlossary('feed', 'memberi makan/menghidupi')">feed</span> <span id="w25">his</span> <span id="w26">family</span>. 
+          <span id="w27">In</span> <span id="w28">the</span> <span id="w29">afternoon,</span> <span id="w30">he</span> <span id="w31">rests</span> 
+          <span id="w32">under</span> <span id="w33">a</span> <span id="w34">big</span> <span id="w35">tree</span>.
+        </p>
+      `,
+      plainText: "Joko is a farmer. He wakes up at 4 AM every morning. He goes to the field to plant rice. He works hard to feed his family. In the afternoon, he rests under a big tree.",
+      quiz: [
+        {
+          id:'r3_1', text:"What is Joko's job?",
+          options: ['Teacher', 'Farmer', 'Seller', 'Fisherman'],
+          correct: 1, whyCorrect: 'Teks menyebutkan "Joko is a farmer". Farmer artinya petani.',
+          whyWrong: ['Teacher = Guru', null, 'Seller/Merchant = Pedagang', 'Fisherman = Nelayan'],
+          example: 'Joko is a farmer.'
+        },
+        {
+          id:'r3_2', text:'Where does Joko rest in the afternoon?',
+          options: ['Inside the house', 'In the field', 'Under a big tree', 'At the market'],
+          correct: 2, whyCorrect: '"he rests under a big tree" artinya dia beristirahat di bawah pohon besar.',
+          whyWrong: ['House = rumah', 'He rests under a tree, not exactly in the field.', null, 'Market = pasar'],
+          example: 'He rests under a big tree.'
+        }
+      ]
+    }
+  ];
+
+  /* ════════════════════════════════════════════════════════
+     2. APP STATE & CONFIG
+     ════════════════════════════════════════════════════════ */
+  const App = {
+    sess: 0,
+    phase: 0, // 0=Membaca, 1=Kuis Pemahaman
+    xp: 0,
+    done: [false,false,false,false],
+    
+    cs: { qi: 0, qs: [], quizSess: null },
+
+    PHASE_ICONS: ['👀', '✍️'],
+    PHASE_NAMES: ['Membaca', 'Pemahaman'],
+
+    glTimeout: null,
+
+    init(){
+      this._loadProgress();
+      this._loadXP();
+      FeedbackEngine.init({
+        onNext:  () => this._quizNext(),
+        onRetry: () => this._quizRetry(),
+        onSkip:  () => this._quizNext(),
+      });
+      if('speechSynthesis' in window) window.speechSynthesis.getVoices();
+      this.render();
+    },
+
+    goTo(n){
+      FeedbackEngine.dismiss();
+      if('speechSynthesis' in window) window.speechSynthesis.cancel();
+      this.sess=n; this.phase=0;
+      this.render();
+      window.scrollTo({top:0,behavior:'smooth'});
+    },
+
+    nextPhase(){
+      if(this.phase < 1){
+        this.phase++;
+        this.render();
+      } else {
+        this._completeSess();
+      }
+    },
+
+    render(){
+      this._updateHero();
+      this._updateTabs();
+      this._updatePhaseStrip();
+
+      if(this.phase === 0) this._renderReading();
+      else this._renderQuiz();
+    },
+
+    _updateHero(){
+      const s = READING_DATA[this.sess];
+      document.getElementById('sess-hero').style.background = s.bg;
+      document.getElementById('hero-deco').textContent = s.emoji;
+      document.getElementById('hero-title').textContent = s.title;
+      document.getElementById('hero-desc').textContent = s.desc;
+      
+      const sessPct = Math.round((this.phase/1)*50);
+      const bar = document.getElementById('hero-bar');
+      if(bar){ bar.style.width='0%'; setTimeout(()=>{ bar.style.width=`${sessPct}%`; },100); }
+    },
+
+    _updateTabs(){
+      for(let i=0;i<4;i++){
+        const el=document.getElementById(`tab-${i}`);
+        if(!el) continue;
+        el.className='sess-tab';
+        if(i===this.sess){ el.classList.add('active'); }
+        else if(this.done[i]){ el.classList.add('done'); }
+      }
+    },
+
+    _updatePhaseStrip(){
+      const strip=document.getElementById('phase-strip');
+      const lbl=document.getElementById('phase-label-text');
+      if(!strip) return;
+      lbl.textContent = `${this.PHASE_ICONS[this.phase]} ${this.PHASE_NAMES[this.phase]}`;
+
+      let html='';
+      this.PHASE_NAMES.forEach((name,i)=>{
+        const isDone=i<this.phase;
+        const isAct=i===this.phase;
+        const cls=isDone?'done':isAct?'active':'upcoming';
+        const icon=isDone?'✓':this.PHASE_ICONS[i];
+        const lblCls=isAct?'phase-label active-label':'phase-label';
+        
+        html+=`<div class="phase-node">
+          <div class="phase-dot ${cls}" title="${name}">${icon}</div>
+          <span class="${lblCls}">${name}</span>
+        </div>`;
+        if(i<1) html+=`<div class="phase-line ${isDone?'done':''}"></div>`;
+      });
+      strip.innerHTML=html;
+    },
+
+    /* ═══════════════════════════════════════════════════════
+       PHASE 0: READING (Membaca & Mendengar)
+       ═══════════════════════════════════════════════════════ */
+    _renderReading(){
+      const s = READING_DATA[this.sess];
+
+      document.getElementById('activity-area').innerHTML=`
+        <span class="act-tag act-read">
+          👀 Bacalah Teks Berikut
+        </span>
+        
+        <div style="margin-bottom:var(--space-3);">
+          <button class="btn-tts-large" id="btn-read-aloud" onclick="App.readAloud()">
+            🔊 Bacakan Teks
+          </button>
+        </div>
+
+        <div class="reading-box ${s.textType}" id="reading-content">
+          ${s.textHtml}
+        </div>
+        
+        <p style="font-size:var(--font-size-sm);color:var(--text-muted);margin:var(--space-3) 0 var(--space-5);text-align:center;">
+          💡 <em>Ketuk kata yang digarisbawahi (putus-putus) untuk melihat artinya.</em>
+        </p>
+
+        <button class="btn btn-primary btn-block" onclick="App._markReadingDone()">
+          Saya Sudah Paham →
+        </button>
+      `;
+    },
+
+    showGlossary(en, id){
+      const toast = document.getElementById('gl-toast');
+      document.getElementById('gl-en').textContent = en;
+      document.getElementById('gl-id').textContent = id;
+      toast.classList.add('show');
+      
+      clearTimeout(this.glTimeout);
+      this.glTimeout = setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3000);
+    },
+
+    readAloud(){
+      if(!('speechSynthesis' in window)) return;
+      window.speechSynthesis.cancel();
+      
+      const s = READING_DATA[this.sess];
+      const btn = document.getElementById('btn-read-aloud');
+      
+      const utterance = new SpeechSynthesisUtterance(s.plainText);
+      utterance.lang = 'en-US'; // Fallback aman
+      utterance.rate = 0.85; // slightly slower for learners
+
+      // Pilih suara native Australia secara acak, fallback jika tidak ada
+      const voices = window.speechSynthesis.getVoices();
+      let auVoices = voices.filter(v => v.lang === 'en-AU' || v.lang === 'en_AU');
+      if (auVoices.length === 0) {
+        auVoices = voices.filter(v => v.lang.startsWith('en'));
+      }
+      
+      if (auVoices.length > 0) {
+        utterance.voice = auVoices[Math.floor(Math.random() * auVoices.length)];
+        utterance.lang = utterance.voice.lang;
+      }
+
+      // Mencegah Garbage Collection bug pada Chrome/Safari
+      window._synth_utterance = utterance;
+
+      utterance.onstart = () => {
+        btn.classList.add('playing');
+        btn.innerHTML = '⏸️ Sedang Membaca...';
+      };
+      utterance.onend = () => {
+        btn.classList.remove('playing');
+        btn.innerHTML = '🔊 Bacakan Teks';
+        this._removeHighlights();
+      };
+      utterance.onerror = () => {
+        btn.classList.remove('playing');
+        btn.innerHTML = '🔊 Bacakan Teks';
+      };
+
+      // Very simple word boundary highlighting approximation (browser support varies widely)
+      let wordIndex = 0;
+      utterance.onboundary = (event) => {
+        if(event.name === 'word') {
+          this._removeHighlights();
+          const el = document.getElementById(`w${wordIndex}`);
+          if(el){
+            el.classList.add('word-highlight');
+            wordIndex++;
+          }
+        }
+      };
+
+      window.speechSynthesis.speak(utterance);
+    },
+
+    _removeHighlights(){
+      document.querySelectorAll('.word-highlight').forEach(el => {
+        el.classList.remove('word-highlight');
+      });
+    },
+
+    _markReadingDone(){
+      if('speechSynthesis' in window) window.speechSynthesis.cancel();
+      this._addXP(15);
+      this.nextPhase();
+    },
+
+    /* ═══════════════════════════════════════════════════════
+       PHASE 1: COMPREHENSION QUIZ (Pemahaman)
+       ═══════════════════════════════════════════════════════ */
+    _renderQuiz(){
+      const s = READING_DATA[this.sess];
+      this.cs = {
+        qi: 0, 
+        qs: s.quiz,
+        quizSess: QuizStore.startSession(`read_unit3_s${this.sess}`)
+      };
+      this._renderQuizQ();
+    },
+
+    _renderQuizQ(){
+      const cs = this.cs;
+      if(cs.qi >= cs.qs.length){
+        this._renderQuizResult();
+        return;
+      }
+      const q = cs.qs[cs.qi];
+      const keys = ['A','B','C','D'];
+      const pct = Math.round((cs.qi / cs.qs.length) * 100);
+      const s = READING_DATA[this.sess];
+
+      document.getElementById('activity-area').innerHTML=`
+        <span class="act-tag act-quiz">
+          ✍️ Kuis Pemahaman &middot; Soal ${cs.qi+1} / ${cs.qs.length}
+        </span>
+        
+        <div class="progress-bar-track progress-bar-track--thin" style="margin-bottom:var(--space-4);">
+          <div class="progress-bar-fill" style="width:${pct}%;transition:width .4s ease;"></div>
+        </div>
+
+        <!-- Teks Referensi -->
+        <div style="margin-bottom: var(--space-4);">
+          <p style="font-size: var(--font-size-sm); color: var(--text-muted); margin-bottom: var(--space-2); font-weight: bold;">Teks Referensi:</p>
+          <div class="reading-box ${s.textType}" style="padding: var(--space-4); opacity: 0.9;">
+            ${s.textHtml}
+          </div>
+        </div>
+
+        <div class="card" style="padding:var(--space-5);">
+          <p style="font-size:var(--font-size-lg);font-weight:700;color:var(--text-main);margin-bottom:var(--space-4);text-align:center;">
+            ${q.text}
+          </p>
+
+          <div style="display:flex;flex-direction:column;gap:var(--space-2);" id="quiz-opts">
+            ${q.options.map((opt, i) => `
+              <button class="quiz-option" onclick="App._handleQuizAns(${i})" aria-label="Pilihan ${keys[i]}: ${opt}">
+                <span class="quiz-option-key">${keys[i]}</span>
+                <span class="quiz-option-text">${opt}</span>
+              </button>
+            `).join('')}
+          </div>
+        </div>`;
+    },
+
+    _handleQuizAns(sel){
+      const cs = this.cs;
+      const q = cs.qs[cs.qi];
+      const ok = sel === q.correct;
+
+      document.querySelectorAll('#quiz-opts .quiz-option').forEach((btn, i) => {
+        btn.classList.add('quiz-option--disabled');
+        if(i === q.correct) btn.classList.add('quiz-option--correct');
+        else if(i === sel && !ok) btn.classList.add('quiz-option--wrong');
+      });
+
+      QuizStore.recordAnswer(cs.quizSess, q.id, ok, 0, sel);
+      if(ok){ 
+        this._addXP(20);
+        FeedbackEngine.showCorrect(q, sel); 
+      } else { 
+        FeedbackEngine.showWrong(q, sel); 
+      }
+    },
+
+    _quizNext(){ this.cs.qi++; this._renderQuizQ(); },
+    _quizRetry(){
+      document.querySelectorAll('#quiz-opts .quiz-option').forEach((btn, i) => {
+        btn.classList.remove('quiz-option--disabled','quiz-option--wrong','quiz-option--correct');
+        btn.onclick = () => this._handleQuizAns(i);
+      });
+    },
+
+    _renderQuizResult(){
+      const cs = this.cs;
+      const res = QuizStore.finishSession(cs.quizSess, cs.qs.length);
+      const pct = res.score;
+      this._addXP(30);
+
+      document.getElementById('activity-area').innerHTML=`
+        <div class="card" style="padding:var(--space-6);text-align:center;">
+          <div class="score-ring" style="background:conic-gradient(var(--accent) ${pct*3.6}deg, var(--surface-2) ${pct*3.6}deg);">
+            <div class="score-ring-inner">
+              <span style="font-size:1.65rem;font-weight:800;color:var(--accent-700);">${pct}%</span>
+            </div>
+          </div>
+
+          <h2 style="font-size:var(--font-size-xl);font-weight:800;margin-bottom:var(--space-2);">
+            Pemahaman Selesai! 🎉</h2>
+          <p style="color:var(--text-muted);margin-bottom:var(--space-4);">
+            Anda membaca dan mengerti teks dengan baik.</p>
+
+          <button class="btn btn-accent btn-block" onclick="App.nextPhase()">
+            Selesaikan Sesi Ini 🏆
+          </button>
+        </div>`;
+    },
+
+    /* ═══════════════════════════════════════════════════════
+       SESSION COMPLETE
+       ═══════════════════════════════════════════════════════ */
+    _completeSess(){
+      this.done[this.sess] = true;
+      this._saveProgress();
+      this._updateTabs();
+      this._updateHero();
+
+      const next = READING_DATA[this.sess+1];
+      const allDone = this.done.every(Boolean);
+
+      // Sync ke index
+      try {
+        const raw = localStorage.getItem('emodul_state');
+        if(raw){
+          const state = JSON.parse(raw);
+          const u = (state.units||[]).find(u=>u.id===3);
+          if(u){
+            const doneCount = this.done.filter(Boolean).length;
+            u.progress = Math.max(u.progress||0, Math.round((doneCount/4)*100));
+            if(allDone) u.status = 'done';
+            localStorage.setItem('emodul_state', JSON.stringify(state));
+          }
+        }
+      } catch{}
+
+      document.getElementById('activity-area').innerHTML=`
+        <div class="card" style="padding:var(--space-6);text-align:center;border:2px solid var(--accent);">
+          <div style="font-size:3.5rem;animation:badgeBounce .6s ease both;margin-bottom:var(--space-3);" aria-hidden="true">🏆</div>
+          <h2 style="font-size:var(--font-size-2xl);font-weight:800;color:var(--accent-700);margin-bottom:var(--space-2);">
+            Sesi ${this.sess+1} Selesai!</h2>
+          
+          <div style="display:flex;flex-direction:column;gap:var(--space-3);margin-top:var(--space-5);">
+            ${next ? `<button class="btn btn-accent btn-block" onclick="App.goTo(${this.sess+1})">Lanjut Sesi ${this.sess+2}: ${next.title} →</button>` : ''}
+            ${allDone ? `<a href="index.html" class="btn btn-primary btn-block">Semua Unit Selesai! Kembali ke Beranda 🏠</a>` : ''}
+          </div>
+        </div>`;
+
+      if(typeof Utils !== 'undefined') Utils.showConfetti?.();
+    },
+
+    /* ═══════════════════════════════════════════════════════
+       UTILS (XP)
+       ═══════════════════════════════════════════════════════ */
+    _addXP(n){
+      this.xp += n;
+      try{ localStorage.setItem('emodul_read_xp', this.xp); }catch{}
+      const el = document.getElementById('nav-xp');
+      if(el){
+        el.textContent = `${this.xp} XP`;
+        el.style.animation = 'none';
+        el.offsetHeight;
+        el.style.animation = 'heartbeat .4s ease both';
+      }
+    },
+    _loadXP(){
+      try{ this.xp = parseInt(localStorage.getItem('emodul_read_xp')||'0',10)||0; }catch{}
+    },
+    _saveProgress(){
+      try{ localStorage.setItem('emodul_read_prog', JSON.stringify(this.done)); }catch{}
+    },
+    _loadProgress(){
+      try{ 
+        const d = JSON.parse(localStorage.getItem('emodul_read_prog'));
+        if(d && d.length===4) { this.done = d; return; }
+      }catch{}
+      this.done = [false,false,false,false];
+    }
+  };
+
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded', ()=>App.init());
+  } else {
+    App.init();
+  }
+  </script>
+</body>
+</html>

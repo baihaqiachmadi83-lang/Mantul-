@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Final Test MANTUL – Uji pemahaman kosakata, percakapan, dan kemampuan membaca Anda." />
+  <title>Final Test | MANTUL</title>
+
+  <link rel="stylesheet" href="css/design-system.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/animations.css" />
+  <link rel="stylesheet" href="css/feedback.css" />
+
+  <style>
+    body { background: var(--surface); }
+
+    /* ── SESSION TABS ── */
+    .sess-tabs {
+      display: flex; gap: var(--space-2); overflow-x: auto;
+      scrollbar-width: none; -webkit-overflow-scrolling: touch;
+      padding-bottom: var(--space-1); margin-bottom: var(--space-4);
+    }
+    .sess-tabs::-webkit-scrollbar { display: none; }
+    .sess-tab {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: var(--space-2) var(--space-3); border-radius: var(--radius-full);
+      font-size: var(--font-size-sm); font-weight: var(--font-weight-semibold);
+      border: 1.5px solid var(--border); background: var(--card);
+      color: var(--text-muted); white-space: nowrap; flex-shrink: 0;
+      transition: all var(--transition-fast); cursor: pointer;
+    }
+    .sess-tab.active { background: #DC2626; border-color: #DC2626; color: white; }
+    .sess-tab.done   { background: #FEF2F2; border-color: #EF4444; color: #B91C1C; }
+
+    /* ── HERO CARD ── */
+    .sess-hero {
+      border-radius: var(--radius-2xl); padding: var(--space-5) var(--space-6);
+      color: white; position: relative; overflow: hidden; margin-bottom: var(--space-4);
+      background: linear-gradient(135deg, #DC2626, #7F1D1D);
+    }
+    .sess-hero-deco {
+      position: absolute; right: -10px; top: 50%; transform: translateY(-50%);
+      font-size: 5rem; opacity: .15; pointer-events: none; line-height: 1;
+    }
+
+    /* ── PROGRESS STRIP ── */
+    .phase-strip { display: flex; align-items: center; gap: 0; }
+    .phase-node { display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; }
+    .phase-dot {
+      width: 30px; height: 30px; border-radius: 50%; display: flex;
+      align-items: center; justify-content: center; font-size: 13px;
+      font-weight: 700; transition: all var(--transition-base);
+      border: 2px solid transparent; background: var(--surface-2); color: var(--text-faint);
+    }
+    .phase-dot.done { background: #EF4444; color: white; border-color: #EF4444; }
+    .phase-dot.active { background: #DC2626; color: white; box-shadow: 0 0 0 4px #FCA5A5; }
+    
+    .phase-line { flex: 1; height: 2px; background: var(--border); margin: 0 -4px;
+      position: relative; top: -10px; transition: background var(--transition-base); }
+    .phase-line.done { background: #EF4444; }
+
+    /* ── RESULT BARS ── */
+    .skill-res-card {
+      background: white; border: 1px solid var(--border); border-radius: var(--radius-lg);
+      padding: var(--space-4); margin-bottom: var(--space-3);
+      display: flex; align-items: center; gap: var(--space-4);
+    }
+    .skill-res-icon {
+      width: 48px; height: 48px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem; flex-shrink: 0;
+    }
+    .skill-res-body { flex: 1; }
+    
+    .sr-vocab { background: #DBEAFE; color: #1D4ED8; }
+    .sr-speak { background: #FEF3C7; color: #B45309; }
+    .sr-read  { background: #D1FAE5; color: #047857; }
+
+    /* ── ACTIVITY TAG ── */
+    .act-tag {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 3px var(--space-2); border-radius: var(--radius-full);
+      font-size: 10px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: .07em; margin-bottom: var(--space-3);
+      background: #FEE2E2; color: #991B1B;
+    }
+
+    /* TTS Button Mini */
+    .btn-tts-mini {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 40px; height: 40px; border-radius: 50%;
+      background: #FEE2E2; color: #DC2626; border: none;
+      font-size: 1.2rem; cursor: pointer; transition: all .2s;
+    }
+    .btn-tts-mini.playing { animation: pulsePlay 1s infinite; background: #DC2626; color: white; }
+    @keyframes pulsePlay {
+      0% { box-shadow: 0 0 0 0 rgba(220,38,38,.4); }
+      70% { box-shadow: 0 0 0 8px rgba(220,38,38,0); }
+      100% { box-shadow: 0 0 0 0 rgba(220,38,38,0); }
+    }
+
+    .read-box {
+      background: var(--surface-2); padding: var(--space-4); border-radius: var(--radius-md);
+      margin-bottom: var(--space-4); font-size: var(--font-size-sm); color: var(--text-body);
+      border-left: 4px solid var(--accent);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="confetti-container" id="confetti-container" aria-hidden="true"></div>
+
+  <!-- ══════════════════════════════════════════════════════
+       NAVBAR
+       ══════════════════════════════════════════════════════ -->
+  <nav class="navbar" role="navigation" aria-label="Navigasi halaman">
+    <div class="container">
+      <a href="index.html" class="btn-back" aria-label="Kembali ke beranda">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+        Beranda
+      </a>
+      <div style="display:flex;align-items:center;gap:var(--space-2);">
+        <span class="chip" style="background:#FEE2E2;color:#991B1B;border:1px solid #FCA5A5;">Evaluasi</span>
+      </div>
+      <!-- XP counter -->
+      <div style="display:flex;align-items:center;gap:6px; background:var(--warm-50);border:1px solid var(--warm-200); border-radius:var(--radius-full);padding:4px var(--space-3);">
+        <span style="font-size:.9rem;" aria-hidden="true">⭐</span>
+        <span id="nav-xp" style="font-size:var(--font-size-xs);font-weight:800; color:var(--warm-700);">0 XP</span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ══════════════════════════════════════════════════════
+       MAIN
+       ══════════════════════════════════════════════════════ -->
+  <main class="page-content" id="main-content" style="padding-bottom:90px;">
+    <div class="container">
+
+      <!-- SESSION HERO -->
+      <div class="sess-hero anim-fade-in-up" id="sess-hero">
+        <span class="sess-hero-deco" id="hero-deco" aria-hidden="true">🎯</span>
+        <div style="position:relative;z-index:1;">
+          <p style="font-size:10px;font-weight:800;text-transform:uppercase; letter-spacing:.09em;color:rgba(255,255,255,.7);margin-bottom:2px;">
+            EVALUASI AKHIR
+          </p>
+          <h1 id="hero-title" style="font-size:var(--font-size-xl);font-weight:800; color:white;margin-bottom:var(--space-2);">
+            Final Test
+          </h1>
+          <p id="hero-desc" style="font-size:var(--font-size-sm);color:rgba(255,255,255,.9); line-height:1.5; margin-bottom:var(--space-3);">
+            Uji kemampuan Vocabulary, Speaking, dan Reading Anda.
+          </p>
+          <div class="progress-bar-track" style="background:rgba(255,255,255,.3);">
+            <div id="hero-bar" class="progress-bar-fill" style="width:0%;background:white;transition:width .4s ease;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SESSION TABS -->
+      <div class="sess-tabs anim-fade-in-up delay-100" role="tablist" id="sess-tabs-container">
+        <!-- Generated by JS -->
+      </div>
+
+      <!-- ACTIVITY AREA -->
+      <div id="activity-area" class="anim-fade-in-up delay-200">
+        <!-- Rendered by JS -->
+      </div>
+
+    </div>
+  </main>
+
+  <script src="js/app.js"></script>
+  <script src="js/quiz-store.js"></script>
+  <script src="js/feedback.js"></script>
+  <script>
+  'use strict';
+
+  /* ════════════════════════════════════════════════════════
+     1. FINAL TEST DATA
+     ════════════════════════════════════════════════════════ */
+  const TEST_DATA = [
+    {
+      id: 'vocab', title: 'Vocabulary', emoji: '📖', themeClass: 'sr-vocab',
+      desc: 'Kosakata sehari-hari, jual-beli, dan waktu.',
+      questions: [
+        {
+          id: 'ft_v1', text: 'Apa arti dari kata "Vegetables"?',
+          options: ['Buah-buahan', 'Sayur-sayuran', 'Daging', 'Minuman'],
+          correct: 1, whyCorrect: 'Vegetables artinya sayur-sayuran.',
+          whyWrong: ['Buah-buahan = Fruits.', null, 'Daging = Meat.', 'Minuman = Drinks.']
+        },
+        {
+          id: 'ft_v2', text: 'Lengkapi kalimat berikut: "The market opens in the ____ (pagi)."',
+          options: ['afternoon', 'evening', 'morning', 'night'],
+          correct: 2, whyCorrect: 'Pagi hari dalam bahasa Inggris adalah "morning".',
+          whyWrong: ['afternoon = siang.', 'evening = malam (sore/petang).', null, 'night = malam (larut).']
+        },
+        {
+          id: 'ft_v3', text: 'Pilih terjemahan yang tepat untuk "This phone is very expensive".',
+          options: ['HP ini sangat murah.', 'HP ini sangat mahal.', 'HP ini baru.', 'HP ini rusak.'],
+          correct: 1, whyCorrect: 'Expensive berarti mahal.',
+          whyWrong: ['Murah = cheap.', null, 'Baru = new.', 'Rusak = broken.']
+        },
+        {
+          id: 'ft_v4', text: 'Apa arti dari kata "Chair"?',
+          options: ['Meja', 'Kursi', 'Pintu', 'Jendela'],
+          correct: 1, whyCorrect: 'Chair artinya kursi.',
+          whyWrong: ['Meja = Table.', null, 'Pintu = Door.', 'Jendela = Window.']
+        },
+        {
+          id: 'ft_v5', text: 'Kata "Rice" dalam Bahasa Indonesia berarti...',
+          options: ['Roti', 'Nasi', 'Mie', 'Jagung'],
+          correct: 1, whyCorrect: 'Rice artinya nasi (atau beras).',
+          whyWrong: ['Roti = Bread.', null, 'Mie = Noodles.', 'Jagung = Corn.']
+        },
+        {
+          id: 'ft_v6', text: 'Kata Bahasa Inggris yang tepat untuk "membeli" adalah...',
+          options: ['sell', 'buy', 'pay', 'cook'],
+          correct: 1, whyCorrect: '"Buy" berarti membeli.',
+          whyWrong: ['sell = menjual.', null, 'pay = membayar.', 'cook = memasak.']
+        },
+        {
+          id: 'ft_v7', text: 'Apa arti dari kata "Table"?',
+          options: ['Kursi', 'Lemari', 'Meja', 'Tempat tidur'],
+          correct: 2, whyCorrect: 'Table artinya meja.',
+          whyWrong: ['Kursi = Chair.', 'Lemari = Cupboard.', null, 'Tempat tidur = Bed.']
+        },
+        {
+          id: 'ft_v8', text: 'Lengkapi: "I want to ____ some fish at the market." (membeli)',
+          options: ['sell', 'cook', 'buy', 'eat'],
+          correct: 2, whyCorrect: '"Buy" berarti membeli.',
+          whyWrong: ['sell = menjual.', 'cook = memasak.', null, 'eat = makan.']
+        },
+        {
+          id: 'ft_v9', text: 'Kata "Cheap" adalah lawan kata dari...',
+          options: ['expensive', 'big', 'new', 'hot'],
+          correct: 0, whyCorrect: 'Cheap (murah) berlawanan dengan expensive (mahal).',
+          whyWrong: [null, 'big = besar.', 'new = baru.', 'hot = panas.']
+        },
+        {
+          id: 'ft_v10', text: 'Apa arti dari kata "Money"?',
+          options: ['Waktu', 'Uang', 'Harga', 'Pasar'],
+          correct: 1, whyCorrect: 'Money artinya uang.',
+          whyWrong: ['Waktu = Time.', null, 'Harga = Price.', 'Pasar = Market.']
+        },
+        {
+          id: 'ft_v11', text: 'Pertanyaan "What is the price?" menanyakan tentang...',
+          options: ['Waktu', 'Nama', 'Harga', 'Tempat'],
+          correct: 2, whyCorrect: '"Price" berarti harga.',
+          whyWrong: ['Waktu = time.', 'Nama = name.', null, 'Tempat = place.']
+        },
+        {
+          id: 'ft_v12', text: 'Kata "Kitchen" berarti...',
+          options: ['Kamar tidur', 'Dapur', 'Ruang tamu', 'Kamar mandi'],
+          correct: 1, whyCorrect: 'Kitchen artinya dapur.',
+          whyWrong: ['Kamar tidur = Bedroom.', null, 'Ruang tamu = Living room.', 'Kamar mandi = Bathroom.']
+        },
+        {
+          id: 'ft_v13', text: 'Terjemahan yang tepat untuk "Selamat pagi" adalah...',
+          options: ['Good night', 'Good morning', 'Good bye', 'Good afternoon'],
+          correct: 1, whyCorrect: '"Good morning" berarti selamat pagi.',
+          whyWrong: ['Selamat malam (tidur).', null, 'Selamat tinggal.', 'Selamat siang.']
+        },
+        {
+          id: 'ft_v14', text: 'Apa arti dari kata "Water"?',
+          options: ['Air', 'Api', 'Angin', 'Tanah'],
+          correct: 0, whyCorrect: 'Water artinya air.',
+          whyWrong: [null, 'Api = Fire.', 'Angin = Wind.', 'Tanah = Soil.']
+        },
+        {
+          id: 'ft_v15', text: 'Lengkapi: "The price is twenty ____ rupiah." (ribu)',
+          options: ['hundred', 'thousand', 'million', 'ten'],
+          correct: 1, whyCorrect: '"Thousand" berarti ribu.',
+          whyWrong: ['hundred = ratus.', null, 'million = juta.', 'ten = sepuluh.']
+        },
+        {
+          id: 'ft_v16', text: 'Kata Bahasa Inggris untuk "menjual" adalah...',
+          options: ['buy', 'sell', 'give', 'take'],
+          correct: 1, whyCorrect: '"Sell" berarti menjual.',
+          whyWrong: ['buy = membeli.', null, 'give = memberi.', 'take = mengambil.']
+        },
+        {
+          id: 'ft_v17', text: 'Pilih terjemahan yang tepat: "The vegetables are fresh and cheap."',
+          options: ['Sayurannya segar dan mahal.', 'Sayurannya segar dan murah.', 'Sayurannya busuk dan murah.', 'Sayurannya sedikit dan mahal.'],
+          correct: 1, whyCorrect: 'Fresh = segar, cheap = murah.',
+          whyWrong: ['Cheap = murah, bukan mahal.', null, 'Fresh = segar, bukan busuk.', 'Kurang tepat.']
+        }
+      ]
+    },
+    {
+      id: 'speak', title: 'Speaking', emoji: '🎙️', themeClass: 'sr-speak',
+      desc: 'Respons percakapan dan pemahaman dialog.',
+      questions: [
+        {
+          id: 'ft_s1', text: 'Seseorang menyapa Anda: "Good morning! How are you?"<br>Respons yang paling tepat adalah:',
+          options: ['I am fine, thank you.', 'See you later.', 'Nice to meet you.', 'I am sorry.'],
+          correct: 0, whyCorrect: '"I am fine, thank you" adalah cara sopan menjawab "How are you?".',
+          whyWrong: [null, 'Untuk berpamitan.', 'Untuk saat pertama berkenalan.', 'Untuk meminta maaf.']
+        },
+        {
+          id: 'ft_s2', text: 'Anda ingin menanyakan harga sayuran di pasar. Kalimat mana yang digunakan?',
+          options: ['How many is it?', 'What time is it?', 'How much is it?', 'Where is it?'],
+          correct: 2, whyCorrect: '"How much is it?" digunakan untuk menanyakan harga.',
+          whyWrong: ['Untuk benda yang bisa dihitung.', 'Menanyakan jam.', null, 'Menanyakan lokasi.']
+        },
+        {
+          id: 'ft_s3', text: 'Dengarkan percakapan berikut: "Excuse me, where is the toilet?"<br>Apa jawaban yang sesuai dari pilihan di bawah ini?',
+          audioText: "Excuse me, where is the toilet?",
+          options: ['It is twenty thousand.', 'Go straight, then turn left.', 'I wake up at five.', 'Nice to meet you.'],
+          correct: 1, whyCorrect: '"Go straight, then turn left" menunjukkan arah (jalan lurus, lalu belok kiri).',
+          whyWrong: ['Jawaban tentang harga.', null, 'Jawaban tentang rutinitas waktu.', 'Jawaban sapaan perkenalan.']
+        },
+        {
+          id: 'ft_s4', text: 'Untuk berpamitan pada malam hari (sebelum tidur), Anda mengucapkan...',
+          options: ['Good morning.', 'Good night.', 'How are you?', 'Thank you.'],
+          correct: 1, whyCorrect: '"Good night" digunakan untuk berpamitan di malam hari.',
+          whyWrong: ['Sapaan pagi hari.', null, 'Menanyakan kabar.', 'Ucapan terima kasih.']
+        },
+        {
+          id: 'ft_s5', text: 'Ketika seseorang berkata "Thank you", respons yang sopan adalah...',
+          options: ['You are welcome.', 'Good bye.', 'I am sorry.', 'See you.'],
+          correct: 0, whyCorrect: '"You are welcome" adalah balasan untuk ucapan terima kasih.',
+          whyWrong: [null, 'Untuk berpamitan.', 'Untuk meminta maaf.', 'Untuk berpamitan.']
+        },
+        {
+          id: 'ft_s6', text: 'Dengarkan pertanyaan berikut. Jawaban yang paling tepat adalah:',
+          audioText: 'What is your name?',
+          options: ['I am from Jakarta.', 'My name is Andi.', 'I am fine.', 'It is ten.'],
+          correct: 1, whyCorrect: '"My name is Andi" menjawab pertanyaan tentang nama.',
+          whyWrong: ['Menjawab asal daerah.', null, 'Menjawab kabar.', 'Menjawab jumlah/harga.']
+        },
+        {
+          id: 'ft_s7', text: 'Anda memperkenalkan diri untuk pertama kali. Kalimat yang tepat:',
+          options: ['See you tomorrow.', 'Nice to meet you.', 'How much is it?', 'Good bye.'],
+          correct: 1, whyCorrect: '"Nice to meet you" diucapkan saat pertama berkenalan.',
+          whyWrong: ['Untuk berpamitan.', null, 'Menanyakan harga.', 'Untuk berpamitan.']
+        },
+        {
+          id: 'ft_s8', text: 'Di warung, penjual bertanya "Anything else?". Jika sudah cukup, Anda menjawab...',
+          options: ['No, thank you. That is all.', 'Yes, I am fine.', 'See you later.', 'What time is it?'],
+          correct: 0, whyCorrect: '"No, thank you. That is all" berarti pesanan sudah cukup.',
+          whyWrong: [null, 'Kurang sesuai konteks.', 'Untuk berpamitan.', 'Menanyakan waktu.']
+        },
+        {
+          id: 'ft_s9', text: 'Dengarkan pertanyaan berikut. Respons yang tepat adalah:',
+          audioText: 'How much is this?',
+          options: ['It is ten thousand rupiah.', 'I am a student.', 'Turn right.', 'Good morning.'],
+          correct: 0, whyCorrect: '"How much" menanyakan harga, jadi dijawab dengan nominal.',
+          whyWrong: [null, 'Menjawab pekerjaan.', 'Menjawab arah.', 'Sapaan.']
+        },
+        {
+          id: 'ft_s10', text: 'Untuk menanyakan arah ke stasiun, Anda berkata...',
+          options: ['What is your name?', 'How much is the ticket?', 'Where is the station?', 'What time is it?'],
+          correct: 2, whyCorrect: '"Where is the station?" menanyakan lokasi stasiun.',
+          whyWrong: ['Menanyakan nama.', 'Menanyakan harga.', null, 'Menanyakan waktu.']
+        },
+        {
+          id: 'ft_s11', text: 'Untuk meminta izin lewat atau menarik perhatian dengan sopan, Anda mengatakan...',
+          options: ['Excuse me.', 'I am sorry.', 'Good bye.', 'Thank you.'],
+          correct: 0, whyCorrect: '"Excuse me" digunakan untuk permisi atau menarik perhatian.',
+          whyWrong: [null, 'Untuk meminta maaf atas kesalahan.', 'Untuk berpamitan.', 'Ucapan terima kasih.']
+        },
+        {
+          id: 'ft_s12', text: 'Dengarkan pertanyaan berikut. Jawaban tentang rutinitas yang tepat:',
+          audioText: 'What do you do every morning?',
+          options: ['I wake up at five and pray.', 'It is twenty thousand.', 'Turn left.', 'Nice to meet you.'],
+          correct: 0, whyCorrect: 'Jawaban ini menjelaskan kegiatan rutin di pagi hari.',
+          whyWrong: [null, 'Menjawab harga.', 'Menjawab arah.', 'Sapaan perkenalan.']
+        },
+        {
+          id: 'ft_s13', text: 'Ketika Anda tidak memahami ucapan lawan bicara, Anda dapat berkata...',
+          options: ['Could you repeat, please?', 'You are welcome.', 'See you later.', 'It is cheap.'],
+          correct: 0, whyCorrect: '"Could you repeat, please?" meminta lawan bicara mengulang.',
+          whyWrong: [null, 'Merespons terima kasih.', 'Untuk berpamitan.', 'Komentar tentang harga.']
+        },
+        {
+          id: 'ft_s14', text: 'Jawaban yang tepat untuk pertanyaan "Where are you from?" adalah...',
+          options: ['I am fine.', 'I am from Indonesia.', 'My name is Sri.', 'It is five o clock.'],
+          correct: 1, whyCorrect: '"Where are you from?" menanyakan asal, dijawab dengan tempat.',
+          whyWrong: ['Menjawab kabar.', null, 'Menjawab nama.', 'Menjawab waktu.']
+        },
+        {
+          id: 'ft_s15', text: 'Untuk mengakhiri percakapan telepon dengan sopan, Anda berkata...',
+          options: ['Good bye, talk to you later.', 'How much is it?', 'What is this?', 'I am sorry.'],
+          correct: 0, whyCorrect: 'Kalimat ini adalah cara sopan mengakhiri percakapan.',
+          whyWrong: [null, 'Menanyakan harga.', 'Menanyakan benda.', 'Meminta maaf.']
+        },
+        {
+          id: 'ft_s16', text: 'Seseorang menawarkan bantuan: "Can I help you?". Jika Anda butuh bantuan, jawab...',
+          options: ['Yes, please.', 'No problem.', 'Good night.', 'See you.'],
+          correct: 0, whyCorrect: '"Yes, please" menerima tawaran bantuan dengan sopan.',
+          whyWrong: [null, 'Merespons permintaan maaf.', 'Sapaan malam.', 'Untuk berpamitan.']
+        }
+      ]
+    },
+    {
+      id: 'read', title: 'Reading', emoji: '👀', themeClass: 'sr-read',
+      desc: 'Pemahaman teks pendek, tanda, dan label.',
+      questions: [
+        {
+          id: 'ft_r1', 
+          readingText: "<b>Store Notice:</b><br>NO SMOKING IN THIS AREA.",
+          text: 'Berdasarkan tanda di atas, pengunjung...',
+          options: ['Boleh merokok di mana saja.', 'Boleh merokok di area ini.', 'Dilarang merokok di area ini.', 'Harus membeli rokok.'],
+          correct: 2, whyCorrect: '"No smoking" adalah larangan untuk merokok.',
+          whyWrong: ['Dilarang merokok.', 'Dilarang merokok.', null, 'Tanda larangan merokok.']
+        },
+        {
+          id: 'ft_r2',
+          readingText: "<b>Fresh Milk Label</b><br>Store in a cool place.<br>Best before: 20 December.",
+          text: 'Produk ini sebaiknya disimpan di mana?',
+          options: ['Di tempat panas', 'Di bawah sinar matahari', 'Di tempat sejuk/dingin', 'Di luar ruangan'],
+          correct: 2, whyCorrect: '"Store in a cool place" artinya simpan di tempat sejuk.',
+          whyWrong: ['Membuat produk cepat rusak.', 'Membuat produk cepat rusak.', null, 'Kurang tepat.']
+        },
+        {
+          id: 'ft_r3',
+          readingText: "Budi is a mechanic. He works at a garage. He fixes cars and motorcycles every day. He works from 8 AM to 5 PM.",
+          text: 'Apa yang dikerjakan Budi setiap hari?',
+          options: ['Memasak nasi', 'Menjual sayur', 'Mengajar siswa', 'Memperbaiki mobil dan motor'],
+          correct: 3, whyCorrect: '"He fixes cars and motorcycles" (Dia memperbaiki mobil dan sepeda motor).',
+          whyWrong: ['Itu pekerjaan koki (cook).', 'Itu penjual (seller).', 'Itu guru (teacher).', null]
+        },
+        {
+          id: 'ft_r4',
+          readingText: '<b>Menu</b><br>Fried rice — 15,000<br>Iced tea — 5,000',
+          text: 'Berapa harga nasi goreng (fried rice)?',
+          options: ['5,000', '15,000', '20,000', '10,000'],
+          correct: 1, whyCorrect: 'Fried rice tertera seharga 15,000.',
+          whyWrong: ['Itu harga es teh.', null, 'Itu total keduanya.', 'Kurang tepat.']
+        },
+        {
+          id: 'ft_r5',
+          readingText: '<b>Warung Menu</b><br>Coffee — 8,000<br>Bread — 6,000',
+          text: 'Jika membeli satu kopi dan satu roti, berapa total yang harus dibayar?',
+          options: ['8,000', '6,000', '14,000', '16,000'],
+          correct: 2, whyCorrect: '8,000 + 6,000 = 14,000.',
+          whyWrong: ['Hanya harga kopi.', 'Hanya harga roti.', null, 'Perhitungan kurang tepat.']
+        },
+        {
+          id: 'ft_r6',
+          readingText: '<b>Sign on the door:</b><br>PUSH',
+          text: 'Tanda "PUSH" pada pintu berarti Anda harus...',
+          options: ['Menarik pintu', 'Mendorong pintu', 'Mengunci pintu', 'Mengetuk pintu'],
+          correct: 1, whyCorrect: '"Push" berarti dorong.',
+          whyWrong: ['Menarik = Pull.', null, 'Mengunci = Lock.', 'Mengetuk = Knock.']
+        },
+        {
+          id: 'ft_r7',
+          readingText: '<b>Store Sign:</b><br>OPEN 08.00 – 17.00',
+          text: 'Toko ini tutup pada pukul...',
+          options: ['08.00', '12.00', '17.00', '24.00'],
+          correct: 2, whyCorrect: 'Jam tutup tertera pukul 17.00.',
+          whyWrong: ['Itu jam buka.', 'Tidak tertera.', null, 'Tidak tertera.']
+        },
+        {
+          id: 'ft_r8',
+          readingText: 'Sri is a seller. She sells vegetables at the market. She starts working at 6 AM.',
+          text: 'Apa pekerjaan Sri?',
+          options: ['Guru', 'Penjual sayur', 'Montir', 'Perawat'],
+          correct: 1, whyCorrect: '"She sells vegetables" artinya dia menjual sayur.',
+          whyWrong: ['Guru = teacher.', null, 'Montir = mechanic.', 'Perawat = nurse.']
+        },
+        {
+          id: 'ft_r9',
+          readingText: 'Sri is a seller. She sells vegetables at the market. She starts working at 6 AM.',
+          text: 'Pukul berapa Sri mulai bekerja?',
+          options: ['5 AM', '6 AM', '7 AM', '8 AM'],
+          correct: 1, whyCorrect: '"She starts working at 6 AM".',
+          whyWrong: ['Kurang tepat.', null, 'Kurang tepat.', 'Kurang tepat.']
+        },
+        {
+          id: 'ft_r10',
+          readingText: '<b>Label:</b><br>Keep away from children.',
+          text: 'Peringatan ini berarti produk harus dijauhkan dari...',
+          options: ['Air', 'Sinar matahari', 'Anak-anak', 'Api'],
+          correct: 2, whyCorrect: '"Keep away from children" artinya jauhkan dari anak-anak.',
+          whyWrong: ['Bukan air.', 'Bukan sinar matahari.', null, 'Bukan api.']
+        },
+        {
+          id: 'ft_r11',
+          readingText: '<b>Notice:</b><br>Please keep silent in the library.',
+          text: 'Di perpustakaan, pengunjung diminta untuk...',
+          options: ['Berbicara keras', 'Tetap tenang/diam', 'Makan', 'Berlari'],
+          correct: 1, whyCorrect: '"Keep silent" berarti tetap tenang/diam.',
+          whyWrong: ['Justru sebaliknya.', null, 'Tidak disebutkan.', 'Tidak disebutkan.']
+        },
+        {
+          id: 'ft_r12',
+          readingText: 'Joko is a farmer. He plants rice in the field. He works hard every day.',
+          text: 'Di mana Joko bekerja?',
+          options: ['Di kantor', 'Di sawah', 'Di pasar', 'Di sekolah'],
+          correct: 1, whyCorrect: '"He plants rice in the field" (di sawah/ladang).',
+          whyWrong: ['Bukan kantor.', null, 'Bukan pasar.', 'Bukan sekolah.']
+        },
+        {
+          id: 'ft_r13',
+          readingText: '<b>Bus Schedule</b><br>First bus: 06.00<br>Last bus: 21.00',
+          text: 'Bus terakhir berangkat pukul...',
+          options: ['06.00', '12.00', '18.00', '21.00'],
+          correct: 3, whyCorrect: '"Last bus: 21.00".',
+          whyWrong: ['Itu bus pertama.', 'Tidak tertera.', 'Tidak tertera.', null]
+        },
+        {
+          id: 'ft_r14',
+          readingText: '<b>Sign:</b><br>NO PARKING',
+          text: 'Tanda ini melarang orang untuk...',
+          options: ['Merokok', 'Parkir', 'Makan', 'Masuk'],
+          correct: 1, whyCorrect: '"No parking" berarti dilarang parkir.',
+          whyWrong: ['Itu No smoking.', null, 'Tidak tertera.', 'Itu No entry.']
+        },
+        {
+          id: 'ft_r15',
+          readingText: '<b>Product:</b><br>Best before: 10 March',
+          text: '"Best before: 10 March" menunjukkan tanggal...',
+          options: ['Produksi', 'Batas terbaik konsumsi', 'Pembelian', 'Pengiriman'],
+          correct: 1, whyCorrect: '"Best before" adalah batas waktu terbaik untuk dikonsumsi.',
+          whyWrong: ['Bukan tanggal produksi.', null, 'Bukan tanggal pembelian.', 'Bukan tanggal pengiriman.']
+        },
+        {
+          id: 'ft_r16',
+          readingText: 'Ani works at a hospital. She helps doctors and takes care of patients.',
+          text: 'Apa pekerjaan Ani yang paling tepat?',
+          options: ['Dokter', 'Perawat', 'Guru', 'Petani'],
+          correct: 1, whyCorrect: 'Membantu dokter dan merawat pasien adalah tugas perawat (nurse).',
+          whyWrong: ['Dia membantu dokter, bukan dokter.', null, 'Bukan guru.', 'Bukan petani.']
+        },
+        {
+          id: 'ft_r17',
+          readingText: '<b>Sign at the market:</b><br>Fresh fish sold here.',
+          text: 'Berdasarkan tanda, di tempat ini dijual...',
+          options: ['Sayur', 'Ikan segar', 'Roti', 'Pakaian'],
+          correct: 1, whyCorrect: '"Fresh fish sold here" artinya menjual ikan segar.',
+          whyWrong: ['Bukan sayur.', null, 'Bukan roti.', 'Bukan pakaian.']
+        }
+      ]
+    }
+  ];
+
+  /* ════════════════════════════════════════════════════════
+     2. APP STATE & CONFIG
+     ════════════════════════════════════════════════════════ */
+  const App = {
+    sess: 0, // 0=Vocab, 1=Speak, 2=Read, 3=Result
+    qi: 0,
+    xp: 0,
+    scores: [0, 0, 0], // Store score per section
+    quizSess: null,
+
+    init(){
+      this._loadXP();
+      FeedbackEngine.init({
+        onNext:  () => this._nextQuestion(),
+        onRetry: () => this._retryQuestion(),
+        onSkip:  () => this._nextQuestion(),
+      });
+      if('speechSynthesis' in window) window.speechSynthesis.getVoices();
+      this.render();
+    },
+
+    goTo(n) {
+      if (n >= 0 && n <= 3) {
+        FeedbackEngine.dismiss();
+        if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+        this.sess = n;
+        this.qi = 0;
+        this.quizSess = null;
+        this.render();
+      }
+    },
+
+    render(){
+      this._updateTabs();
+      this._updateHeroBar();
+
+      if(this.sess === 3) {
+        this._renderResultPage();
+        return;
+      }
+
+      if(!this.quizSess) {
+        this.quizSess = QuizStore.startSession(`final_${TEST_DATA[this.sess].id}`);
+      }
+
+      const currentSection = TEST_DATA[this.sess];
+      if(this.qi >= currentSection.questions.length){
+        const res = QuizStore.finishSession(this.quizSess, currentSection.questions.length);
+        this.scores[this.sess] = Math.round(res.score); // save percentage score
+        this.quizSess = null;
+        this.sess++;
+        this.qi = 0;
+        this.render();
+        return;
+      }
+
+      this._renderQuestion();
+    },
+
+    _updateTabs(){
+      const container = document.getElementById('sess-tabs-container');
+      let html = '';
+      TEST_DATA.forEach((s, i) => {
+        const isDone = i < this.sess;
+        const isAct = i === this.sess;
+        
+        let cls = 'sess-tab';
+        if(isAct) cls += ' active';
+        else if(isDone) cls += ' done';
+        
+        html += `<button class="${cls}" onclick="App.goTo(${i})">${s.emoji} ${s.title}</button>`;
+      });
+      if(this.sess === 3) {
+        html += `<button class="sess-tab active">🏆 Hasil</button>`;
+      }
+      container.innerHTML = html;
+    },
+
+    _updateHeroBar(){
+      let totalQ = 0, answered = 0;
+      TEST_DATA.forEach((s, i) => {
+        totalQ += s.questions.length;
+        if(i < this.sess) answered += s.questions.length;
+        else if(i === this.sess) answered += this.qi;
+      });
+      const pct = Math.round((answered / totalQ) * 100);
+      const pb = document.getElementById('hero-bar');
+      if(pb) pb.style.width = `${pct}%`;
+    },
+
+    _renderQuestion(){
+      const s = TEST_DATA[this.sess];
+      const q = s.questions[this.qi];
+      const keys = ['A','B','C','D'];
+
+      let readBoxHtml = '';
+      if(q.readingText){
+        readBoxHtml = `<div class="read-box">${q.readingText}</div>`;
+      }
+      
+      let audioHtml = '';
+      if(q.audioText){
+        audioHtml = `
+          <div style="text-align:center;margin-bottom:var(--space-3);">
+            <button class="btn-tts-mini" id="btn-audio" onclick="App._playAudio('${q.audioText.replace(/'/g,"\\'")}')">🔊</button>
+          </div>
+        `;
+      }
+
+      document.getElementById('activity-area').innerHTML = `
+        <div style="display:flex;justify-content:space-between;margin-bottom:var(--space-3);align-items:center;">
+          <span class="act-tag">${s.emoji} Bagian ${this.sess+1}: ${s.title}</span>
+          <span style="font-size:var(--font-size-xs);color:var(--text-muted);font-weight:700;">Soal ${this.qi+1} / ${s.questions.length}</span>
+        </div>
+        
+        <div class="card" style="padding:var(--space-5);">
+          ${readBoxHtml}
+          ${audioHtml}
+          
+          <p style="font-weight:700;font-size:var(--font-size-lg);margin-bottom:var(--space-4);text-align:center;line-height:1.4;">
+            ${q.text}
+          </p>
+
+          <div style="display:flex;flex-direction:column;gap:var(--space-2);" id="quiz-opts">
+            ${q.options.map((opt, i) => `
+              <button class="quiz-option" onclick="App._handleAns(${i})" aria-label="${opt}">
+                <span class="quiz-option-key">${keys[i]}</span>
+                <span class="quiz-option-text">${opt}</span>
+              </button>
+            `).join('')}
+          </div>
+          
+          <div style="display:flex;justify-content:flex-end;margin-top:var(--space-4);">
+            <button class="btn btn-outline" style="border-radius:var(--radius-full);font-size:var(--font-size-sm);" onclick="App._skipQuestion()">
+              Lewati / Next ➔
+            </button>
+          </div>
+        </div>
+      `;
+
+      // Auto play audio if exists
+      if(q.audioText) {
+        setTimeout(() => this._playAudio(q.audioText), 500);
+      }
+    },
+
+    _handleAns(sel){
+      const s = TEST_DATA[this.sess];
+      const q = s.questions[this.qi];
+      const ok = sel === q.correct;
+
+      document.querySelectorAll('.quiz-option').forEach((btn, i) => {
+        btn.classList.add('quiz-option--disabled');
+        if(i === q.correct) btn.classList.add('quiz-option--correct');
+        else if(i === sel && !ok) btn.classList.add('quiz-option--wrong');
+      });
+
+      QuizStore.recordAnswer(this.quizSess, q.id, ok, 0, sel);
+      if(ok){
+        this._addXP(25);
+        FeedbackEngine.showCorrect(q, sel);
+      } else {
+        FeedbackEngine.showWrong(q, sel);
+      }
+    },
+
+    _nextQuestion(){
+      this.qi++;
+      this.render();
+    },
+
+    _skipQuestion(){
+      FeedbackEngine.dismiss();
+      const s = TEST_DATA[this.sess];
+      const q = s.questions[this.qi];
+      QuizStore.recordAnswer(this.quizSess, q.id, false, 0, -1);
+      this._nextQuestion();
+    },
+
+    _retryQuestion(){
+      document.querySelectorAll('.quiz-option').forEach(btn => {
+        btn.classList.remove('quiz-option--disabled','quiz-option--wrong','quiz-option--correct');
+      });
+    },
+
+    _playAudio(text){
+      if(!('speechSynthesis' in window)) return;
+      window.speechSynthesis.cancel();
+      const btn = document.getElementById('btn-audio');
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'en-US';
+      if(btn){
+        utterance.onstart = () => btn.classList.add('playing');
+        utterance.onend = () => btn.classList.remove('playing');
+        utterance.onerror = () => btn.classList.remove('playing');
+      }
+      window.speechSynthesis.speak(utterance);
+    },
+
+    /* ── RESULT PAGE ── */
+    _renderResultPage(){
+      // Calculate total average
+      const avgScore = Math.round(this.scores.reduce((a,b)=>a+b, 0) / 3);
+      
+      // Update global state
+      try {
+        const raw = localStorage.getItem('emodul_state');
+        if(raw){
+          const state = JSON.parse(raw);
+          const u = (state.units||[]).find(u=>u.id===4);
+          if(u){
+            u.progress = Math.max(u.progress||0, avgScore);
+            if(avgScore >= 60) u.status = 'done';
+            localStorage.setItem('emodul_state', JSON.stringify(state));
+          }
+        }
+      } catch{}
+
+      let html = `
+        <div class="card" style="padding:var(--space-6);text-align:center;border:2px solid var(--accent);margin-bottom:var(--space-5);">
+          <div style="font-size:3.5rem;animation:badgeBounce .6s ease both;margin-bottom:var(--space-3);" aria-hidden="true">🎓</div>
+          <h2 style="font-size:var(--font-size-2xl);font-weight:800;color:var(--accent-700);margin-bottom:var(--space-2);">
+            Ujian Selesai!
+          </h2>
+          <p style="color:var(--text-body);margin-bottom:var(--space-3);line-height:1.5;">
+            Selamat, Anda telah menyelesaikan seluruh rangkaian evaluasi. Berikut adalah ringkasan kemampuan Anda:
+          </p>
+          <div style="font-size:var(--font-size-2xl);font-weight:900;color:var(--primary);margin-bottom:var(--space-4);">
+            Nilai Akhir: ${avgScore}%
+          </div>
+        </div>
+        
+        <h3 style="font-size:var(--font-size-sm);font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--text-faint);margin-bottom:var(--space-3);">
+          Rincian Kompetensi
+        </h3>
+      `;
+
+      TEST_DATA.forEach((s, i) => {
+        const sc = this.scores[i];
+        let msg = sc >= 80 ? 'Sangat Baik' : sc >= 60 ? 'Cukup Baik' : 'Perlu Latihan Lagi';
+        
+        html += `
+          <div class="skill-res-card">
+            <div class="skill-res-icon ${s.themeClass}">${s.emoji}</div>
+            <div class="skill-res-body">
+              <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+                <span style="font-weight:700;">${s.title}</span>
+                <span style="font-weight:800;color:var(--text-main);">${sc}%</span>
+              </div>
+              <div class="progress-bar-track progress-bar-track--thin" style="margin-bottom:6px;">
+                <div class="progress-bar-fill" style="width:${sc}%; background:var(--primary);"></div>
+              </div>
+              <p style="font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;">${msg}</p>
+            </div>
+          </div>
+        `;
+      });
+
+      html += `
+        <div style="margin-top:var(--space-5);display:flex;flex-direction:column;gap:var(--space-3);">
+          <a href="index.html" class="btn btn-primary btn-block">Kembali ke Beranda 🏠</a>
+          <button class="btn btn-outline btn-block" onclick="location.reload()">Ulangi Final Test ↺</button>
+        </div>
+      `;
+
+      document.getElementById('activity-area').innerHTML = html;
+      
+      if(avgScore >= 60 && typeof Utils !== 'undefined') Utils.showConfetti?.();
+    },
+
+    _addXP(n){
+      this.xp += n;
+      try{ localStorage.setItem('emodul_final_xp', this.xp); }catch{}
+      const el = document.getElementById('nav-xp');
+      if(el){
+        el.textContent = `${this.xp} XP`;
+        el.style.animation = 'none';
+        el.offsetHeight;
+        el.style.animation = 'heartbeat .4s ease both';
+      }
+    },
+    _loadXP(){
+      try{ this.xp = parseInt(localStorage.getItem('emodul_final_xp')||'0',10)||0; }catch{}
+    }
+  };
+
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded', ()=>App.init());
+  } else {
+    App.init();
+  }
+  </script>
+</body>
+</html>

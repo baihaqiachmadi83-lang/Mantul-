@@ -1,0 +1,1332 @@
+/* ============================================================
+   COMPONENTS – E-Modul Visual
+   Semua komponen UI: Navbar, Kartu, Tombol, Badge, Progress, dll.
+   ============================================================ */
+
+/* ============================================================
+   1. NAVBAR
+   ============================================================ */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--navbar-height);
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  z-index: var(--z-sticky);
+  display: flex;
+  align-items: center;
+}
+
+.navbar .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-lg);
+  color: var(--primary);
+  text-decoration: none;
+}
+
+.navbar-brand .brand-icon {
+  width: 32px;
+  height: 32px;
+  background: var(--primary);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.navbar-progress {
+  flex: 1;
+  max-width: 120px;
+  margin: 0 var(--space-4);
+}
+
+.navbar-progress-label {
+  font-size: var(--font-size-xs);
+  color: var(--text-muted);
+  margin-bottom: 3px;
+  text-align: right;
+}
+
+.navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-full);
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-sm);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+
+.avatar:hover {
+  transform: scale(1.08);
+  box-shadow: var(--shadow-primary);
+}
+
+/* Tombol kembali di navbar */
+.btn-back {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-full);
+  color: var(--text-muted);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  transition: all var(--transition-fast);
+  cursor: pointer;
+}
+
+.btn-back:hover {
+  background: var(--surface);
+  color: var(--primary);
+}
+
+/* ============================================================
+   2. PROGRESS BAR
+   ============================================================ */
+.progress-bar-wrapper {
+  width: 100%;
+}
+
+.progress-bar-track {
+  width: 100%;
+  height: 8px;
+  background: var(--surface-2);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.progress-bar-track--thin { height: 4px; }
+.progress-bar-track--thick { height: 12px; }
+
+.progress-bar-fill {
+  height: 100%;
+  border-radius: var(--radius-full);
+  background: linear-gradient(90deg, var(--accent), var(--accent-600));
+  width: 0%;
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.progress-bar-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255,255,255,0.3) 50%,
+    transparent 100%
+  );
+  animation: shimmer 2s infinite;
+}
+
+.progress-bar-fill--primary {
+  background: linear-gradient(90deg, var(--primary-400), var(--primary));
+}
+
+.progress-bar-fill--warm {
+  background: linear-gradient(90deg, var(--warm-200), var(--warm));
+}
+
+.progress-bar-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-1);
+}
+
+.progress-bar-label-text {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-muted);
+}
+
+.progress-bar-label-value {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  color: var(--accent);
+}
+
+/* ============================================================
+   3. TOMBOL (BUTTON)
+   ============================================================ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-6);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  line-height: 1;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition:
+    background var(--transition-fast),
+    box-shadow var(--transition-fast),
+    transform var(--transition-fast),
+    color var(--transition-fast),
+    border-color var(--transition-fast);
+  text-decoration: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Ripple effect */
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255,255,255,0.2);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.4s ease, height 0.4s ease, opacity 0.4s ease;
+  opacity: 0;
+}
+
+.btn:active::before {
+  width: 200px;
+  height: 200px;
+  opacity: 0;
+}
+
+.btn:active {
+  transform: scale(0.96);
+}
+
+/* Primary */
+.btn-primary {
+  background: var(--primary);
+  color: var(--text-invert);
+  box-shadow: var(--shadow-primary);
+}
+
+.btn-primary:hover {
+  background: var(--primary-700);
+  box-shadow: 0 6px 20px rgba(37,99,235,.35);
+  transform: translateY(-1px);
+}
+
+.btn-primary:active {
+  transform: scale(0.96) translateY(0);
+  box-shadow: var(--shadow-primary);
+}
+
+/* Accent / Success */
+.btn-accent {
+  background: var(--accent);
+  color: var(--text-invert);
+  box-shadow: var(--shadow-accent);
+}
+
+.btn-accent:hover {
+  background: var(--accent-600);
+  box-shadow: 0 6px 20px rgba(16,185,129,.35);
+  transform: translateY(-1px);
+}
+
+.btn-accent:active {
+  transform: scale(0.96) translateY(0);
+}
+
+/* Outline */
+.btn-outline {
+  background: transparent;
+  color: var(--primary);
+  border-color: var(--primary);
+}
+
+.btn-outline:hover {
+  background: var(--primary-50);
+  box-shadow: 0 0 0 3px var(--primary-100);
+}
+
+/* Ghost */
+.btn-ghost {
+  background: transparent;
+  color: var(--text-muted);
+}
+
+.btn-ghost:hover {
+  background: var(--surface);
+  color: var(--text-main);
+}
+
+/* Warm */
+.btn-warm {
+  background: var(--warm);
+  color: var(--text-invert);
+  box-shadow: var(--shadow-warm);
+}
+
+.btn-warm:hover {
+  background: var(--warm-600);
+  transform: translateY(-1px);
+}
+
+/* Sizes */
+.btn-sm {
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--font-size-sm);
+}
+
+.btn-lg {
+  padding: var(--space-4) var(--space-8);
+  font-size: var(--font-size-lg);
+  border-radius: var(--radius-xl);
+}
+
+.btn-block {
+  width: 100%;
+}
+
+/* Disabled */
+.btn:disabled,
+.btn[aria-disabled="true"] {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Icon button */
+.btn-icon {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border-radius: var(--radius-full);
+}
+
+/* ============================================================
+   4. KARTU (CARD)
+   ============================================================ */
+.card {
+  background: var(--card);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  transition: box-shadow var(--transition-base), transform var(--transition-base);
+}
+
+.card:hover {
+  box-shadow: var(--shadow-lg);
+}
+
+.card--interactive {
+  cursor: pointer;
+}
+
+.card--interactive:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-xl);
+}
+
+.card--interactive:active {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.card-body {
+  padding: var(--space-6);
+}
+
+.card-body--compact {
+  padding: var(--space-4);
+}
+
+/* ============================================================
+   5. UNIT CARD
+   ============================================================ */
+.unit-card {
+  background: var(--card);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  transition: all var(--transition-base);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+}
+
+.unit-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  opacity: 0;
+  transition: opacity var(--transition-base);
+}
+
+.unit-card:hover::before,
+.unit-card:focus-visible::before {
+  opacity: 1;
+}
+
+.unit-card:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-4px);
+  border-color: var(--primary-200);
+}
+
+.unit-card:active {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.unit-card--completed {
+  border-color: var(--accent-200);
+}
+
+.unit-card--completed::before {
+  opacity: 1;
+  background: linear-gradient(90deg, var(--accent), var(--accent-600));
+}
+
+.unit-card--locked {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.unit-card--locked:hover {
+  transform: none;
+  box-shadow: var(--shadow-sm);
+}
+
+.unit-card-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-bottom: var(--space-4);
+}
+
+.unit-card-icon--blue   { background: var(--primary-100); color: var(--primary); }
+.unit-card-icon--green  { background: var(--accent-100); color: var(--accent-600); }
+.unit-card-icon--amber  { background: var(--warm-100); color: var(--warm-600); }
+.unit-card-icon--purple {
+  background: #EDE9FE;
+  color: #7C3AED;
+}
+.unit-card-icon--rose {
+  background: #FFE4E6;
+  color: #E11D48;
+}
+
+.unit-card-content {
+  padding: var(--space-5);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.unit-card-number {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-faint);
+  margin-bottom: var(--space-1);
+}
+
+.unit-card-title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-main);
+  margin-bottom: var(--space-2);
+  line-height: var(--line-height-snug);
+}
+
+.unit-card-desc {
+  font-size: var(--font-size-sm);
+  color: var(--text-muted);
+  line-height: var(--line-height-normal);
+  flex: 1;
+  margin-bottom: var(--space-4);
+}
+
+.unit-card-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+}
+
+.meta-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 3px var(--space-2);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  background: var(--surface);
+  color: var(--text-muted);
+}
+
+.unit-card-status {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: auto;
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--border);
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+}
+
+.status-badge--done {
+  background: var(--accent-100);
+  color: var(--accent-600);
+}
+
+.status-badge--progress {
+  background: var(--primary-100);
+  color: var(--primary-700);
+}
+
+.status-badge--locked {
+  background: var(--surface-2);
+  color: var(--text-faint);
+}
+
+/* ============================================================
+   6. BADGE / LENCANA
+   ============================================================ */
+.badge-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.badge {
+  width: 100px;
+  height: 100px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.badge-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: conic-gradient(var(--warm) var(--badge-progress, 100%), var(--surface-2) 0%);
+  padding: 4px;
+}
+
+.badge-inner {
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--warm-100), var(--warm-50));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,.05);
+}
+
+.badge-icon {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.badge-label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-main);
+  text-align: center;
+}
+
+.badge-sublabel {
+  font-size: var(--font-size-xs);
+  color: var(--text-muted);
+  text-align: center;
+}
+
+/* Badge kecil sebagai chip */
+.badge-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  background: linear-gradient(135deg, var(--warm-50), var(--warm-100));
+  border: 1px solid var(--warm-200);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--warm-700);
+  box-shadow: var(--shadow-warm);
+}
+
+/* ============================================================
+   7. CHIP / TAG
+   ============================================================ */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  white-space: nowrap;
+}
+
+.chip--primary { background: var(--primary-100); color: var(--primary-700); }
+.chip--accent  { background: var(--accent-100);  color: var(--accent-700); }
+.chip--warm    { background: var(--warm-100);    color: var(--warm-700); }
+.chip--neutral { background: var(--surface-2);   color: var(--text-muted); }
+.chip--danger  { background: var(--danger-100);  color: var(--danger-600); }
+
+/* ============================================================
+   8. QUIZ KARTU
+   ============================================================ */
+.quiz-wrapper {
+  position: relative;
+  overflow: hidden;
+}
+
+.quiz-question-card {
+  background: var(--card);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border);
+  padding: var(--space-6);
+}
+
+.quiz-question-text {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-main);
+  line-height: var(--line-height-snug);
+  margin-bottom: var(--space-6);
+}
+
+.quiz-options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.quiz-option {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-4);
+  border-radius: var(--radius-lg);
+  border: 2px solid var(--border);
+  background: var(--card);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-align: left;
+  width: 100%;
+  font-size: var(--font-size-base);
+  color: var(--text-body);
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+.quiz-option:hover {
+  border-color: var(--primary-300);
+  background: var(--primary-50);
+  transform: translateX(3px);
+}
+
+.quiz-option:active {
+  transform: scale(0.98);
+}
+
+.quiz-option-key {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  border: 1px solid var(--border-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-muted);
+  flex-shrink: 0;
+  transition: all var(--transition-fast);
+}
+
+.quiz-option:hover .quiz-option-key {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: white;
+}
+
+.quiz-option--selected {
+  border-color: var(--primary);
+  background: var(--primary-50);
+}
+
+.quiz-option--selected .quiz-option-key {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: white;
+}
+
+.quiz-option--correct {
+  border-color: var(--accent);
+  background: var(--accent-50, #F0FDF4);
+  animation: none;
+}
+
+.quiz-option--correct .quiz-option-key {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.quiz-option--wrong {
+  border-color: var(--danger);
+  background: var(--danger-100);
+}
+
+.quiz-option--wrong .quiz-option-key {
+  background: var(--danger);
+  border-color: var(--danger);
+  color: white;
+}
+
+.quiz-option--disabled {
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+/* ============================================================
+   9. FEEDBACK OVERLAY
+   ============================================================ */
+.feedback-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-overlay);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
+.feedback-overlay.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.feedback-toast {
+  background: var(--card);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-xl);
+  padding: var(--space-6) var(--space-8);
+  text-align: center;
+  max-width: 280px;
+  width: 90%;
+}
+
+.feedback-toast--correct {
+  border: 2px solid var(--accent);
+}
+
+.feedback-toast--wrong {
+  border: 2px solid var(--danger);
+}
+
+.feedback-emoji {
+  font-size: 3rem;
+  margin-bottom: var(--space-3);
+  display: block;
+}
+
+.feedback-title {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--space-2);
+}
+
+.feedback-title--correct { color: var(--accent-600); }
+.feedback-title--wrong   { color: var(--danger-600); }
+
+.feedback-desc {
+  font-size: var(--font-size-sm);
+  color: var(--text-muted);
+  margin-bottom: var(--space-4);
+}
+
+/* ============================================================
+   10. CONFETTI (CSS Only)
+   ============================================================ */
+.confetti-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: var(--z-toast);
+  overflow: hidden;
+}
+
+.confetti-piece {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  top: -10px;
+  border-radius: 2px;
+  animation: confettiFall 2.5s ease-in forwards;
+}
+
+/* ============================================================
+   11. FLOATING PROGRESS PILL
+   ============================================================ */
+.progress-pill {
+  position: fixed;
+  bottom: var(--space-6);
+  right: var(--space-4);
+  z-index: var(--z-raised);
+  background: var(--card);
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--border);
+  padding: var(--space-2) var(--space-4);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+
+.progress-pill:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-xl);
+}
+
+.progress-pill-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: pulse-dot 2s infinite;
+}
+
+/* ============================================================
+   12. SECTION CONTENT (Materi)
+   ============================================================ */
+.content-section {
+  background: var(--card);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  padding: var(--space-6);
+  margin-bottom: var(--space-4);
+}
+
+.content-section-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+  padding-bottom: var(--space-4);
+  border-bottom: 1px solid var(--border);
+}
+
+.content-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.content-icon--blue   { background: var(--primary-100); color: var(--primary); }
+.content-icon--green  { background: var(--accent-100); color: var(--accent-600); }
+.content-icon--amber  { background: var(--warm-100); color: var(--warm-600); }
+.content-icon--purple { background: #EDE9FE; color: #7C3AED; }
+
+.content-section-title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-main);
+}
+
+.content-section-subtitle {
+  font-size: var(--font-size-sm);
+  color: var(--text-muted);
+}
+
+.content-body {
+  font-size: var(--font-size-base);
+  color: var(--text-body);
+  line-height: var(--line-height-relaxed);
+}
+
+.content-body p + p {
+  margin-top: var(--space-4);
+}
+
+.content-body ul,
+.content-body ol {
+  list-style: disc;
+  padding-left: var(--space-6);
+  margin: var(--space-4) 0;
+}
+
+.content-body ul li,
+.content-body ol li {
+  margin-bottom: var(--space-2);
+}
+
+.content-body strong {
+  color: var(--text-main);
+  font-weight: var(--font-weight-semibold);
+}
+
+.callout {
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  display: flex;
+  gap: var(--space-3);
+  margin: var(--space-4) 0;
+}
+
+.callout--info {
+  background: var(--primary-50);
+  border-left: 3px solid var(--primary);
+}
+
+.callout--tip {
+  background: var(--accent-50, #F0FDF4);
+  border-left: 3px solid var(--accent);
+}
+
+.callout--warning {
+  background: var(--warm-50);
+  border-left: 3px solid var(--warm);
+}
+
+.callout-icon { font-size: 1.25rem; flex-shrink: 0; }
+.callout-text { font-size: var(--font-size-sm); color: var(--text-body); }
+.callout-text strong { color: var(--text-main); }
+
+/* ============================================================
+   13. BREADCRUMB
+   ============================================================ */
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--font-size-sm);
+  color: var(--text-muted);
+  flex-wrap: wrap;
+}
+
+.breadcrumb-item { color: var(--text-muted); transition: color var(--transition-fast); }
+.breadcrumb-item:hover { color: var(--primary); }
+.breadcrumb-separator { color: var(--text-faint); }
+.breadcrumb-current { color: var(--text-main); font-weight: var(--font-weight-medium); }
+
+/* ============================================================
+   14. STAT CARD
+   ============================================================ */
+.stat-card {
+  background: var(--card);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  padding: var(--space-5);
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+}
+
+.stat-card-value {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  line-height: 1;
+  margin-bottom: var(--space-1);
+}
+
+.stat-card-label {
+  font-size: var(--font-size-sm);
+  color: var(--text-muted);
+}
+
+/* ============================================================
+   15. DIVIDER
+   ============================================================ */
+.divider {
+  height: 1px;
+  background: var(--border);
+  border: none;
+  margin: var(--space-6) 0;
+}
+
+/* ============================================================
+   16. SKELETON LOADER
+   ============================================================ */
+.skeleton {
+  background: linear-gradient(90deg, var(--surface-2) 0%, var(--border) 50%, var(--surface-2) 100%);
+  background-size: 200% 100%;
+  animation: skeletonShimmer 1.4s ease infinite;
+  border-radius: var(--radius-sm);
+}
+
+/* ============================================================
+   17. HERO SECTION (Beranda)
+   ============================================================ */
+.hero-section {
+  padding: var(--space-8) var(--space-4);
+  position: relative;
+}
+
+.greeting-line {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  opacity: 0.85;
+  margin-bottom: var(--space-1);
+}
+
+.hero-title {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-invert);
+  line-height: var(--line-height-snug);
+  margin-bottom: var(--space-4);
+}
+
+.hero-overall-progress {
+  background: rgba(255,255,255,.15);
+  border-radius: var(--radius-xl);
+  padding: var(--space-4);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255,255,255,.2);
+}
+
+.hero-overall-progress .progress-bar-track {
+  background: rgba(255,255,255,.25);
+}
+
+.hero-overall-progress .progress-bar-fill {
+  background: linear-gradient(90deg, #A7F3D0, #34D399);
+}
+
+.hero-overall-progress .progress-bar-label-text {
+  color: rgba(255,255,255,.8);
+}
+
+.hero-overall-progress .progress-bar-label-value {
+  color: #A7F3D0;
+}
+
+/* ============================================================
+   18. SECTION HEADER
+   ============================================================ */
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-4);
+}
+
+.section-title {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-main);
+}
+
+.section-subtitle {
+  font-size: var(--font-size-sm);
+  color: var(--text-muted);
+  margin-top: var(--space-1);
+}
+
+/* ============================================================
+   19. TIMER
+   ============================================================ */
+.quiz-timer {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  background: var(--surface);
+  border-radius: var(--radius-full);
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-main);
+}
+
+.quiz-timer--warning {
+  background: var(--danger-100);
+  color: var(--danger);
+  animation: timerPulse 1s ease infinite;
+}
+
+/* ============================================================
+   20. RESULT SCORE RING
+   ============================================================ */
+.score-ring-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.score-ring {
+  position: relative;
+  width: 140px;
+  height: 140px;
+}
+
+.score-ring svg {
+  transform: rotate(-90deg);
+}
+
+.score-ring-value {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+}
+
+.score-number {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-main);
+  line-height: 1;
+}
+
+.score-label {
+  font-size: var(--font-size-xs);
+  color: var(--text-muted);
+}
+
+/* ============================================================
+   21. MICRO-COPY / MOTIVATIONAL
+   ============================================================ */
+.motivational-card {
+  background: linear-gradient(135deg, var(--primary-50), var(--accent-50, #F0FDF4));
+  border: 1px solid var(--primary-200);
+  border-radius: var(--radius-xl);
+  padding: var(--space-5);
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-4);
+}
+
+.motivational-icon {
+  font-size: 1.75rem;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.motivational-text {
+  font-size: var(--font-size-sm);
+  color: var(--text-body);
+  line-height: var(--line-height-relaxed);
+}
+
+.motivational-text strong {
+  color: var(--primary);
+  font-weight: var(--font-weight-semibold);
+}
+
+/* ============================================================
+   22. NAVIGATION TABS
+   ============================================================ */
+.nav-tabs {
+  display: flex;
+  background: var(--surface-2);
+  border-radius: var(--radius-lg);
+  padding: 3px;
+  gap: 2px;
+}
+
+.nav-tab {
+  flex: 1;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-muted);
+  text-align: center;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  border: none;
+  background: transparent;
+}
+
+.nav-tab:hover {
+  color: var(--text-main);
+  background: rgba(255,255,255,.5);
+}
+
+.nav-tab--active {
+  background: var(--card);
+  color: var(--primary);
+  font-weight: var(--font-weight-semibold);
+  box-shadow: var(--shadow-xs);
+}
+
+/* ============================================================
+   23. STEPPER / QUIZ COUNTER
+   ============================================================ */
+.quiz-counter {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.quiz-counter-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--surface-2);
+  transition: all var(--transition-base);
+}
+
+.quiz-counter-dot--active {
+  background: var(--primary);
+  transform: scale(1.3);
+}
+
+.quiz-counter-dot--done {
+  background: var(--accent);
+}
+
+/* ============================================================
+   24. RESPONSIVE – Mobile first
+   ============================================================ */
+@media (max-width: 400px) {
+  .btn-lg {
+    padding: var(--space-3) var(--space-6);
+    font-size: var(--font-size-base);
+  }
+
+  .quiz-question-text {
+    font-size: var(--font-size-lg);
+  }
+
+  .hero-title {
+    font-size: var(--font-size-xl);
+  }
+
+  .unit-card-title {
+    font-size: var(--font-size-base);
+  }
+}
+
+@media (min-width: 480px) {
+  .grid-2-col {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ============================================================
+   EFEK TEKAN (tap feedback) untuk kartu unit vertikal beranda
+   Memberi umpan balik sentuhan di HP: kartu sedikit mengecil saat ditekan.
+   Kartu terkunci tidak ikut menekan.
+   ============================================================ */
+.unit-card-v {
+  transition: transform var(--transition-fast), box-shadow var(--transition-base), border-color var(--transition-base);
+  -webkit-tap-highlight-color: transparent;
+}
+.unit-card-v:not(.is-locked):hover {
+  box-shadow: var(--shadow-md);
+}
+.unit-card-v:not(.is-locked):active {
+  transform: scale(0.98);
+}
+
+/* Umpan balik tekan tambahan untuk elemen interaktif lain */
+.stat-card:active,
+.progress-pill:active,
+.motivational-card a:active {
+  transform: scale(0.98);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .unit-card-v:not(.is-locked):active,
+  .stat-card:active,
+  .progress-pill:active,
+  .motivational-card a:active { transform: none; }
+}
+
+/* ============================================================
+   DARK MODE — override elemen berlatar terang (harus di file ini
+   agar menang atas aturan dasar karena urutan pemuatan CSS)
+   ============================================================ */
+@media (prefers-color-scheme: dark) {
+  .motivational-card {
+    background: linear-gradient(135deg, #1E293B, #12241D);
+    border-color: #334155;
+  }
+  .motivational-text strong { color: var(--primary-300); }
+  .unit-card-icon--rose   { background: #4C1D24; color: #FDA4AF; }
+  .unit-card-icon--purple { background: #2E1065; color: #C4B5FD; }
+}

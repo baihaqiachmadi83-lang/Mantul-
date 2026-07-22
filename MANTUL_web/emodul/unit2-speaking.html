@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Unit 2 Speaking – Latih percakapan Bahasa Inggris dalam situasi nyata tanpa rasa cemas." />
+  <title>Unit 2: Speaking | MANTUL</title>
+
+  <link rel="stylesheet" href="css/design-system.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/animations.css" />
+  <link rel="stylesheet" href="css/feedback.css" />
+
+  <style>
+    /* ══════════════════════════════════════════════════════
+       SPEAKING PAGE – Page-specific styles
+       ══════════════════════════════════════════════════════ */
+    body { background: var(--surface); }
+
+    /* ── SESSION TABS ── */
+    .sess-tabs {
+      display: flex; gap: var(--space-2); overflow-x: auto;
+      scrollbar-width: none; -webkit-overflow-scrolling: touch;
+      padding-bottom: var(--space-1);
+    }
+    .sess-tabs::-webkit-scrollbar { display: none; }
+    .sess-tab {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: var(--space-2) var(--space-3); border-radius: var(--radius-full);
+      font-size: var(--font-size-sm); font-weight: var(--font-weight-semibold);
+      border: 1.5px solid var(--border); background: var(--card);
+      color: var(--text-muted); cursor: pointer; white-space: nowrap;
+      flex-shrink: 0; transition: all var(--transition-fast);
+      -webkit-tap-highlight-color: transparent;
+    }
+    .sess-tab.active  { background: var(--primary); border-color: var(--primary); color: white; }
+    .sess-tab.done    { background: var(--accent-50); border-color: var(--accent); color: var(--accent-700); }
+    .sess-tab.locked  { opacity: .4; cursor: not-allowed; pointer-events: none; }
+
+    /* ── PHASE STRIP ── */
+    .phase-strip { display: flex; align-items: center; gap: 0; }
+    .phase-node { display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; }
+    .phase-dot {
+      width: 30px; height: 30px; border-radius: 50%; display: flex;
+      align-items: center; justify-content: center; font-size: 13px;
+      font-weight: 700; transition: all var(--transition-base);
+      border: 2px solid transparent;
+    }
+    .phase-dot.done    { background: var(--accent); color: white; }
+    .phase-dot.active  { background: var(--primary); color: white; box-shadow: 0 0 0 4px var(--primary-100); }
+    .phase-dot.upcoming{ background: var(--surface-2); color: var(--text-faint); border-color: var(--border-2); }
+    .phase-label { font-size: 9px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .05em; color: var(--text-faint); text-align: center; }
+    .phase-label.active-label { color: var(--primary); }
+    .phase-line { flex: 1; height: 2px; background: var(--border); margin: 0 -4px;
+      position: relative; top: -10px; transition: background var(--transition-base); }
+    .phase-line.done { background: var(--accent); }
+
+    /* ── HERO CARD ── */
+    .sess-hero {
+      border-radius: var(--radius-2xl); padding: var(--space-5) var(--space-6);
+      color: white; position: relative; overflow: hidden; margin-bottom: var(--space-4);
+    }
+    .sess-hero-deco {
+      position: absolute; right: -10px; top: 50%; transform: translateY(-50%);
+      font-size: 5rem; opacity: .15; pointer-events: none; line-height: 1;
+    }
+
+    /* ── CHAT UI (BUBBLES) ── */
+    .chat-container {
+      display: flex; flex-direction: column; gap: var(--space-4);
+      padding: var(--space-2) 0;
+    }
+    .chat-row {
+      display: flex; gap: var(--space-3); max-width: 90%;
+      opacity: 0; transform: translateY(15px);
+      animation: chatPop .4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+    @keyframes chatPop { to { opacity:1; transform:translateY(0); } }
+    .chat-row.right { align-self: flex-end; flex-direction: row-reverse; }
+    .chat-row.left  { align-self: flex-start; }
+
+    .chat-avatar {
+      width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; background: var(--surface-2); border: 2px solid white;
+      box-shadow: var(--shadow-sm); z-index: 2;
+    }
+    .chat-row.right .chat-avatar { background: var(--primary-100); }
+    .chat-row.left .chat-avatar  { background: var(--accent-100); }
+
+    .chat-bubble-wrap { display: flex; flex-direction: column; gap: 4px; }
+    .chat-row.right .chat-bubble-wrap { align-items: flex-end; }
+    .chat-row.left .chat-bubble-wrap  { align-items: flex-start; }
+
+    .chat-bubble {
+      padding: var(--space-3) var(--space-4);
+      border-radius: var(--radius-2xl);
+      font-size: var(--font-size-base); line-height: 1.5;
+      position: relative; box-shadow: var(--shadow-sm);
+    }
+    .chat-row.left .chat-bubble {
+      background: white; border-top-left-radius: 4px; color: var(--text-main);
+      border: 1px solid var(--border);
+    }
+    .chat-row.right .chat-bubble {
+      background: var(--primary); border-top-right-radius: 4px; color: white;
+    }
+
+    .chat-trans {
+      font-size: var(--font-size-sm); color: var(--text-muted);
+      font-style: italic; margin-top: 4px; padding: 0 8px;
+    }
+    .chat-row.right .chat-trans { text-align: right; }
+
+    /* TTS Button */
+    .btn-tts {
+      width: 28px; height: 28px; border-radius: 50%; border: none;
+      display: inline-flex; align-items: center; justify-content: center;
+      background: rgba(0,0,0,.08); color: inherit; cursor: pointer;
+      transition: all var(--transition-fast); margin-left: 8px; vertical-align: middle;
+    }
+    .chat-row.right .btn-tts { background: rgba(255,255,255,.2); color: white; }
+    .btn-tts:hover { transform: scale(1.1); background: rgba(0,0,0,.15); }
+    .chat-row.right .btn-tts:hover { background: rgba(255,255,255,.3); }
+    .btn-tts.playing {
+      animation: pulsePlay 1.5s infinite;
+      background: var(--accent); color: white;
+    }
+    @keyframes pulsePlay {
+      0% { box-shadow: 0 0 0 0 rgba(16,185,129,.5); }
+      70% { box-shadow: 0 0 0 6px rgba(16,185,129,0); }
+      100% { box-shadow: 0 0 0 0 rgba(16,185,129,0); }
+    }
+
+    /* ── MIC BUTTON (Imitate Phase) ── */
+    .mic-wrap { text-align: center; margin: var(--space-5) 0; }
+    .btn-mic {
+      width: 70px; height: 70px; border-radius: 50%; border: none;
+      background: linear-gradient(135deg, var(--primary), var(--primary-700));
+      color: white; font-size: 1.8rem; display: inline-flex;
+      align-items: center; justify-content: center; cursor: pointer;
+      box-shadow: 0 8px 16px rgba(37,99,235,.25); transition: all .3s cubic-bezier(0.175,0.885,0.32,1.275);
+      position: relative;
+    }
+    .btn-mic::before {
+      content: ''; position: absolute; inset: -10px; border-radius: 50%;
+      border: 2px solid var(--primary-300); opacity: 0; transition: all .3s ease;
+    }
+    .btn-mic:active { transform: scale(0.92); }
+    .btn-mic.recording {
+      background: linear-gradient(135deg, var(--danger), #991B1B);
+      animation: micPulse 1.5s infinite;
+    }
+    @keyframes micPulse {
+      0% { box-shadow: 0 0 0 0 rgba(239,68,68,.6); }
+      70% { box-shadow: 0 0 0 15px rgba(239,68,68,0); }
+      100% { box-shadow: 0 0 0 0 rgba(239,68,68,0); }
+    }
+
+    /* ── BLANK CHAT (Compose Phase) ── */
+    .chat-blank {
+      display: inline-block; min-width: 60px; height: 24px;
+      border-bottom: 2px dashed var(--border-2); margin: 0 4px;
+      vertical-align: bottom; background: rgba(255,255,255,.5);
+    }
+    .chat-row.right .chat-blank { border-color: rgba(255,255,255,.5); background: rgba(0,0,0,.1); }
+
+    /* ── ACTIVITY TAG ── */
+    .act-tag {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 3px var(--space-2); border-radius: var(--radius-full);
+      font-size: 10px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: .07em; margin-bottom: var(--space-3);
+    }
+    .act-listen { background: var(--primary-100); color: var(--primary-700); }
+    .act-speak  { background: var(--accent-100);  color: var(--accent-700); }
+    .act-fill   { background: var(--warm-100);    color: var(--warm-700); }
+
+    /* ── SCORE RING ── */
+    .score-ring {
+      width: 110px; height: 110px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto var(--space-4); position: relative;
+    }
+    .score-ring-inner {
+      width: 80px; height: 80px; border-radius: 50%; background: white;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+    }
+    .result-grade {
+      font-size: 2.5rem; font-weight: 800;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="confetti-container" id="confetti-container" aria-hidden="true"></div>
+
+  <!-- ══════════════════════════════════════════════════════
+       NAVBAR
+       ══════════════════════════════════════════════════════ -->
+  <nav class="navbar" role="navigation" aria-label="Navigasi halaman">
+    <div class="container">
+      <div style="display: flex; align-items: center; gap: var(--space-4);">
+        <a href="index.html" class="btn-back" aria-label="Kembali ke beranda">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2.5" stroke-linecap="round" aria-hidden="true">
+            <polyline points="15 18 9 12 15 6"/>
+          </svg>
+          Beranda
+        </a>
+        <!-- Quick Tools -->
+        <div style="display: flex; gap: var(--space-2); align-items: center;">
+          <button onclick="toggleTheme()" class="btn" style="background: var(--surface-2); border-radius: var(--radius-full); width: 32px; height: 32px; padding: 0; display: flex; align-items: center; justify-content: center; color: var(--text-main); font-size: 14px; transition: transform 0.2s ease;" title="Ganti Mode (Siang/Malam)" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+            <span id="theme-icon">🌙</span>
+          </button>
+          <button onclick="unlockAllSteps()" class="btn" style="background: var(--surface-2); border-radius: var(--radius-full); height: 32px; padding: 0 10px; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; color: var(--text-main); transition: transform 0.2s ease, color 0.2s ease;" title="Unlock Semua Step" onmouseover="this.style.transform='scale(1.05)'; this.style.color='var(--accent)'" onmouseout="this.style.transform='scale(1)'; this.style.color='var(--text-main)'">
+            🔓 Unlock
+          </button>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:var(--space-2);">
+        <span class="chip chip--primary" style="background:var(--accent-100);color:var(--accent-700);">Unit 2</span>
+        <span style="font-size:var(--font-size-sm);font-weight:700;color:var(--text-main);">Speaking</span>
+      </div>
+      <!-- XP counter -->
+      <div style="display:flex;align-items:center;gap:6px;
+        background:var(--warm-50);border:1px solid var(--warm-200);
+        border-radius:var(--radius-full);padding:4px var(--space-3);">
+        <span style="font-size:.9rem;" aria-hidden="true">⭐</span>
+        <span id="nav-xp" style="font-size:var(--font-size-xs);font-weight:800;
+          color:var(--warm-700);">0 XP</span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ══════════════════════════════════════════════════════
+       MAIN
+       ══════════════════════════════════════════════════════ -->
+  <main class="page-content" id="main-content" style="padding-bottom:90px;">
+    <div class="container">
+
+      <!-- SESSION HERO -->
+      <div class="sess-hero anim-fade-in-up" id="sess-hero"
+        style="background:linear-gradient(135deg,var(--primary),var(--primary-700));">
+        <span class="sess-hero-deco" id="hero-deco" aria-hidden="true">👋</span>
+        <div style="position:relative;z-index:1;">
+          <p style="font-size:10px;font-weight:800;text-transform:uppercase;
+            letter-spacing:.09em;color:rgba(255,255,255,.65);margin-bottom:2px;">
+            UNIT 2 · SPEAKING</p>
+          <h1 id="hero-title" style="font-size:var(--font-size-xl);font-weight:800;
+            color:white;margin-bottom:var(--space-3);">Menyapa & Berkenalan</h1>
+          
+          <p id="hero-desc" style="font-size:var(--font-size-sm);color:rgba(255,255,255,.8);
+            margin-bottom:var(--space-3);line-height:1.5;">
+            Pelajari cara memulai percakapan ramah dengan orang baru.</p>
+
+          <div class="progress-bar-track" style="background:rgba(255,255,255,.2);">
+            <div id="hero-bar" class="progress-bar-fill"
+              style="width:0%;background:white;transition:width .8s ease;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SESSION TABS -->
+      <div class="sess-tabs anim-fade-in-up delay-100" role="tablist"
+        aria-label="Pilih skenario percakapan" style="margin-bottom:var(--space-4);">
+        <button class="sess-tab active" id="tab-0" role="tab" onclick="App.goTo(0)">👋 Menyapa</button>
+        <button class="sess-tab" id="tab-1" role="tab" onclick="App.goTo(1)">🛒 Di Warung</button>
+        <button class="sess-tab" id="tab-2" role="tab" onclick="App.goTo(2)">🗺️ Tanya Arah</button>
+        <button class="sess-tab" id="tab-3" role="tab" onclick="App.goTo(3)">⏰ Rutinitas</button>
+      </div>
+
+      <!-- PHASE PROGRESS -->
+      <div class="card anim-fade-in-up delay-200"
+        style="padding:var(--space-4);margin-bottom:var(--space-4);" id="phase-panel">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--space-3);">
+          <span style="font-size:10px;font-weight:800;color:var(--text-faint);
+            text-transform:uppercase;letter-spacing:.07em;">Tahap Latihan</span>
+          <span id="phase-label-text"
+            style="font-size:var(--font-size-xs);color:var(--primary);font-weight:700;"></span>
+        </div>
+        <div class="phase-strip" id="phase-strip"></div>
+      </div>
+
+      <!-- ACTIVITY AREA -->
+      <div id="activity-area" class="anim-fade-in-up delay-300">
+        <!-- Rendered by JS -->
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ══════════════════════════════════════════════════════
+       SCRIPTS
+       ══════════════════════════════════════════════════════ -->
+  <script src="js/app.js"></script>
+  <script src="js/quiz-store.js"></script>
+  <script src="js/feedback.js"></script>
+  <script>
+  'use strict';
+
+  /* ════════════════════════════════════════════════════════
+     1. SCENARIO DATA (4 Situasi Nyata)
+     ════════════════════════════════════════════════════════ */
+  const SCENARIOS = [
+    {
+      id: 0, title: 'Menyapa & Berkenalan', emoji: '👋', color: 'blue',
+      bg: 'linear-gradient(135deg,#2563EB,#1D4ED8)',
+      desc: 'Pelajari cara memulai percakapan ramah dengan rekan kerja atau orang baru.',
+      dialogue: [
+        { role:'A', avatar:'👩', en:"Good morning! How are you today?", id_:"Selamat pagi! Bagaimana kabarmu hari ini?", delay: 0 },
+        { role:'B', avatar:'👨', en:"Good morning. I am fine, thank you. And you?", id_:"Selamat pagi. Saya baik, terima kasih. Dan kamu?", delay: 800 },
+        { role:'A', avatar:'👩', en:"I am doing well. My name is Siti.", id_:"Saya baik-baik saja. Nama saya Siti.", delay: 800 },
+        { role:'B', avatar:'👨', en:"Nice to meet you, Siti. I am Budi.", id_:"Senang bertemu denganmu, Siti. Saya Budi.", delay: 800 }
+      ],
+      quiz: [
+        {
+          id:'q0_1',
+          text:'Lengkapi: "Good morning. I am ____, thank you."',
+          options: ['bad', 'fine', 'busy', 'sleepy'],
+          correct: 1,
+          whyCorrect: '"I am fine" adalah cara sopan untuk merespons sapaan "How are you?".',
+          whyWrong: [null, null, '"busy" (sibuk) kurang pas untuk sapaan awal standar.', '"sleepy" (mengantuk) kurang sopan di lingkungan kerja.'],
+          example: 'A: How are you? | B: I am fine, thank you.'
+        },
+        {
+          id:'q0_2',
+          text:'Bagaimana cara Budi merespons perkenalan Siti?',
+          options: ['See you later.', 'Thank you.', 'Nice to meet you.', 'I am sorry.'],
+          correct: 2,
+          whyCorrect: '"Nice to meet you" (Senang bertemu denganmu) adalah respons standar saat baru berkenalan.',
+          whyWrong: ['"See you later" digunakan saat berpamitan.', '"Thank you" kurang pas konteksnya di sini.', null, '"I am sorry" digunakan untuk meminta maaf.'],
+          example: 'My name is Siti. -> Nice to meet you, Siti.'
+        }
+      ]
+    },
+    {
+      id: 1, title: 'Transaksi di Warung', emoji: '🛒', color: 'amber',
+      bg: 'linear-gradient(135deg,#D97706,#92400E)',
+      desc: 'Latih kosakata belanja, menanyakan harga, dan membayar.',
+      dialogue: [
+        { role:'A', avatar:'🧑‍ms', en:"Excuse me, do you have fresh fish?", id_:"Permisi, apakah Anda punya ikan segar?", delay: 0 },
+        { role:'B', avatar:'👨‍🍳', en:"Yes, we do. How much do you need?", id_:"Ya, ada. Berapa banyak yang Anda butuhkan?", delay: 800 },
+        { role:'A', avatar:'🧑‍ms', en:"I need one kilo. How much is it?", id_:"Saya butuh satu kilo. Berapa harganya?", delay: 800 },
+        { role:'B', avatar:'👨‍🍳', en:"It is thirty thousand rupiah.", id_:"Harganya tiga puluh ribu rupiah.", delay: 800 }
+      ],
+      quiz: [
+        {
+          id:'q1_1',
+          text:'Frasa yang tepat untuk menanyakan harga adalah:',
+          options: ['How much is it?', 'How many is it?', 'What time is it?', 'Where is it?'],
+          correct: 0,
+          whyCorrect: '"How much" digunakan untuk menanyakan harga atau sesuatu yang tidak bisa dihitung (uncountable).',
+          whyWrong: [null, '"How many" untuk benda yang bisa dihitung (buku, apel).', '"What time" untuk menanyakan jam.', '"Where" untuk arah.'],
+          example: 'How much is this fish? (Berapa harga ikan ini?)'
+        }
+      ]
+    },
+    {
+      id: 2, title: 'Menanyakan Arah', emoji: '🗺️', color: 'green',
+      bg: 'linear-gradient(135deg,#059669,#065F46)',
+      desc: 'Cara sopan bertanya lokasi di tempat umum atau pabrik.',
+      dialogue: [
+        { role:'A', avatar:'👱‍♀️', en:"Excuse me, where is the toilet?", id_:"Permisi, di mana toiletnya?", delay: 0 },
+        { role:'B', avatar:'👨‍🔧', en:"Go straight, then turn left.", id_:"Jalan lurus, lalu belok kiri.", delay: 800 },
+        { role:'A', avatar:'👱‍♀️', en:"Turn left after the blue door?", id_:"Belok kiri setelah pintu biru?", delay: 800 },
+        { role:'B', avatar:'👨‍🔧', en:"Yes, that is correct.", id_:"Ya, itu benar.", delay: 800 }
+      ],
+      quiz: [
+        {
+          id:'q2_1',
+          text:'Lengkapi: "Go ____, then turn left."',
+          options: ['back', 'straight', 'right', 'down'],
+          correct: 1,
+          whyCorrect: '"Go straight" berarti berjalan lurus.',
+          whyWrong: ['"Go back" berarti kembali.', null, '"Turn right" berarti belok kanan.', '"Go down" berarti turun.'],
+          example: 'Go straight to the end of the hall.'
+        }
+      ]
+    },
+    {
+      id: 3, title: 'Rutinitas Harian', emoji: '⏰', color: 'purple',
+      bg: 'linear-gradient(135deg,#7C3AED,#4C1D95)',
+      desc: 'Bercerita tentang jadwal kerja dan aktivitas sehari-hari.',
+      dialogue: [
+        { role:'A', avatar:'👨', en:"What time do you wake up?", id_:"Jam berapa kamu bangun?", delay: 0 },
+        { role:'B', avatar:'👩', en:"I wake up at five in the morning.", id_:"Saya bangun jam lima pagi.", delay: 800 },
+        { role:'A', avatar:'👨', en:"Do you cook every morning?", id_:"Apakah kamu memasak setiap pagi?", delay: 800 },
+        { role:'B', avatar:'👩', en:"Yes, I cook rice and vegetables.", id_:"Ya, saya memasak nasi dan sayur.", delay: 800 }
+      ],
+      quiz: [
+        {
+          id:'q3_1',
+          text:'Lengkapi: "I wake up ____ five in the morning."',
+          options: ['in', 'on', 'at', 'to'],
+          correct: 2,
+          whyCorrect: 'Preposisi "at" selalu digunakan sebelum waktu/jam spesifik.',
+          whyWrong: ['"in" dipakai untuk bulan/tahun/bagian hari (in the morning).', '"on" dipakai untuk nama hari (on Sunday).', null, '"to" menunjukkan arah.'],
+          example: 'The class starts at 8 AM.'
+        }
+      ]
+    }
+  ];
+
+  /* ════════════════════════════════════════════════════════
+     2. APP STATE & CONFIG
+     ════════════════════════════════════════════════════════ */
+  const App = {
+    sess:  0,
+    phase: 0, // 0=Listen, 1=Imitate, 2=Compose
+    xp:    0,
+    done:  [false,false,false,false],
+    
+    ls: { currentLine: 0 }, // Listen state
+    is: { currentLine: 0, recording: false }, // Imitate state
+    cs: { qi: 0, qs: [], quizSess: null }, // Compose state
+
+    PHASE_ICONS: ['🎧', '🎙️', '✍️'],
+    PHASE_NAMES: ['Dengar', 'Tirukan', 'Lengkapi'],
+
+    /* ── INIT ── */
+    init(){
+      this._loadProgress();
+      this._loadXP();
+      FeedbackEngine.init({
+        onNext:  () => this._composeNext(),
+        onRetry: () => this._composeRetry(),
+        onSkip:  () => this._composeNext(),
+      });
+      
+      // Warm up TTS
+      if('speechSynthesis' in window){
+        window.speechSynthesis.getVoices();
+      }
+
+      this.render();
+    },
+
+    goTo(n){
+      FeedbackEngine.dismiss();
+      if('speechSynthesis' in window) window.speechSynthesis.cancel();
+      this.sess=n; this.phase=0;
+      this.render();
+      window.scrollTo({top:0,behavior:'smooth'});
+    },
+
+    nextPhase(){
+      if(this.phase<2){
+        this.phase++;
+        this.render();
+        setTimeout(()=>window.scrollTo({top:100,behavior:'smooth'}),50);
+      } else {
+        this._completeSess();
+      }
+    },
+
+    /* ── RENDER ROOT ── */
+    render(){
+      this._updateHero();
+      this._updateTabs();
+      this._updatePhaseStrip();
+
+      [this._renderListen, this._renderImitate, this._renderCompose][this.phase].call(this);
+    },
+
+    _updateHero(){
+      const s = SCENARIOS[this.sess];
+      document.getElementById('sess-hero').style.background = s.bg;
+      document.getElementById('hero-deco').textContent = s.emoji;
+      document.getElementById('hero-title').textContent = s.title;
+      document.getElementById('hero-desc').textContent = s.desc;
+
+      const sessPct = Math.round((this.phase/3)*100);
+      const bar = document.getElementById('hero-bar');
+      if(bar){ bar.style.width='0%'; setTimeout(()=>{ bar.style.width=`${sessPct}%`; },100); }
+    },
+
+    _updateTabs(){
+      for(let i=0;i<4;i++){
+        const el=document.getElementById(`tab-${i}`);
+        if(!el) continue;
+        el.className='sess-tab';
+        if(i===this.sess){ el.classList.add('active'); }
+        else if(this.done[i]){ el.classList.add('done'); }
+      }
+    },
+
+    _updatePhaseStrip(){
+      const strip=document.getElementById('phase-strip');
+      const lbl=document.getElementById('phase-label-text');
+      if(!strip) return;
+      lbl.textContent = `${this.PHASE_ICONS[this.phase]} ${this.PHASE_NAMES[this.phase]}`;
+
+      let html='';
+      this.PHASE_NAMES.forEach((name,i)=>{
+        const isDone=i<this.phase;
+        const isAct=i===this.phase;
+        const cls=isDone?'done':isAct?'active':'upcoming';
+        const icon=isDone?'✓':this.PHASE_ICONS[i];
+        const lblCls=isAct?'phase-label active-label':'phase-label';
+        
+        html+=`<div class="phase-node">
+          <div class="phase-dot ${cls}" title="${name}">${icon}</div>
+          <span class="${lblCls}">${name}</span>
+        </div>`;
+        if(i<2) html+=`<div class="phase-line ${isDone?'done':''}"></div>`;
+      });
+      strip.innerHTML=html;
+    },
+
+    /* ═══════════════════════════════════════════════════════
+       PHASE 0: LISTEN (Dengar)
+       ═══════════════════════════════════════════════════════ */
+    _renderListen(){
+      this.ls.currentLine = 0;
+      const s = SCENARIOS[this.sess];
+
+      document.getElementById('activity-area').innerHTML=`
+        <span class="act-tag act-listen">
+          🎧 Dengar & Pahami &middot; Perhatikan cara pengucapannya
+        </span>
+        <div class="card" style="padding:var(--space-5);background:var(--card);">
+          <div class="chat-container" id="listen-chat"></div>
+          <div style="margin-top:var(--space-6);display:flex;justify-content:center;">
+            <button class="btn btn-primary" onclick="App._playAllListen()" id="btn-play-all">
+              ▶️ Putar Semua Dialog
+            </button>
+            <button class="btn btn-accent" onclick="App.nextPhase()" id="btn-next-phase" style="display:none;">
+              Lanjut: Latihan Meniru →
+            </button>
+          </div>
+        </div>`;
+
+      // Render all bubbles at once but keep them static initially
+      const chat = document.getElementById('listen-chat');
+      let html = '';
+      s.dialogue.forEach((line, i) => {
+        const side = line.role === 'A' ? 'left' : 'right';
+        html += `
+          <div class="chat-row ${side}" id="lr-${i}" style="animation-delay:${i*0.2}s">
+            <div class="chat-avatar">${line.avatar}</div>
+            <div class="chat-bubble-wrap">
+              <div class="chat-bubble">
+                ${line.en}
+                <button class="btn-tts" onclick="App.speak('${line.en.replace(/'/g,"\\'")}', this)" aria-label="Dengarkan kalimat ini">🔊</button>
+              </div>
+              <span class="chat-trans">${line.id_}</span>
+            </div>
+          </div>`;
+      });
+      chat.innerHTML = html;
+
+      // Automatically let user proceed, listening is self-paced
+      setTimeout(() => {
+        document.getElementById('btn-play-all').style.display = 'none';
+        document.getElementById('btn-next-phase').style.display = 'inline-flex';
+        this._addXP(10);
+      }, 5000); // just reveal button after 5s
+    },
+
+    _playAllListen(){
+      if(!('speechSynthesis' in window)) return;
+      const s = SCENARIOS[this.sess];
+      let delay = 0;
+      
+      document.getElementById('btn-play-all').style.display = 'none';
+      document.getElementById('btn-next-phase').style.display = 'inline-flex';
+
+      s.dialogue.forEach((line, i) => {
+        setTimeout(() => {
+          const btn = document.querySelector(`#lr-${i} .btn-tts`);
+          this.speak(line.en, btn);
+        }, delay);
+        delay += 2500; // rough delay between sentences
+      });
+      this._addXP(15);
+    },
+
+    /* ═══════════════════════════════════════════════════════
+       PHASE 1: IMITATE (Tirukan)
+       ═══════════════════════════════════════════════════════ */
+    _renderImitate(){
+      this.is.currentLine = 0;
+      this._renderImitateLine();
+    },
+
+    _renderImitateLine(){
+      const s = SCENARIOS[this.sess];
+      if(this.is.currentLine >= s.dialogue.length){
+        this._addXP(25);
+        this.nextPhase();
+        return;
+      }
+      
+      const line = s.dialogue[this.is.currentLine];
+      const side = line.role === 'A' ? 'left' : 'right';
+
+      document.getElementById('activity-area').innerHTML=`
+        <span class="act-tag act-speak">
+          🎙️ Giliran Anda &middot; Baris ${this.is.currentLine + 1} dari ${s.dialogue.length}
+        </span>
+        
+        <div class="card" style="padding:var(--space-6);min-height:300px;display:flex;flex-direction:column;">
+          <p style="text-align:center;color:var(--text-muted);font-size:var(--font-size-sm);margin-bottom:var(--space-4);">
+            1. Dengarkan kalimatnya<br>2. Ketuk tombol mic dan tirukan!
+          </p>
+          
+          <div class="chat-row ${side}" style="margin:0 auto;max-width:100%;align-self:center;">
+            <div class="chat-avatar">${line.avatar}</div>
+            <div class="chat-bubble-wrap">
+              <div class="chat-bubble" style="font-size:var(--font-size-lg);">
+                ${line.en}
+                <button class="btn-tts" onclick="App.speak('${line.en.replace(/'/g,"\\'")}', this)">🔊</button>
+              </div>
+              <span class="chat-trans" style="text-align:center;">${line.id_}</span>
+            </div>
+          </div>
+
+          <div style="flex:1;"></div>
+
+          <div class="mic-wrap">
+            <button class="btn-mic" id="btn-mic" onclick="App._toggleMic()">🎤</button>
+            <p id="mic-hint" style="margin-top:var(--space-3);color:var(--text-faint);font-size:var(--font-size-sm);font-weight:600;">
+              Ketuk untuk bicara
+            </p>
+          </div>
+        </div>`;
+
+      // Auto play the line first
+      setTimeout(() => {
+        const btn = document.querySelector('.btn-tts');
+        this.speak(line.en, btn);
+      }, 500);
+    },
+
+    _toggleMic(){
+      const btn = document.getElementById('btn-mic');
+      const hint = document.getElementById('mic-hint');
+      if(this.is.recording) return;
+
+      this.is.recording = true;
+      btn.classList.add('recording');
+      hint.textContent = 'Mendengarkan... (Katakan sekarang!)';
+      hint.style.color = 'var(--danger)';
+
+      // Mock voice recognition delay
+      setTimeout(() => {
+        btn.classList.remove('recording');
+        btn.innerHTML = '✓';
+        btn.style.background = 'var(--accent)';
+        hint.textContent = 'Bagus sekali! Pengucapan yang baik.';
+        hint.style.color = 'var(--accent-700)';
+        this._addXP(5);
+        
+        setTimeout(() => {
+          this.is.recording = false;
+          this.is.currentLine++;
+          this._renderImitateLine();
+        }, 1500);
+      }, 3000); // 3 seconds mock recording
+    },
+
+    /* ═══════════════════════════════════════════════════════
+       PHASE 2: COMPOSE (Susun / Lengkapi)
+       ═══════════════════════════════════════════════════════ */
+    _renderCompose(){
+      const s = SCENARIOS[this.sess];
+      this.cs = {
+        qi: 0, 
+        qs: s.quiz,
+        quizSess: QuizStore.startSession(`speak_unit2_s${this.sess}`)
+      };
+      this._renderComposeQ();
+    },
+
+    _renderComposeQ(){
+      const cs = this.cs;
+      if(cs.qi >= cs.qs.length){
+        this._renderComposeResult();
+        return;
+      }
+      const q = cs.qs[cs.qi];
+      const keys = ['A','B','C','D'];
+      const pct = Math.round((cs.qi / cs.qs.length) * 100);
+
+      document.getElementById('activity-area').innerHTML=`
+        <span class="act-tag act-fill">
+          ✍️ Lengkapi Dialog &middot; ${cs.qi+1} / ${cs.qs.length}
+        </span>
+        
+        <div class="progress-bar-track progress-bar-track--thin" style="margin-bottom:var(--space-4);">
+          <div class="progress-bar-fill" style="width:${pct}%;transition:width .4s ease;"></div>
+        </div>
+
+        <div class="card" style="padding:var(--space-5);">
+          <p style="font-size:var(--font-size-lg);font-weight:700;color:var(--text-main);margin-bottom:var(--space-4);text-align:center;">
+            ${q.text.replace('____', '<span class="chat-blank"></span>')}
+          </p>
+
+          <div style="display:flex;flex-direction:column;gap:var(--space-2);" id="quiz-opts">
+            ${q.options.map((opt, i) => `
+              <button class="quiz-option" onclick="App._handleComposeAns(${i})" aria-label="Pilihan ${keys[i]}: ${opt}">
+                <span class="quiz-option-key">${keys[i]}</span>
+                <span class="quiz-option-text">${opt}</span>
+              </button>
+            `).join('')}
+          </div>
+        </div>`;
+    },
+
+    _handleComposeAns(sel){
+      const cs = this.cs;
+      const q = cs.qs[cs.qi];
+      const ok = sel === q.correct;
+
+      document.querySelectorAll('#quiz-opts .quiz-option').forEach((btn, i) => {
+        btn.classList.add('quiz-option--disabled');
+        if(i === q.correct) btn.classList.add('quiz-option--correct');
+        else if(i === sel && !ok) btn.classList.add('quiz-option--wrong');
+      });
+
+      QuizStore.recordAnswer(cs.quizSess, q.id, ok, 0, sel);
+      if(ok){ 
+        this._addXP(15);
+        FeedbackEngine.showCorrect(q, sel); 
+      } else { 
+        FeedbackEngine.showWrong(q, sel); 
+      }
+    },
+
+    _composeNext(){ this.cs.qi++; this._renderComposeQ(); },
+    _composeRetry(){
+      document.querySelectorAll('#quiz-opts .quiz-option').forEach((btn, i) => {
+        btn.classList.remove('quiz-option--disabled','quiz-option--wrong','quiz-option--correct');
+        btn.onclick = () => this._handleComposeAns(i);
+      });
+    },
+
+    _renderComposeResult(){
+      const cs = this.cs;
+      const total = cs.qs.length;
+      const res = QuizStore.finishSession(cs.quizSess, total);
+      
+      const pct = res.score;
+      this._addXP(30);
+
+      document.getElementById('activity-area').innerHTML=`
+        <div class="card" style="padding:var(--space-6);text-align:center;">
+          <div class="score-ring" style="background:conic-gradient(var(--accent) ${pct*3.6}deg, var(--surface-2) ${pct*3.6}deg);">
+            <div class="score-ring-inner">
+              <span style="font-size:1.65rem;font-weight:800;color:var(--accent-700);">${pct}%</span>
+            </div>
+          </div>
+
+          <h2 style="font-size:var(--font-size-xl);font-weight:800;margin-bottom:var(--space-2);">
+            Skenario Selesai! 🎉</h2>
+          <p style="color:var(--text-muted);margin-bottom:var(--space-4);">
+            Pemahaman dialog Anda semakin mantap.</p>
+
+          <button class="btn btn-accent btn-block" onclick="App.nextPhase()">
+            Selesaikan Sesi Ini 🏆
+          </button>
+        </div>`;
+    },
+
+    /* ═══════════════════════════════════════════════════════
+       SESSION COMPLETE
+       ═══════════════════════════════════════════════════════ */
+    _completeSess(){
+      this.done[this.sess] = true;
+      this._saveProgress();
+      this._updateTabs();
+      this._updateHero();
+
+      const next = SCENARIOS[this.sess+1];
+      const allDone = this.done.every(Boolean);
+
+      // Sync ke index (appState)
+      try {
+        const raw = localStorage.getItem('emodul_state');
+        if(raw){
+          const state = JSON.parse(raw);
+          const u = (state.units||[]).find(u=>u.id===2);
+          if(u){
+            const doneCount = this.done.filter(Boolean).length;
+            u.progress = Math.max(u.progress||0, Math.round((doneCount/4)*100));
+            if(allDone) u.status = 'done';
+            localStorage.setItem('emodul_state', JSON.stringify(state));
+          }
+        }
+      } catch{}
+
+      document.getElementById('activity-area').innerHTML=`
+        <div class="card" style="padding:var(--space-6);text-align:center;border:2px solid var(--accent);">
+          <div style="font-size:3.5rem;animation:badgeBounce .6s ease both;margin-bottom:var(--space-3);" aria-hidden="true">🏆</div>
+          <h2 style="font-size:var(--font-size-2xl);font-weight:800;color:var(--accent-700);margin-bottom:var(--space-2);">
+            Sesi ${this.sess+1} Selesai!</h2>
+          
+          <div style="display:flex;flex-direction:column;gap:var(--space-3);margin-top:var(--space-5);">
+            ${next ? `<button class="btn btn-accent btn-block" onclick="App.goTo(${this.sess+1})">Lanjut Sesi ${this.sess+2}: ${next.title} →</button>` : ''}
+            ${allDone ? `<a href="unit3-reading.html" class="btn btn-primary btn-block">Semua Selesai! Lanjut Unit 3 📖</a>` : ''}
+            <a href="index.html" class="btn btn-outline btn-block">← Kembali ke Beranda</a>
+          </div>
+        </div>`;
+
+      if(typeof Utils !== 'undefined') Utils.showConfetti?.();
+    },
+
+    /* ═══════════════════════════════════════════════════════
+       UTILS (TTS, XP)
+       ═══════════════════════════════════════════════════════ */
+    speak(text, btnElement) {
+      if(!('speechSynthesis' in window)) return;
+      
+      // Hanya cancel jika memang sedang ada yang berbicara/antre untuk menghindari bug cancel() di Windows
+      if (window.speechSynthesis.speaking || window.speechSynthesis.pending) {
+        window.speechSynthesis.cancel();
+      }
+      
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.rate = 0.9;
+      
+      const voices = window.speechSynthesis.getVoices();
+      let selectedVoice = voices.find(v => (v.lang === 'en-GB' || v.lang === 'en_GB') && (v.name.includes('Google') || v.name.includes('Natural'))) 
+                          || voices.find(v => v.lang === 'en-GB' || v.lang === 'en_GB')
+                          || voices.find(v => v.lang.startsWith('en'));
+      
+      // Jika sama sekali tidak ada suara bahasa Inggris, ambil suara default pertama
+      if (!selectedVoice && voices.length > 0) {
+        selectedVoice = voices[0];
+      }
+      
+      if (selectedVoice) {
+        utterance.voice = selectedVoice;
+        utterance.lang = selectedVoice.lang;
+      } else {
+        utterance.lang = 'en-US';
+      }
+      
+      // Mencegah Garbage Collection bug
+      window._synth_utterance = utterance;
+      
+      if(btnElement) {
+        // Hapus kelas playing dari tombol lain yang mungkin nyangkut
+        document.querySelectorAll('.btn-tts.playing').forEach(el => el.classList.remove('playing'));
+        btnElement.classList.add('playing');
+        utterance.onend = () => btnElement.classList.remove('playing');
+        utterance.onerror = () => btnElement.classList.remove('playing');
+      }
+      
+      window.speechSynthesis.speak(utterance);
+      
+      // Workaround ampuh untuk bug Chrome/Edge dimana TTS nyangkut dan diam saja
+      if (window.speechSynthesis.pause && window.speechSynthesis.resume) {
+        window.speechSynthesis.resume();
+      }
+    },
+
+    _addXP(n){
+      this.xp += n;
+      try{ localStorage.setItem('emodul_speak_xp', this.xp); }catch{}
+      const el = document.getElementById('nav-xp');
+      if(el){
+        el.textContent = `${this.xp} XP`;
+        el.style.animation = 'none';
+        el.offsetHeight;
+        el.style.animation = 'heartbeat .4s ease both';
+      }
+    },
+    _loadXP(){
+      try{ this.xp = parseInt(localStorage.getItem('emodul_speak_xp')||'0',10)||0; }catch{}
+    },
+    _saveProgress(){
+      try{ localStorage.setItem('emodul_speak_prog', JSON.stringify(this.done)); }catch{}
+    },
+    _loadProgress(){
+      try{ 
+        const d = JSON.parse(localStorage.getItem('emodul_speak_prog'));
+        if(d && d.length===4) { this.done = d; return; }
+      }catch{}
+      this.done = [false,false,false,false];
+    }
+  };
+
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded', ()=>App.init());
+  } else {
+    App.init();
+  }
+  </script>
+</body>
+</html>

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Dashboard Tutor PKBM – Analisis kelas dan pantau progres siswa." />
+  <title>Dashboard Tutor | MANTUL – PKBM Tunas Mandiri</title>
+
+  <link rel="stylesheet" href="css/design-system.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/animations.css" />
+
+  <style>
+    body { background: var(--surface); }
+
+    /* ── HEADER ── */
+    .admin-header {
+      background: linear-gradient(135deg, var(--accent-700), var(--accent));
+      padding: var(--space-5) var(--space-5) var(--space-6);
+      border-bottom-left-radius: var(--radius-2xl);
+      border-bottom-right-radius: var(--radius-2xl);
+      color: white; position: relative;
+    }
+    .admin-title { font-size: var(--font-size-xl); font-weight: 800; margin-bottom: 2px; }
+    .admin-subtitle { font-size: var(--font-size-sm); color: rgba(255,255,255,.8); font-weight: 600; }
+    
+    /* ── STATS GRID ── */
+    .stats-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-3);
+      margin: -25px var(--space-4) var(--space-5); position: relative; z-index: 2;
+    }
+    .stat-card {
+      background: white; border-radius: var(--radius-xl); padding: var(--space-4);
+      box-shadow: var(--shadow-sm); border: 1px solid var(--border);
+      display: flex; flex-direction: column; gap: 4px;
+    }
+    .stat-card-val { font-size: 1.8rem; font-weight: 900; color: var(--text-main); line-height: 1; }
+    .stat-card-lbl { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--text-faint); }
+
+    /* ── SECTION TITLE ── */
+    .sec-title {
+      font-size: var(--font-size-lg); font-weight: 800; color: var(--text-main);
+      margin: var(--space-5) 0 var(--space-3); display: flex; align-items: center; gap: 8px;
+    }
+
+    /* ── LIGHTWEIGHT CHARTS (CSS) ── */
+    .chart-card {
+      background: white; border-radius: var(--radius-xl); padding: var(--space-5);
+      border: 1px solid var(--border); margin-bottom: var(--space-4);
+    }
+    .bar-row { display: flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-3); }
+    .bar-label { width: 70px; font-size: var(--font-size-xs); font-weight: 700; color: var(--text-muted); text-align: right; }
+    .bar-track { flex: 1; height: 12px; background: var(--surface-2); border-radius: 6px; overflow: hidden; }
+    .bar-fill { height: 100%; border-radius: 6px; }
+
+    /* ── STUDENT CARDS ── */
+    .student-list { display: flex; flex-direction: column; gap: var(--space-3); }
+    .student-card {
+      background: white; border-radius: var(--radius-lg); padding: var(--space-4);
+      border: 1px solid var(--border); display: flex; align-items: center; gap: var(--space-3);
+    }
+    .student-avatar {
+      width: 44px; height: 44px; border-radius: 50%; background: var(--primary-50);
+      color: var(--primary-700); display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem; font-weight: 700; flex-shrink: 0;
+    }
+    .student-info { flex: 1; }
+    .student-name { font-size: var(--font-size-sm); font-weight: 800; color: var(--text-main); }
+    .student-meta { font-size: 11px; color: var(--text-muted); display: flex; gap: 8px; margin-top: 2px; }
+    
+    .status-badge {
+      font-size: 9px; font-weight: 800; text-transform: uppercase; padding: 3px 8px;
+      border-radius: var(--radius-full);
+    }
+    .status-ok { background: var(--accent-100); color: var(--accent-700); }
+    .status-warn { background: #FEE2E2; color: #B91C1C; }
+
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar" style="background:transparent;border:none;position:absolute;width:100%;z-index:10;" aria-label="Navigasi halaman">
+    <div class="container" style="justify-content:flex-start;">
+      <a href="index.html" class="btn-back" style="color:white;background:rgba(0,0,0,.15);border:none;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+        Beranda
+      </a>
+    </div>
+  </nav>
+
+  <!-- HEADER -->
+  <div class="admin-header anim-fade-in-up">
+    <div style="margin-top:var(--space-5);">
+      <h1 class="admin-title">Dashboard Tutor</h1>
+      <p class="admin-subtitle">Kelas Bahasa Inggris (Paket C)</p>
+    </div>
+  </div>
+
+  <div class="container" style="padding-bottom:90px;">
+    
+    <!-- STATS -->
+    <div class="stats-grid anim-fade-in-up delay-100">
+      <div class="stat-card">
+        <span class="stat-card-val">24</span>
+        <span class="stat-card-lbl">Siswa Aktif</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-card-val" style="color:var(--accent-600);">78%</span>
+        <span class="stat-card-lbl">Rata-rata Nilai</span>
+      </div>
+      <div class="stat-card" style="grid-column:span 2;flex-direction:row;justify-content:space-between;align-items:center;">
+        <div>
+          <span class="stat-card-val" style="font-size:1.4rem;">4</span>
+          <span class="stat-card-lbl">Perlu Bantuan</span>
+        </div>
+        <button class="btn btn-sm btn-outline">Lihat Detail</button>
+      </div>
+    </div>
+
+    <!-- ANALYSIS CHART -->
+    <h2 class="sec-title anim-fade-in-up delay-200">🔍 Analisis Kesulitan</h2>
+    <div class="chart-card anim-fade-in-up delay-200">
+      <p style="font-size:var(--font-size-xs);color:var(--text-muted);margin-bottom:var(--space-4);">
+        Top 4 kata/konsep yang paling sering dijawab salah minggu ini (Spaced Repetition Data):
+      </p>
+      
+      <div class="bar-row">
+        <span class="bar-label">Expensive</span>
+        <div class="bar-track"><div class="bar-fill" style="width:85%; background:#EF4444;"></div></div>
+        <span style="font-size:10px;font-weight:700;">85% Salah</span>
+      </div>
+      <div class="bar-row">
+        <span class="bar-label">Boils</span>
+        <div class="bar-track"><div class="bar-fill" style="width:70%; background:#F59E0B;"></div></div>
+        <span style="font-size:10px;font-weight:700;">70% Salah</span>
+      </div>
+      <div class="bar-row">
+        <span class="bar-label">Vegetables</span>
+        <div class="bar-track"><div class="bar-fill" style="width:55%; background:#FBBF24;"></div></div>
+        <span style="font-size:10px;font-weight:700;">55% Salah</span>
+      </div>
+      <div class="bar-row" style="margin-bottom:0;">
+        <span class="bar-label">Morning</span>
+        <div class="bar-track"><div class="bar-fill" style="width:30%; background:var(--accent);"></div></div>
+        <span style="font-size:10px;font-weight:700;">30% Salah</span>
+      </div>
+    </div>
+
+    <!-- STUDENT LIST -->
+    <h2 class="sec-title anim-fade-in-up delay-300">👨‍🎓 Data Siswa</h2>
+    <div class="student-list anim-fade-in-up delay-300">
+      
+      <div class="student-card">
+        <div class="student-avatar">B</div>
+        <div class="student-info">
+          <div class="student-name">Budi Santoso</div>
+          <div class="student-meta"><span>Unit 3 Selesai</span> &bull; <span>Skor: 85</span></div>
+        </div>
+        <span class="status-badge status-ok">Aman</span>
+      </div>
+
+      <div class="student-card" style="border-color:#FCA5A5;">
+        <div class="student-avatar" style="background:#FEE2E2;color:#B91C1C;">S</div>
+        <div class="student-info">
+          <div class="student-name">Siti Aminah</div>
+          <div class="student-meta"><span>Unit 1 Tertunda</span> &bull; <span>Skor: 45</span></div>
+        </div>
+        <span class="status-badge status-warn">Bantu</span>
+      </div>
+
+      <div class="student-card">
+        <div class="student-avatar">J</div>
+        <div class="student-info">
+          <div class="student-name">Joko Susilo</div>
+          <div class="student-meta"><span>Unit 2 Selesai</span> &bull; <span>Skor: 72</span></div>
+        </div>
+        <span class="status-badge status-ok">Aman</span>
+      </div>
+
+    </div>
+
+    <div style="text-align:center;margin-top:var(--space-4);" class="anim-fade-in-up delay-400">
+      <button class="btn btn-outline btn-block">Muat Semua Siswa ↓</button>
+    </div>
+
+  </div>
+
+</body>
+</html>

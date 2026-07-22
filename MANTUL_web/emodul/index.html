@@ -1,0 +1,1794 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="MANTUL (Mandiri Tunas English Learning) — MANTUL interaktif untuk Paket C: pelajari Vocabulary, Speaking, dan Reading secara terstruktur, fleksibel, dan menyenangkan." />
+  <title>MANTUL | Beranda</title>
+
+  <link rel="stylesheet" href="css/design-system.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/animations.css" />
+
+  <style>
+    /* ── Halaman beranda: layout khusus ── */
+
+    /* Flow connector: garis vertikal antar unit card */
+    .flow-connector {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      padding: 0 var(--space-5);
+      margin: var(--space-1) 0;
+      position: relative;
+      z-index: 0;
+    }
+
+    .flow-connector-line {
+      width: 2px;
+      height: 28px;
+      background: linear-gradient(180deg, var(--border-2), var(--border));
+      border-radius: var(--radius-full);
+      flex-shrink: 0;
+      margin-left: 26px; /* sejajar tengah icon */
+    }
+
+    .flow-connector-label {
+      font-size: var(--font-size-xs);
+      color: var(--text-faint);
+      font-weight: var(--font-weight-medium);
+      letter-spacing: .04em;
+    }
+
+    /* Unit card: warna aksen stripe kiri */
+    .unit-card-v {
+      display: block;
+      text-decoration: none;
+      color: inherit;
+      background: var(--card);
+      border-radius: var(--radius-xl);
+      border: 1.5px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+      position: relative;
+      transition: box-shadow var(--transition-base), transform var(--transition-base), border-color var(--transition-base);
+      cursor: pointer;
+    }
+
+    .unit-card-v:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-3px);
+      border-color: var(--primary-200);
+    }
+
+    .unit-card-v:active {
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .unit-card-v::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+      background: var(--stripe-color, var(--primary));
+      transition: width var(--transition-base);
+    }
+
+    .unit-card-v:hover::before { width: 6px; }
+
+    /* Completed state */
+    .unit-card-v.is-done {
+      border-color: var(--accent-200);
+    }
+
+    .unit-card-v.is-done::before {
+      background: var(--accent);
+    }
+
+    /* In-progress state */
+    .unit-card-v.is-progress::before {
+      background: var(--primary);
+    }
+
+    /* Locked state */
+    .unit-card-v.is-locked {
+      opacity: 0.6;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    .unit-card-v.is-locked::before {
+      background: var(--border-2);
+    }
+
+    /* Inner layout */
+    .unit-card-inner {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-4);
+      padding: var(--space-5) var(--space-5) var(--space-4) var(--space-6);
+    }
+
+    /* Icon box */
+    .unit-icon-box {
+      width: 52px;
+      height: 52px;
+      border-radius: var(--radius-lg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: transform var(--transition-base);
+    }
+
+    .unit-card-v:hover .unit-icon-box {
+      transform: scale(1.08) rotate(-3deg);
+    }
+
+    .unit-icon-box--blue   { background: var(--primary-100); color: var(--primary); }
+    .unit-icon-box--green  { background: var(--accent-100); color: var(--accent-600); }
+    .unit-icon-box--amber  { background: var(--warm-100); color: var(--warm-600); }
+    .unit-icon-box--purple { background: #EDE9FE; color: #7C3AED; }
+    .unit-icon-box--rose   { background: #FFE4E6; color: #E11D48; }
+    .unit-icon-box--cyan   { background: #CFFAFE; color: #0891B2; }
+    .unit-icon-box--gray   { background: var(--surface-2); color: var(--text-faint); }
+
+    /* Unit text */
+    .unit-meta-row {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      margin-top: var(--space-2);
+      flex-wrap: wrap;
+    }
+
+    /* Final Test card khusus */
+    .final-card {
+      background: linear-gradient(135deg, var(--primary-800) 0%, #0F3460 100%);
+      border-radius: var(--radius-xl);
+      padding: var(--space-5) var(--space-6);
+      color: white;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      transition: box-shadow var(--transition-base), transform var(--transition-base);
+      text-decoration: none;
+      display: block;
+    }
+
+    .final-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 32px rgba(37,99,235,.4);
+    }
+
+    .final-card::before {
+      content: '';
+      position: absolute;
+      top: -30%;
+      right: -10%;
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.06);
+      pointer-events: none;
+    }
+
+    .final-card::after {
+      content: '';
+      position: absolute;
+      bottom: -25%;
+      left: -5%;
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.04);
+      pointer-events: none;
+    }
+
+    .final-card.is-locked {
+      opacity: 0.55;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    /* Grammar penunjang card */
+    .grammar-card {
+      background: linear-gradient(135deg, var(--warm-50), var(--warm-100));
+      border: 1.5px solid var(--warm-200);
+      border-radius: var(--radius-xl);
+      padding: var(--space-4) var(--space-5);
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+      transition: box-shadow var(--transition-base), transform var(--transition-base);
+    }
+
+    .grammar-card:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-2px);
+    }
+
+    /* Step number badge */
+    .step-badge {
+      position: absolute;
+      top: var(--space-3);
+      right: var(--space-3);
+      width: 24px;
+      height: 24px;
+      border-radius: var(--radius-full);
+      background: var(--primary-100);
+      color: var(--primary-700);
+      font-size: var(--font-size-xs);
+      font-weight: var(--font-weight-bold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .step-badge--done {
+      background: var(--accent-100);
+      color: var(--accent-700);
+    }
+
+    .step-badge--locked {
+      background: var(--surface-2);
+      color: var(--text-faint);
+    }
+
+    /* Progress footer strip di bawah unit card */
+    .card-progress-strip {
+      padding: var(--space-2) var(--space-6) var(--space-4);
+    }
+
+    /* Hero Flex Layout */
+    .hero-section-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-5);
+      position: relative;
+      z-index: 1;
+      width: 100%;
+    }
+    .hero-content {
+      flex: 1;
+      min-width: 50%;
+    }
+    .hero-illustration {
+      flex: 0 0 38%;
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+      transform: perspective(1000px) rotateY(-8deg) translateY(-5px);
+      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .hero-illustration:hover {
+      transform: perspective(1000px) rotateY(0deg) scale(1.03);
+    }
+    .hero-illustration img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    @media (max-width: 768px) {
+      .hero-section-inner {
+        flex-direction: column-reverse;
+        text-align: center;
+      }
+      .hero-illustration {
+        width: 80%;
+        max-width: 300px;
+        margin-bottom: var(--space-4);
+        transform: perspective(1000px) rotateY(0deg);
+      }
+      .hero-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .hero-overall-progress {
+        width: 100%;
+        text-align: left;
+      }
+    }
+
+    /* Streak display */
+    .streak-card {
+      background: linear-gradient(135deg, #FFF7ED, #FEF3C7);
+      border: 1px solid var(--warm-200);
+      border-radius: var(--radius-xl);
+      padding: var(--space-4) var(--space-5);
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+    }
+
+    /* Tip of the day rotating */
+    .tip-rotator {
+      position: relative;
+      overflow: hidden;
+      min-height: 44px;
+    }
+
+    .tip-text {
+      font-size: var(--font-size-sm);
+      color: var(--text-body);
+      line-height: var(--line-height-relaxed);
+    }
+
+    /* Quiz-store best score badge on cards */
+    .best-score-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: var(--warm-100);
+      color: var(--warm-700);
+      border-radius: var(--radius-full);
+      padding: 2px var(--space-2);
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    /* ── LOCK ORNAMENT (Gembok) ── */
+    .lock-ornament {
+      position: absolute;
+      top: 50%;
+      right: var(--space-4);
+      transform: translateY(-50%);
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-full);
+      background: linear-gradient(135deg, #F59E0B, #D97706);
+      border: 3px solid rgba(255,255,255,0.5);
+      cursor: pointer;
+      box-shadow: 0 4px 16px rgba(245,158,11,0.4), 0 0 0 0 rgba(245,158,11,0.3);
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      pointer-events: auto !important;
+      animation: lockPulse 2.5s ease-in-out infinite;
+    }
+
+    .lock-ornament:hover {
+      transform: translateY(-50%) scale(1.15) rotate(-5deg);
+      box-shadow: 0 6px 24px rgba(245,158,11,0.5), 0 0 0 6px rgba(245,158,11,0.15);
+    }
+
+    .lock-ornament:active {
+      transform: translateY(-50%) scale(0.95);
+    }
+
+    .lock-ornament svg {
+      width: 22px;
+      height: 22px;
+      stroke: white;
+      fill: none;
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      filter: drop-shadow(0 1px 2px rgba(0,0,0,0.2));
+    }
+
+    /* Final card lock ornament */
+    .final-card .lock-ornament {
+      background: linear-gradient(135deg, #FBBF24, #F59E0B);
+      border-color: rgba(255,255,255,0.6);
+      box-shadow: 0 4px 16px rgba(251,191,36,0.5), 0 0 0 0 rgba(251,191,36,0.3);
+    }
+
+    .final-card .lock-ornament:hover {
+      box-shadow: 0 6px 24px rgba(251,191,36,0.6), 0 0 0 6px rgba(251,191,36,0.2);
+    }
+
+    @keyframes lockPulse {
+      0%, 100% { box-shadow: 0 4px 16px rgba(245,158,11,0.4), 0 0 0 0 rgba(245,158,11,0.3); }
+      50% { box-shadow: 0 4px 16px rgba(245,158,11,0.4), 0 0 0 8px rgba(245,158,11,0); }
+    }
+
+    /* Unlock animation */
+    @keyframes unlockShake {
+      0% { transform: translateY(-50%) rotate(0deg); }
+      15% { transform: translateY(-50%) rotate(-12deg); }
+      30% { transform: translateY(-50%) rotate(10deg); }
+      45% { transform: translateY(-50%) rotate(-8deg); }
+      60% { transform: translateY(-50%) rotate(6deg); }
+      75% { transform: translateY(-50%) rotate(-3deg); }
+      85% { transform: translateY(-50%) rotate(0deg) scale(1.2); }
+      100% { transform: translateY(-50%) scale(0) rotate(0deg); opacity: 0; }
+    }
+
+    .lock-ornament.unlocking {
+      animation: unlockShake 0.8s ease-in-out forwards;
+      pointer-events: none;
+    }
+
+    /* Card unlock transition */
+    @keyframes cardUnlock {
+      0% { opacity: 0.6; }
+      50% { opacity: 1; border-color: var(--accent); box-shadow: 0 0 0 4px var(--accent-100), var(--shadow-lg); }
+      100% { opacity: 1; }
+    }
+
+    .unit-card-v.unlocking-card {
+      animation: cardUnlock 1s ease-out forwards;
+      pointer-events: auto !important;
+      cursor: pointer !important;
+    }
+
+    .final-card.unlocking-card {
+      animation: cardUnlock 1s ease-out forwards;
+      pointer-events: auto !important;
+      cursor: pointer !important;
+    }
+
+    /* ── UNLOCK MODAL ── */
+    .unlock-modal-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 99998;
+      background: rgba(0,0,0,0.5);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+
+    .unlock-modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .unlock-modal {
+      background: var(--card);
+      border-radius: var(--radius-2xl);
+      padding: var(--space-6);
+      max-width: 400px;
+      width: 90%;
+      text-align: center;
+      box-shadow: 0 24px 48px rgba(0,0,0,0.2);
+      transform: scale(0.9) translateY(20px);
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .unlock-modal-overlay.active .unlock-modal {
+      transform: scale(1) translateY(0);
+    }
+
+    .unlock-modal-icon {
+      width: 72px;
+      height: 72px;
+      border-radius: var(--radius-full);
+      background: linear-gradient(135deg, #FEF3C7, #FDE68A);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto var(--space-4);
+      font-size: 2rem;
+    }
+
+    .unlock-modal h3 {
+      font-size: var(--font-size-xl);
+      font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: var(--space-2);
+    }
+
+    .unlock-modal p {
+      font-size: var(--font-size-sm);
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: var(--space-5);
+    }
+
+    .unlock-modal-btns {
+      display: flex;
+      gap: var(--space-3);
+    }
+
+    .unlock-modal-btns button {
+      flex: 1;
+      padding: var(--space-3) var(--space-4);
+      border-radius: var(--radius-lg);
+      font-size: var(--font-size-sm);
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-unlock-cancel {
+      background: var(--surface-2);
+      color: var(--text-muted);
+    }
+
+    .btn-unlock-cancel:hover {
+      background: var(--border);
+    }
+
+    .btn-unlock-confirm {
+      background: linear-gradient(135deg, #F59E0B, #D97706);
+      color: white;
+      box-shadow: 0 4px 12px rgba(245,158,11,0.3);
+    }
+
+    .btn-unlock-confirm:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(245,158,11,0.4);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Konfeti container -->
+  <div class="confetti-container" id="confetti-container" aria-hidden="true"></div>
+
+  <!-- ============================================================
+       ONBOARDING OVERLAY (FULLSCREEN)
+       ============================================================ -->
+  <div id="onboarding-overlay" style="display: none; position: fixed; inset: 0; z-index: 99999; background: var(--surface); flex-direction: column; opacity: 1; transition: opacity 0.5s ease;">
+    <div class="onboarding-container" style="display: flex; flex: 1; overflow: hidden; flex-direction: row;">
+      <!-- Left side: Illustration -->
+      <div style="flex: 1; background: var(--surface-2); display: flex; align-items: center; justify-content: center; position: relative;" class="onboarding-left">
+        <img src="assets/onboarding-bg.png" alt="" style="width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0;" />
+        <div class="onboarding-gradient" style="position: absolute; inset: 0; background: linear-gradient(to right, transparent, var(--surface));"></div>
+      </div>
+      
+      <!-- Right side: Form -->
+      <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 10%; background: var(--surface);" class="onboarding-right">
+        <h1 style="font-size: 2.5rem; color: var(--text-main); font-weight: 800; margin-bottom: var(--space-2); line-height: 1.2;">Mari Mulai Belajar! 🚀</h1>
+        <p style="font-size: var(--font-size-base); color: var(--text-muted); margin-bottom: var(--space-5); line-height: 1.5;">Masukkan nama lengkapmu. Nama ini akan digunakan untuk mencetak <strong>sertifikat MANTUL</strong> di akhir pembelajaran.</p>
+        
+        <form id="onboarding-form" onsubmit="saveStudentName(event)">
+          <div style="margin-bottom: var(--space-4);">
+            <label for="student-name-input" style="display: block; font-size: var(--font-size-sm); font-weight: 700; color: var(--text-body); margin-bottom: var(--space-2);">Nama Lengkap</label>
+            <input type="text" id="student-name-input" required placeholder="Contoh: Budi Santoso" style="width: 100%; padding: var(--space-3) var(--space-4); border: 2px solid var(--border-2); border-radius: var(--radius-lg); font-size: var(--font-size-base); color: var(--text-main); background: var(--surface); outline: none; transition: border-color var(--transition-base);" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border-2)'" />
+          </div>
+          <button type="submit" class="btn btn-block" style="background: var(--accent); color: white; border-radius: var(--radius-lg); padding: var(--space-3) var(--space-4); font-size: var(--font-size-lg); font-weight: 700; border: none; cursor: pointer;">Lanjutkan ➔</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  
+  <style>
+    @media (max-width: 768px) {
+      .onboarding-container { flex-direction: column !important; }
+      .onboarding-left { flex: 0 0 35% !important; }
+      .onboarding-right { flex: 1 !important; padding: var(--space-5) !important; justify-content: flex-start !important; padding-top: var(--space-6) !important; }
+      .onboarding-gradient { background: linear-gradient(to bottom, transparent, var(--surface)) !important; }
+      .onboarding-right h1 { font-size: 2rem !important; }
+    }
+  </style>
+
+  <script>
+    // Immediate check to prevent flash of content
+    (function() {
+      const saved = localStorage.getItem('mantul_student_name');
+      if (!saved) {
+        document.getElementById('onboarding-overlay').style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+      }
+    })();
+
+    function saveStudentName(e) {
+      e.preventDefault();
+      const input = document.getElementById('student-name-input');
+      const name = input.value.trim();
+      if (name) {
+        localStorage.setItem('mantul_student_name', name);
+        const overlay = document.getElementById('onboarding-overlay');
+        overlay.style.opacity = '0';
+        setTimeout(() => {
+          overlay.style.display = 'none';
+          document.body.style.overflow = 'auto';
+        }, 500);
+        
+        const usernameSpan = document.getElementById('hero-username');
+        if (usernameSpan) usernameSpan.textContent = name.split(' ')[0];
+      }
+    }
+
+    function resetName() {
+      localStorage.removeItem('mantul_student_name');
+      document.getElementById('student-name-input').value = '';
+      document.getElementById('onboarding-overlay').style.display = 'flex';
+      document.getElementById('onboarding-overlay').style.opacity = '1';
+      document.body.style.overflow = 'hidden';
+    }
+  </script>
+
+  <!-- ============================================================
+       NAVBAR
+       ============================================================ -->
+  <nav class="navbar" role="navigation" aria-label="Navigasi utama">
+    <div class="container">
+
+      <!-- Brand & Quick Tools -->
+      <div style="display: flex; align-items: center; gap: var(--space-4);">
+        <a href="index.html" class="navbar-brand" aria-label="MANTUL – Beranda">
+          <div class="brand-icon" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+              <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+            </svg>
+          </div>
+          MANTUL
+        </a>
+
+        <!-- Quick Tools -->
+        <div style="display: flex; gap: var(--space-2); align-items: center;">
+          <!-- Theme Toggle -->
+          <button onclick="toggleTheme()" class="btn" style="background: var(--surface-2); border-radius: var(--radius-full); width: 32px; height: 32px; padding: 0; display: flex; align-items: center; justify-content: center; color: var(--text-main); font-size: 14px; transition: transform 0.2s ease;" title="Ganti Mode (Siang/Malam)" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+            <span id="theme-icon">🌙</span>
+          </button>
+          <!-- Unlock All -->
+          <button onclick="unlockAllSteps()" class="btn" style="background: var(--surface-2); border-radius: var(--radius-full); height: 32px; padding: 0 10px; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; color: var(--text-main); transition: transform 0.2s ease, color 0.2s ease;" title="Unlock Semua Step" onmouseover="this.style.transform='scale(1.05)'; this.style.color='var(--accent)'" onmouseout="this.style.transform='scale(1)'; this.style.color='var(--text-main)'">
+            🔓 Unlock
+          </button>
+        </div>
+      </div>
+
+      <!-- Progress global -->
+      <div class="navbar-progress" aria-label="Progress keseluruhan">
+        <div class="navbar-progress-label">
+          <span id="nav-progress-text"
+            style="font-size:0.7rem;color:var(--text-muted);font-weight:600;">0%</span>
+        </div>
+        <div class="progress-bar-track progress-bar-track--thin">
+          <div class="progress-bar-fill" id="nav-progress-bar" style="width:0%"></div>
+        </div>
+      </div>
+
+      <!-- Avatar -->
+      <div class="navbar-actions">
+        <a href="student.html" class="avatar" role="button" tabindex="0"
+          aria-label="Profil Anda" title="Profil"
+          id="nav-avatar" style="text-decoration:none;">P</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ============================================================
+       MAIN
+       ============================================================ -->
+  <main class="page-content" id="main-content">
+    <div class="container">
+
+      <!-- ══════════════════════════════════════════════════════
+           HERO SECTION
+           ══════════════════════════════════════════════════════ -->
+      <section class="hero-gradient hero-section"
+        style="border-radius:var(--radius-2xl);margin-bottom:var(--space-5);"
+        aria-label="Selamat datang">
+
+        <div class="hero-blob hero-blob--1" aria-hidden="true"></div>
+        <div class="hero-blob hero-blob--2" aria-hidden="true"></div>
+
+        <div class="hero-section-inner">
+          <div class="hero-content">
+            <!-- Sapaan dinamis -->
+            <p class="greeting-line" id="hero-greeting" style="margin-bottom:var(--space-1);">
+              Selamat pagi
+            </p>
+
+            <h1 class="hero-title" style="margin-bottom:var(--space-2); display: flex; align-items: center; flex-wrap: wrap; gap: 8px;">
+            Halo, <span id="hero-username">Pelajar</span>! 👋
+            <button onclick="resetName()" style="background: rgba(255,255,255,0.2); border: none; border-radius: var(--radius-full); width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background 0.2s;" title="Ganti Nama" onmouseover="this.style.background='rgba(255,255,255,0.4)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">✏️</button>
+            <br>
+            <span style="font-size:var(--font-size-2xl); width: 100%;">Siap belajar Bahasa Inggris hari ini?</span>
+          </h1>
+            <p style="font-size:var(--font-size-lg); color:rgba(255,255,255,.9); font-weight:600; margin-bottom:var(--space-4); font-style:italic;">
+              "Learn anytime and anywhere"
+            </p>
+
+            <!-- Tip motivasi berganti -->
+            <div style="
+              background:rgba(255,255,255,.20);
+              border:1px solid rgba(255,255,255,.32);
+              border-radius:var(--radius-lg);
+              padding:var(--space-3) var(--space-4);
+              margin-bottom:var(--space-5);
+              display:flex;align-items:flex-start;gap:var(--space-3);
+              text-align:left;">
+              <span style="font-size:1.1rem;flex-shrink:0;" aria-hidden="true">💡</span>
+              <p class="tip-text" id="hero-tip"
+                style="color:rgba(255,255,255,.96);font-size:var(--font-size-sm);margin:0;line-height:1.55;">
+              </p>
+            </div>
+
+            <!-- Progress keseluruhan -->
+            <div class="hero-overall-progress">
+              <div class="progress-bar-label">
+                <span class="progress-bar-label-text">Progress keseluruhan</span>
+                <span class="progress-bar-label-value" id="hero-progress-text">0%</span>
+              </div>
+              <div class="progress-bar-track" style="height:10px;">
+                <div class="progress-bar-fill" id="hero-progress-bar" style="width:0%;"></div>
+              </div>
+              <div style="display:flex;justify-content:space-between;margin-top:var(--space-2);">
+                <span style="font-size:var(--font-size-xs);color:rgba(255,255,255,.82);"
+                  id="hero-units-done">0 dari 3 unit selesai</span>
+                <span style="font-size:var(--font-size-xs);color:rgba(255,255,255,.82);"
+                  id="hero-xp">0 XP</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Ilustrasi Hero -->
+          <div class="hero-illustration" aria-hidden="true">
+            <img src="assets/hero-img.png" alt="Hero Illustration" />
+          </div>
+        </div>
+      </section>
+
+      <!-- ══════════════════════════════════════════════════════
+           RESUME BELAJAR (jika ada unit aktif)
+           ══════════════════════════════════════════════════════ -->
+      <div id="resume-section" style="display:none;margin-bottom:var(--space-5);"
+        class="anim-fade-in-up">
+        <a href="#" id="resume-btn"
+          class="btn btn-primary btn-block"
+          style="border-radius:var(--radius-xl);padding:var(--space-4) var(--space-6);font-size:var(--font-size-base);">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2.5" aria-hidden="true">
+            <polygon points="5 3 19 12 5 21 5 3"/>
+          </svg>
+          <span id="resume-label">Lanjutkan: Unit 1 — Vocabulary</span>
+          <svg class="btn-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+            <polyline points="9 18 15 12 9 6"/>
+          </svg>
+        </a>
+      </div>
+
+      <!-- ══════════════════════════════════════════════════════
+           ALUR BELAJAR
+           ══════════════════════════════════════════════════════ -->
+      <section aria-labelledby="flow-heading" style="margin-bottom:var(--space-8);">
+
+        <div class="section-header" style="margin-bottom:var(--space-4);">
+          <div>
+            <h2 class="section-title" id="flow-heading">Alur Pembelajaran</h2>
+            <p class="section-subtitle" id="flow-subtitle">3 unit utama + 1 tes akhir</p>
+          </div>
+          <div class="chip chip--primary" id="units-done-chip">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="3" aria-hidden="true">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+            0 selesai
+          </div>
+        </div>
+
+        <!-- ─── UNIT 1: VOCABULARY ─── -->
+        <article class="card-stagger" style="margin-bottom:0;">
+
+          <!-- Card Unit 1 -->
+          <a href="unit1-vocabulary.html"
+            class="unit-card-v is-progress"
+            id="card-unit-1"
+            style="--stripe-color:var(--primary);"
+            data-unit="1"
+            aria-label="Unit 1 Vocabulary – Sedang berjalan"
+            role="article">
+
+            <div class="step-badge" style="background:var(--primary-100);color:var(--primary-700);" aria-hidden="true">1</div>
+
+            <div class="unit-card-inner">
+              <!-- Ikon -->
+              <div class="unit-icon-box unit-icon-box--blue" aria-hidden="true">
+                <!-- SVG: Huruf A dengan buku (Vocabulary) -->
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="1.8"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                  <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                  <path d="M9 9l1.5 4m1.5-4L9 9m3 4h-3m1.5-4v4" stroke-width="1.5"/>
+                </svg>
+              </div>
+
+              <!-- Teks -->
+              <div style="flex:1;min-width:0;">
+                <p style="font-size:var(--font-size-xs);font-weight:700;color:var(--primary);
+                  text-transform:uppercase;letter-spacing:.07em;margin-bottom:2px;">Unit 1</p>
+                <h3 style="font-size:var(--font-size-lg);font-weight:700;color:var(--text-main);
+                  margin-bottom:var(--space-2);line-height:1.25;">Vocabulary</h3>
+                <p style="font-size:var(--font-size-sm);color:var(--text-muted);
+                  line-height:1.55;margin-bottom:var(--space-3);">
+                  Perkaya kosakata Bahasa Inggris dalam konteks sehari-hari dan profesional.
+                </p>
+                <div class="unit-meta-row">
+                  <span class="meta-chip">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2" aria-hidden="true">
+                      <circle cx="12" cy="12" r="10"/>
+                      <polyline points="12 6 12 12 16 14"/>
+                    </svg>
+                    45 mnt
+                  </span>
+                  <span class="meta-chip">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2" aria-hidden="true">
+                      <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                      <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                    </svg>
+                    6 topik
+                  </span>
+                  <span class="meta-chip">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2" aria-hidden="true">
+                      <circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="8"/>
+                    </svg>
+                    20 soal kuis
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Progress bar strip -->
+            <div class="card-progress-strip">
+              <div class="progress-bar-label" style="margin-bottom:var(--space-1);">
+                <span class="progress-bar-label-text">Progress</span>
+                <div style="display:flex;align-items:center;gap:var(--space-2);">
+                  <span class="status-badge status-badge--progress" style="font-size:10px;">
+                    <svg width="9" height="9" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    Sedang berjalan
+                  </span>
+                  <span class="progress-bar-label-value" style="color:var(--primary);" id="pct-unit-1">0%</span>
+                </div>
+              </div>
+              <div class="progress-bar-track progress-bar-track--thin">
+                <div class="progress-bar-fill" id="bar-unit-1" style="width:0%"></div>
+              </div>
+            </div>
+          </a>
+
+          <!-- Konektor -->
+          <div class="flow-connector" aria-hidden="true">
+            <div class="flow-connector-line"></div>
+            <span class="flow-connector-label">kemudian</span>
+          </div>
+
+          <!-- ─── UNIT 2: SPEAKING ─── -->
+          <a
+            class="unit-card-v is-locked"
+            id="card-unit-2"
+            style="--stripe-color:var(--border-2);"
+            data-unit="2"
+            aria-label="Unit 2 Speaking – Terkunci"
+            aria-disabled="true"
+            role="article">
+
+            <div class="step-badge step-badge--locked" id="step-badge-2" aria-hidden="true">2</div>
+
+            <!-- Lock Ornament (Gembok) Unit 2 -->
+            <div class="lock-ornament" id="lock-ornament-2" onclick="event.preventDefault(); event.stopPropagation(); showUnlockModal(2)" title="Klik untuk unlock Unit 2">
+              <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            </div>
+
+            <div class="unit-card-inner">
+              <div class="unit-icon-box unit-icon-box--amber" aria-hidden="true">
+                <!-- SVG: Gelembung bicara (Speaking) -->
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="1.8"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                  <line x1="9" y1="10" x2="9" y2="10" stroke-width="2.5"/>
+                  <line x1="12" y1="10" x2="12" y2="10" stroke-width="2.5"/>
+                  <line x1="15" y1="10" x2="15" y2="10" stroke-width="2.5"/>
+                </svg>
+              </div>
+
+              <div style="flex:1;min-width:0;">
+                <p style="font-size:var(--font-size-xs);font-weight:700;color:var(--primary);
+                  text-transform:uppercase;letter-spacing:.07em;margin-bottom:2px;">Unit 2</p>
+                <h3 style="font-size:var(--font-size-lg);font-weight:700;color:var(--text-main);
+                  margin-bottom:var(--space-2);line-height:1.25;">Speaking</h3>
+                <p style="font-size:var(--font-size-sm);color:var(--text-muted);
+                  line-height:1.55;margin-bottom:var(--space-3);">
+                  Latih kemampuan berbicara, pelafalan, dan percakapan dalam berbagai situasi nyata.
+                </p>
+                <div class="unit-meta-row">
+                  <span class="meta-chip">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2" aria-hidden="true">
+                      <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+                    </svg>
+                    50 mnt
+                  </span>
+                  <span class="meta-chip">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2" aria-hidden="true">
+                      <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                      <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                    </svg>
+                    5 topik
+                  </span>
+                  <span class="meta-chip">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2" aria-hidden="true">
+                      <circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="8"/>
+                    </svg>
+                    15 soal kuis
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div class="card-progress-strip">
+              <div class="progress-bar-label" style="margin-bottom:var(--space-1);">
+                <span class="progress-bar-label-text" id="label-unit-2" style="color:var(--text-faint);">Terkunci</span>
+                <div style="display:flex;align-items:center;gap:var(--space-2);">
+                  <span id="lockmsg-unit-2" style="font-size:var(--font-size-xs);color:var(--text-faint);">Selesaikan Unit 1 dulu</span>
+                  <span class="progress-bar-label-value" style="color:var(--primary);display:none;" id="pct-unit-2">0%</span>
+                </div>
+              </div>
+              <div class="progress-bar-track progress-bar-track--thin">
+                <div class="progress-bar-fill progress-bar-fill--primary" id="bar-unit-2" style="width:0%"></div>
+              </div>
+            </div>
+          </a>
+
+          <!-- Konektor -->
+          <div class="flow-connector" aria-hidden="true">
+            <div class="flow-connector-line"></div>
+            <span class="flow-connector-label">lalu</span>
+          </div>
+
+          <!-- ─── UNIT 3: READING ─── -->
+          <div class="unit-card-v is-locked"
+            id="card-unit-3"
+            style="--stripe-color:var(--border-2);"
+            data-unit="3"
+            aria-label="Unit 3 Reading – Terkunci"
+            aria-disabled="true"
+            tabindex="0"
+            role="article">
+
+            <div class="step-badge step-badge--locked" id="step-badge-3" aria-hidden="true">3</div>
+
+            <!-- Lock Ornament (Gembok) Unit 3 -->
+            <div class="lock-ornament" id="lock-ornament-3" onclick="event.preventDefault(); event.stopPropagation(); showUnlockModal(3)" title="Klik untuk unlock Unit 3">
+              <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            </div>
+
+            <div class="unit-card-inner">
+              <div class="unit-icon-box unit-icon-box--gray" aria-hidden="true">
+                <!-- SVG: Kacamata baca (Reading) -->
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="1.8"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="7" cy="15" r="4"/>
+                  <circle cx="17" cy="15" r="4"/>
+                  <path d="M3 15c0-2.21 1.79-4 4-4"/>
+                  <path d="M17 11c2.21 0 4 1.79 4 4"/>
+                  <path d="M11 15h2"/>
+                  <path d="M2 9l1 2M22 9l-1 2"/>
+                </svg>
+              </div>
+
+              <div style="flex:1;min-width:0;">
+                <p style="font-size:var(--font-size-xs);font-weight:700;color:var(--text-faint);
+                  text-transform:uppercase;letter-spacing:.07em;margin-bottom:2px;">Unit 3</p>
+                <h3 style="font-size:var(--font-size-lg);font-weight:700;color:var(--text-muted);
+                  margin-bottom:var(--space-2);line-height:1.25;">Reading</h3>
+                <p style="font-size:var(--font-size-sm);color:var(--text-faint);
+                  line-height:1.55;margin-bottom:var(--space-3);">
+                  Tingkatkan pemahaman bacaan teks autentik, artikel, dan dokumen profesional.
+                </p>
+                <div class="unit-meta-row">
+                  <span class="meta-chip">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2" aria-hidden="true">
+                      <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+                    </svg>
+                    40 mnt
+                  </span>
+                  <span class="meta-chip">7 topik</span>
+                  <span class="meta-chip">18 soal kuis</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="card-progress-strip">
+              <div class="progress-bar-label" style="margin-bottom:var(--space-1);">
+                <span class="progress-bar-label-text" style="color:var(--text-faint);">Terkunci</span>
+                <span style="font-size:var(--font-size-xs);color:var(--text-faint);">Selesaikan Unit 2 dulu</span>
+              </div>
+              <div class="progress-bar-track progress-bar-track--thin">
+                <div style="width:0%;height:100%;background:var(--border-2);border-radius:var(--radius-full);"></div>
+              </div>
+            </div>
+          </div>
+
+        </article>
+
+
+        <!-- ─── FINAL TEST ─── -->
+        <div class="flow-connector" aria-hidden="true">
+          <div class="flow-connector-line"
+            style="background:linear-gradient(180deg,var(--border-2),var(--primary-300));"></div>
+          <span class="flow-connector-label" style="color:var(--primary);font-weight:600;">ujian akhir</span>
+        </div>
+
+        <a href="final-test.html"
+          class="final-card is-locked anim-fade-in-up delay-400"
+          id="card-final"
+          aria-label="Final Test – Selesaikan semua unit terlebih dahulu">
+
+          <div style="position:relative;z-index:1;display:flex;align-items:flex-start;gap:var(--space-4);">
+
+            <!-- Ikon trofi -->
+            <div style="
+              width:56px;height:56px;
+              background:rgba(255,255,255,.18);
+              border:2px solid rgba(255,255,255,.25);
+              border-radius:var(--radius-lg);
+              display:flex;align-items:center;justify-content:center;
+              flex-shrink:0;" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none"
+                stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="16 3 21 3 21 8"/>
+                <line x1="4" y1="20" x2="21" y2="3"/>
+                <polyline points="21 16 21 21 16 21"/>
+                <line x1="15" y1="15" x2="21" y2="21"/>
+              </svg>
+            </div>
+
+            <div style="flex:1;">
+              <p style="font-size:var(--font-size-xs);color:rgba(255,255,255,.82);
+                font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px;">
+                Ujian Akhir
+              </p>
+              <h3 style="font-size:var(--font-size-xl);font-weight:700;color:white;
+                margin-bottom:var(--space-2);line-height:1.2;">Final Test</h3>
+              <p style="font-size:var(--font-size-sm);color:rgba(255,255,255,.75);
+                line-height:1.55;margin-bottom:var(--space-3);">
+                Uji seluruh kemampuan Anda setelah menyelesaikan semua unit pembelajaran.
+              </p>
+
+              <div style="display:flex;align-items:center;gap:var(--space-3);flex-wrap:wrap;">
+                <span style="
+                  background:rgba(255,255,255,.15);border-radius:var(--radius-full);
+                  padding:3px 12px;font-size:var(--font-size-xs);color:rgba(255,255,255,.9);
+                  display:flex;align-items:center;gap:6px;">
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+                  </svg>
+                  90 mnt
+                </span>
+                <span style="
+                  background:rgba(255,255,255,.15);border-radius:var(--radius-full);
+                  padding:3px 12px;font-size:var(--font-size-xs);color:rgba(255,255,255,.9);">
+                  50 soal
+                </span>
+                <span style="
+                  background:rgba(255,255,255,.15);border-radius:var(--radius-full);
+                  padding:3px 12px;font-size:var(--font-size-xs);color:rgba(255,255,255,.9);">
+                  Sertifikat 🎓
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Status terkunci -->
+          <!-- Lock Ornament (Gembok) Final Test -->
+          <div class="lock-ornament" id="lock-ornament-final" onclick="event.preventDefault(); event.stopPropagation(); showUnlockModal('final')" title="Klik untuk unlock Final Test" style="top:50%;right:var(--space-5);">
+            <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          </div>
+
+          <div id="final-lock-msg"
+            style="
+              position:relative;z-index:1;
+              margin-top:var(--space-4);
+              padding-top:var(--space-3);
+              border-top:1px solid rgba(255,255,255,.15);
+              display:flex;align-items:center;gap:var(--space-2);">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+              stroke="rgba(255,255,255,.7)" stroke-width="2.5" aria-hidden="true">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+            <span style="font-size:var(--font-size-xs);color:rgba(255,255,255,.7);">
+              Selesaikan semua unit terlebih dahulu untuk membuka Final Test
+            </span>
+          </div>
+        </a>
+
+      </section>
+
+      <!-- ══════════════════════════════════════════════════════
+           STREAK & STATISTIK
+           ══════════════════════════════════════════════════════ -->
+      <section aria-labelledby="stats-heading" style="margin-bottom:var(--space-8);"
+        class="anim-fade-in-up delay-400">
+
+        <h2 class="sr-only" id="stats-heading">Statistik Belajar</h2>
+
+        <!-- Streak card -->
+        <div class="streak-card" style="margin-bottom:var(--space-4);">
+          <div style="font-size:2rem;line-height:1;" aria-hidden="true">🔥</div>
+          <div style="flex:1;">
+            <p style="font-size:var(--font-size-base);font-weight:700;color:var(--warm-700);
+              margin-bottom:2px;">
+              <span id="streak-count">0</span> hari berturut-turut belajar
+            </p>
+            <p style="font-size:var(--font-size-sm);color:var(--warm-600);">
+              Pertahankan konsistensi Anda — kunci utama menguasai bahasa baru!
+            </p>
+          </div>
+          <div style="text-align:right;flex-shrink:0;">
+            <p style="font-size:var(--font-size-xs);color:var(--warm-600);font-weight:600;">
+              Terbaik</p>
+            <p style="font-size:var(--font-size-xl);font-weight:700;color:var(--warm-700);"
+              id="streak-best">0</p>
+          </div>
+        </div>
+
+        <!-- Stat mini cards -->
+        <div class="grid grid-cols-2 gap-3" role="list" aria-label="Statistik belajar Anda">
+          <div class="stat-card" role="listitem">
+            <div class="stat-card-value" style="color:var(--primary);" id="stat-xp">0</div>
+            <div class="stat-card-label">Total XP</div>
+          </div>
+          <div class="stat-card" role="listitem">
+            <div class="stat-card-value" style="color:var(--accent);" id="stat-correct">0%</div>
+            <div class="stat-card-label">Rata-rata Kuis</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══════════════════════════════════════════════════════
+           LENCANA / BADGE
+           ══════════════════════════════════════════════════════ -->
+      <section aria-labelledby="badge-heading" style="margin-bottom:var(--space-8);"
+        class="anim-fade-in-up delay-500">
+        <div class="section-header" style="margin-bottom:var(--space-4);">
+          <div>
+            <h2 class="section-title" id="badge-heading">Lencana Saya</h2>
+            <p class="section-subtitle">Kumpulkan semua — selesaikan setiap unit</p>
+          </div>
+        </div>
+
+        <div class="card" style="padding:var(--space-5);">
+          <div style="display:flex;gap:var(--space-5);flex-wrap:wrap;align-items:flex-start;"
+            role="list" aria-label="Koleksi lencana">
+
+            <!-- Badge 1: Vocabulary Master -->
+            <div class="badge-container" role="listitem" id="badge-1">
+              <div class="badge anim-float">
+                <div class="badge-ring"
+                  style="background:conic-gradient(var(--accent) 100%, var(--surface-2) 0%);">
+                  <div class="badge-inner">
+                    <span class="badge-icon">📚</span>
+                  </div>
+                </div>
+              </div>
+              <span class="badge-label">Vocab Master</span>
+              <span class="badge-sublabel">Unit 1 selesai</span>
+            </div>
+
+            <!-- Badge 2: terkunci -->
+            <div class="badge-container" role="listitem" id="badge-2"
+              style="opacity:.3;">
+              <div class="badge">
+                <div class="badge-ring" style="background:var(--surface-2);padding:4px;">
+                  <div class="badge-inner" style="background:var(--surface-2);">
+                    <span class="badge-icon">🎙️</span>
+                  </div>
+                </div>
+              </div>
+              <span class="badge-label" style="color:var(--text-faint);">Speaker Pro</span>
+              <span class="badge-sublabel">Unit 2 – terkunci</span>
+            </div>
+
+            <!-- Badge 3: terkunci -->
+            <div class="badge-container" role="listitem" id="badge-3"
+              style="opacity:.3;">
+              <div class="badge">
+                <div class="badge-ring" style="background:var(--surface-2);padding:4px;">
+                  <div class="badge-inner" style="background:var(--surface-2);">
+                    <span class="badge-icon">👓</span>
+                  </div>
+                </div>
+              </div>
+              <span class="badge-label" style="color:var(--text-faint);">Reader Elite</span>
+              <span class="badge-sublabel">Unit 3 – terkunci</span>
+            </div>
+
+            <!-- Badge Final -->
+            <div class="badge-container" role="listitem" id="badge-final"
+              style="opacity:.3;">
+              <div class="badge">
+                <div class="badge-ring" style="background:var(--surface-2);padding:4px;">
+                  <div class="badge-inner" style="background:var(--surface-2);">
+                    <span class="badge-icon">🎓</span>
+                  </div>
+                </div>
+              </div>
+              <span class="badge-label" style="color:var(--text-faint);">Graduate</span>
+              <span class="badge-sublabel">Final Test lulus</span>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- FLOATING PROGRESS PILL -->
+  <div class="progress-pill" id="progress-pill"
+    style="opacity:0;transition:opacity 0.3s ease;"
+    role="status" aria-live="polite" aria-label="Progress belajar Anda">
+    <div class="progress-pill-dot" aria-hidden="true"></div>
+    <span id="pill-text">0% selesai</span>
+  </div>
+
+  <!-- ── UNLOCK CONFIRMATION MODAL ── -->
+  <div class="unlock-modal-overlay" id="unlock-modal-overlay">
+    <div class="unlock-modal">
+      <div class="unlock-modal-icon" id="unlock-modal-icon">🔓</div>
+      <h3 id="unlock-modal-title">Unlock Unit?</h3>
+      <p id="unlock-modal-desc">Apakah Anda yakin ingin membuka unit ini? Anda bisa langsung mengakses materinya.</p>
+      <div class="unlock-modal-btns">
+        <button class="btn-unlock-cancel" onclick="hideUnlockModal()">Batal</button>
+        <button class="btn-unlock-confirm" id="unlock-modal-btn" onclick="confirmUnlock()">🔓 Unlock!</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       SCRIPTS
+       ============================================================ -->
+  <script src="js/app.js"></script>
+  <script src="js/quiz-store.js"></script>
+  <script>
+    'use strict';
+
+    /* ============================================================
+       UNIT / FINAL INFO MAP
+       ============================================================ */
+    const UNIT_INFO = {
+      1: { name: 'Unit 1 – Vocabulary', emoji: '📚', href: 'unit1-vocabulary.html', color: 'var(--primary)' },
+      2: { name: 'Unit 2 – Speaking', emoji: '🎙️', href: 'unit2-speaking.html', color: 'var(--warm-600)' },
+      3: { name: 'Unit 3 – Reading', emoji: '📖', href: 'unit3-reading.html', color: '#7C3AED' },
+      'final': { name: 'Final Test', emoji: '🎓', href: 'final-test.html', color: 'var(--primary)' }
+    };
+
+    let pendingUnlockTarget = null;
+
+    /* ============================================================
+       SHOW / HIDE UNLOCK MODAL
+       ============================================================ */
+    function showUnlockModal(target) {
+      pendingUnlockTarget = target;
+      const info = UNIT_INFO[target];
+      if (!info) return;
+
+      document.getElementById('unlock-modal-icon').textContent = info.emoji;
+      document.getElementById('unlock-modal-title').textContent = 'Unlock ' + info.name + '?';
+      document.getElementById('unlock-modal-desc').textContent =
+        target === 'final'
+          ? 'Apakah Anda yakin ingin membuka Final Test? Anda bisa langsung mengerjakan soal ujian akhir.'
+          : 'Apakah Anda yakin ingin membuka ' + info.name + '? Anda bisa langsung mengakses materinya.';
+      document.getElementById('unlock-modal-btn').textContent = '🔓 Unlock ' + info.name;
+
+      const overlay = document.getElementById('unlock-modal-overlay');
+      overlay.classList.add('active');
+    }
+
+    function hideUnlockModal() {
+      const overlay = document.getElementById('unlock-modal-overlay');
+      overlay.classList.remove('active');
+      pendingUnlockTarget = null;
+    }
+
+    // Close modal on backdrop click
+    document.addEventListener('click', function(e) {
+      if (e.target.id === 'unlock-modal-overlay') hideUnlockModal();
+    });
+
+    /* ============================================================
+       CONFIRM UNLOCK – Per Unit / Final Test
+       ============================================================ */
+    function confirmUnlock() {
+      if (!pendingUnlockTarget) return;
+      const target = pendingUnlockTarget;
+      hideUnlockModal();
+
+      if (target === 'final') {
+        unlockFinalTest();
+      } else {
+        unlockUnit(Number(target));
+      }
+    }
+
+    /* ── Unlock a specific unit ── */
+    function unlockUnit(unitId) {
+      // 1. Update localStorage state
+      let raw = localStorage.getItem('emodul_state');
+      let state = raw ? JSON.parse(raw) : { units: [
+        { id: 1, progress: 0, status: 'available' },
+        { id: 2, progress: 0, status: 'locked' },
+        { id: 3, progress: 0, status: 'locked' }
+      ]};
+
+      const unit = state.units.find(u => u.id === unitId);
+      if (unit) {
+        unit.status = 'available';
+      }
+      localStorage.setItem('emodul_state', JSON.stringify(state));
+
+      // 2. Animate lock ornament (shake & disappear)
+      const ornament = document.getElementById('lock-ornament-' + unitId);
+      if (ornament) {
+        ornament.classList.add('unlocking');
+      }
+
+      // 3. After ornament vanishes, unlock the card
+      setTimeout(function() {
+        const card = document.getElementById('card-unit-' + unitId);
+        if (card) {
+          // Remove locked state
+          card.classList.remove('is-locked');
+          card.classList.add('unlocking-card');
+
+          // Set href so the card becomes clickable
+          const info = UNIT_INFO[unitId];
+          if (info && card.tagName === 'A') {
+            card.setAttribute('href', info.href);
+          } else if (info && card.tagName === 'DIV') {
+            // Convert div to be clickable
+            card.style.cursor = 'pointer';
+            card.onclick = function() { window.location.href = info.href; };
+          }
+
+          card.setAttribute('aria-disabled', 'false');
+          card.style.opacity = '1';
+          card.style.pointerEvents = 'auto';
+          card.style.setProperty('--stripe-color', info ? info.color : 'var(--primary)');
+
+          // Update step badge
+          const badge = document.getElementById('step-badge-' + unitId);
+          if (badge) {
+            badge.classList.remove('step-badge--locked');
+            badge.style.background = 'var(--primary-100)';
+            badge.style.color = 'var(--primary-700)';
+          }
+
+          // Update progress strip label
+          const label = document.getElementById('label-unit-' + unitId);
+          if (label) {
+            label.textContent = 'Progress';
+            label.style.color = '';
+          }
+          const lockMsg = document.getElementById('lockmsg-unit-' + unitId);
+          if (lockMsg) {
+            lockMsg.style.display = 'none';
+          }
+          const pct = document.getElementById('pct-unit-' + unitId);
+          if (pct) {
+            pct.style.display = '';
+            pct.textContent = '0%';
+          }
+
+          // Update icon box colors
+          const iconBox = card.querySelector('.unit-icon-box');
+          if (iconBox) {
+            iconBox.classList.remove('unit-icon-box--gray');
+            if (unitId === 2) iconBox.classList.add('unit-icon-box--amber');
+            if (unitId === 3) {
+              iconBox.classList.add('unit-icon-box--purple');
+              iconBox.style.background = '#EDE9FE';
+              iconBox.style.color = '#7C3AED';
+            }
+          }
+
+          // Update text colors
+          const unitLabel = card.querySelector('[style*="text-transform:uppercase"]');
+          if (unitLabel) unitLabel.style.color = 'var(--primary)';
+          const unitTitle = card.querySelector('h3');
+          if (unitTitle) unitTitle.style.color = 'var(--text-main)';
+          const unitDesc = card.querySelector('p[style*="line-height:1.55"]');
+          if (unitDesc) unitDesc.style.color = 'var(--text-muted)';
+        }
+
+        // Hide ornament
+        if (ornament) ornament.style.display = 'none';
+
+        // Show toast & confetti
+        if (typeof Utils !== 'undefined') {
+          Utils.showToast('🔓 ' + UNIT_INFO[unitId].name + ' berhasil di-unlock!');
+          Utils.showConfetti(40);
+        }
+
+        // Re-run dashboard to sync all UI
+        setTimeout(initDashboard, 500);
+      }, 800);
+    }
+
+    /* ── Unlock Final Test ── */
+    function unlockFinalTest() {
+      // 1. Animate lock ornament
+      const ornament = document.getElementById('lock-ornament-final');
+      if (ornament) {
+        ornament.classList.add('unlocking');
+      }
+
+      // 2. After ornament vanishes, unlock the card
+      setTimeout(function() {
+        const card = document.getElementById('card-final');
+        if (card) {
+          card.classList.remove('is-locked');
+          card.classList.add('unlocking-card');
+          card.setAttribute('href', 'final-test.html');
+          card.style.opacity = '1';
+          card.style.pointerEvents = 'auto';
+          card.style.cursor = 'pointer';
+        }
+
+        // Hide lock message
+        const lockMsg = document.getElementById('final-lock-msg');
+        if (lockMsg) {
+          lockMsg.innerHTML = `
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+              stroke="rgba(255,255,255,.9)" stroke-width="2.5" aria-hidden="true">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+            <span style="font-size:var(--font-size-xs);color:rgba(255,255,255,.9);font-weight:600;">
+              Final Test terbuka! Klik untuk mulai ujian.
+            </span>
+          `;
+        }
+
+        // Hide ornament
+        if (ornament) ornament.style.display = 'none';
+
+        // Show toast & confetti
+        if (typeof Utils !== 'undefined') {
+          Utils.showToast('🎓 Final Test berhasil di-unlock!');
+          Utils.showConfetti(60);
+        }
+
+        // Mark final as unlocked in a custom key
+        localStorage.setItem('emodul_final_unlocked', 'true');
+      }, 800);
+    }
+
+    /* ============================================================
+       DASHBOARD INITIALIZATION
+       ============================================================ */
+    function initDashboard() {
+      // 1. Load state
+      let raw = localStorage.getItem('emodul_state');
+      let state;
+      if (!raw) {
+        state = {
+          units: [
+            { id: 1, progress: 0, status: 'available' },
+            { id: 2, progress: 0, status: 'locked' },
+            { id: 3, progress: 0, status: 'locked' }
+          ]
+        };
+        localStorage.setItem('emodul_state', JSON.stringify(state));
+      } else {
+        state = JSON.parse(raw);
+      }
+
+      // 1.5 Update username if saved
+      const savedName = localStorage.getItem('mantul_student_name');
+      if (savedName) {
+        const usernameSpan = document.getElementById('hero-username');
+        if (usernameSpan) usernameSpan.textContent = savedName.split(' ')[0];
+      }
+
+      // 2. Update UI per unit
+      let totalProgress = 0;
+      let totalUnits = state.units.length;
+      let unitsDone = 0;
+
+      state.units.forEach(u => {
+        const card = document.getElementById('card-unit-' + u.id);
+        if (!card) return;
+
+        const ornament = document.getElementById('lock-ornament-' + u.id);
+        const badge = document.getElementById('step-badge-' + u.id);
+        const barFill = document.getElementById('bar-unit-' + u.id);
+        const pctText = document.getElementById('pct-unit-' + u.id);
+        const labelText = document.getElementById('label-unit-' + u.id);
+        const lockMsg = document.getElementById('lockmsg-unit-' + u.id);
+
+        if (u.status === 'locked') {
+          // Card stays locked, show ornament
+          card.classList.add('is-locked');
+          if (ornament) ornament.style.display = 'flex';
+          if (badge) { badge.classList.add('step-badge--locked'); }
+        } else {
+          // Card is unlocked
+          card.classList.remove('is-locked');
+          if (ornament) ornament.style.display = 'none';
+          if (badge) { badge.classList.remove('step-badge--locked'); badge.style.background = ''; badge.style.color = ''; }
+
+          // Set href for the card
+          const info = UNIT_INFO[u.id];
+          if (info) {
+            if (card.tagName === 'A') {
+              card.setAttribute('href', info.href);
+            } else {
+              card.style.cursor = 'pointer';
+              card.onclick = function() { window.location.href = info.href; };
+            }
+          }
+          card.setAttribute('aria-disabled', 'false');
+          card.style.opacity = '1';
+          card.style.pointerEvents = 'auto';
+
+          // Update progress bar
+          if (barFill) barFill.style.width = (u.progress || 0) + '%';
+          if (pctText) { pctText.style.display = ''; pctText.textContent = (u.progress || 0) + '%'; }
+          if (labelText) { labelText.textContent = 'Progress'; labelText.style.color = ''; }
+          if (lockMsg) lockMsg.style.display = 'none';
+
+          // Done state
+          if (u.progress >= 100 || u.status === 'done') {
+            unitsDone++;
+            card.classList.add('is-done');
+            card.classList.remove('is-progress');
+            if (barFill) barFill.style.background = 'var(--accent)';
+            if (badge) { badge.classList.add('step-badge--done'); badge.style.background = 'var(--accent-100)'; badge.style.color = 'var(--accent-700)'; }
+            card.style.setProperty('--stripe-color', 'var(--accent)');
+          } else {
+            card.classList.add('is-progress');
+            card.classList.remove('is-done');
+            card.style.setProperty('--stripe-color', info ? info.color : 'var(--primary)');
+          }
+        }
+        totalProgress += (u.progress || 0);
+      });
+
+      // 3. Update Unit 1 card (always available)
+      const card1 = document.getElementById('card-unit-1');
+      if (card1) {
+        const ornament1 = document.getElementById('lock-ornament-1');
+        if (ornament1) ornament1.style.display = 'none';
+      }
+
+      // 4. Update global progress
+      const overAll = Math.round(totalProgress / totalUnits);
+      const gp = document.getElementById('nav-progress-bar');
+      const gt = document.getElementById('nav-progress-text');
+      const heroBar = document.getElementById('hero-progress-bar');
+      const heroText = document.getElementById('hero-progress-text');
+      const heroUnits = document.getElementById('hero-units-done');
+      const pill = document.getElementById('progress-pill');
+      const pillT = document.getElementById('pill-text');
+      const chipDone = document.getElementById('units-done-chip');
+
+      if (gp) gp.style.width = overAll + '%';
+      if (gt) gt.textContent = overAll + '%';
+      if (heroBar) heroBar.style.width = overAll + '%';
+      if (heroText) heroText.textContent = overAll + '%';
+      if (heroUnits) heroUnits.textContent = unitsDone + ' dari 3 unit selesai';
+      if (chipDone) chipDone.innerHTML = `
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="3" aria-hidden="true">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+        ${unitsDone} selesai`;
+
+      if (pill && pillT && overAll > 0) {
+        pillT.textContent = overAll + '% selesai';
+        pill.style.opacity = '1';
+        pill.style.bottom = '24px';
+      }
+
+      // 5. Resume section
+      const resumeSection = document.getElementById('resume-section');
+      const resumeBtn = document.getElementById('resume-btn');
+      const resumeLabel = document.getElementById('resume-label');
+      if (resumeSection && resumeBtn && resumeLabel) {
+        let resumeUnit = null;
+        for (const u of state.units) {
+          if (u.status === 'available' || (u.status !== 'locked' && u.status !== 'done' && (u.progress || 0) > 0 && (u.progress || 0) < 100)) {
+            resumeUnit = u;
+            break;
+          }
+        }
+        if (resumeUnit) {
+          const info = UNIT_INFO[resumeUnit.id];
+          const unitNames = { 1: 'Unit 1 — Vocabulary', 2: 'Unit 2 — Speaking', 3: 'Unit 3 — Reading' };
+          resumeLabel.textContent = 'Lanjutkan: ' + (unitNames[resumeUnit.id] || info?.name || 'Unit');
+          resumeBtn.setAttribute('href', info ? info.href : ('unit' + resumeUnit.id + '-vocabulary.html'));
+          resumeSection.style.display = 'block';
+        } else if (overAll >= 100 || localStorage.getItem('emodul_final_unlocked') === 'true') {
+          resumeLabel.textContent = 'Mulai Final Test';
+          resumeBtn.setAttribute('href', 'final-test.html');
+          resumeSection.style.display = 'block';
+        }
+      }
+
+      // 6. Update Final Test Card
+      const finalCard = document.getElementById('card-final');
+      const finalOrnament = document.getElementById('lock-ornament-final');
+      const finalLockMsg = document.getElementById('final-lock-msg');
+      const allUnitsDone = state.units.every(u => u.status === 'done' || (u.progress || 0) >= 100);
+      const finalUnlocked = localStorage.getItem('emodul_final_unlocked') === 'true';
+
+      if (finalCard) {
+        if (allUnitsDone || finalUnlocked) {
+          finalCard.classList.remove('is-locked');
+          finalCard.style.opacity = '1';
+          finalCard.style.pointerEvents = 'auto';
+          finalCard.style.cursor = 'pointer';
+          if (finalOrnament) finalOrnament.style.display = 'none';
+          if (finalLockMsg) {
+            finalLockMsg.innerHTML = `
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                stroke="rgba(255,255,255,.9)" stroke-width="2.5" aria-hidden="true">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+              <span style="font-size:var(--font-size-xs);color:rgba(255,255,255,.9);font-weight:600;">
+                Final Test terbuka! Klik untuk mulai ujian.
+              </span>
+            `;
+          }
+        } else {
+          // Keep locked but show ornament
+          if (finalOrnament) finalOrnament.style.display = 'flex';
+        }
+      }
+
+      // 7. Update badges
+      state.units.forEach(u => {
+        const badgeEl = document.getElementById('badge-' + u.id);
+        if (badgeEl) {
+          if (u.status === 'done' || (u.progress || 0) >= 100) {
+            badgeEl.style.opacity = '1';
+            const ring = badgeEl.querySelector('.badge-ring');
+            if (ring) ring.style.background = 'conic-gradient(var(--accent) 100%, var(--surface-2) 0%)';
+            const inner = badgeEl.querySelector('.badge-inner');
+            if (inner) inner.style.background = '';
+            const lbl = badgeEl.querySelector('.badge-label');
+            if (lbl) lbl.style.color = '';
+            const sub = badgeEl.querySelector('.badge-sublabel');
+            if (sub) sub.textContent = 'Unit ' + u.id + ' selesai';
+            const badgeDiv = badgeEl.querySelector('.badge');
+            if (badgeDiv) badgeDiv.classList.add('anim-float');
+          }
+        }
+      });
+
+      // Final badge
+      const badgeFinal = document.getElementById('badge-final');
+      if (badgeFinal && (allUnitsDone || finalUnlocked)) {
+        // Check if final test was actually completed
+        try {
+          const finalXp = localStorage.getItem('emodul_final_xp');
+          if (finalXp && parseInt(finalXp) > 0) {
+            badgeFinal.style.opacity = '1';
+            const ring = badgeFinal.querySelector('.badge-ring');
+            if (ring) ring.style.background = 'conic-gradient(var(--primary) 100%, var(--surface-2) 0%)';
+            const inner = badgeFinal.querySelector('.badge-inner');
+            if (inner) inner.style.background = '';
+            const lbl = badgeFinal.querySelector('.badge-label');
+            if (lbl) lbl.style.color = '';
+            const sub = badgeFinal.querySelector('.badge-sublabel');
+            if (sub) sub.textContent = 'Final Test lulus';
+            const badgeDiv = badgeFinal.querySelector('.badge');
+            if (badgeDiv) badgeDiv.classList.add('anim-float');
+          }
+        } catch {}
+      }
+
+      // 8. Stats
+      try {
+        let totalXP = 0;
+        ['emodul_vocab_xp_session', 'emodul_speak_xp', 'emodul_read_xp', 'emodul_final_xp'].forEach(k => {
+          totalXP += parseInt(localStorage.getItem(k) || '0', 10) || 0;
+        });
+        const statXP = document.getElementById('stat-xp');
+        if (statXP) statXP.textContent = totalXP;
+
+        const heroXP = document.getElementById('hero-xp');
+        if (heroXP) heroXP.textContent = totalXP + ' XP';
+
+        // Average quiz score
+        let quizScores = [];
+        if (typeof QuizStore !== 'undefined') {
+          [1, 2, 3].forEach(id => {
+            const best = QuizStore.getBestScore(id);
+            if (best !== null) quizScores.push(best);
+          });
+        }
+        const avg = quizScores.length > 0 ? Math.round(quizScores.reduce((a, b) => a + b, 0) / quizScores.length) : 0;
+        const statCorrect = document.getElementById('stat-correct');
+        if (statCorrect) statCorrect.textContent = avg + '%';
+      } catch {}
+
+      // 9. Streak
+      try {
+        const today = new Date().toDateString();
+        const lastVisit = localStorage.getItem('emodul_last_visit');
+        let streak = parseInt(localStorage.getItem('emodul_streak') || '0', 10) || 0;
+        let bestStreak = parseInt(localStorage.getItem('emodul_best_streak') || '0', 10) || 0;
+
+        if (lastVisit !== today) {
+          const yesterday = new Date(Date.now() - 86400000).toDateString();
+          if (lastVisit === yesterday) {
+            streak++;
+          } else if (!lastVisit) {
+            streak = 1;
+          } else {
+            streak = 1;
+          }
+          localStorage.setItem('emodul_streak', streak);
+          localStorage.setItem('emodul_last_visit', today);
+          if (streak > bestStreak) {
+            bestStreak = streak;
+            localStorage.setItem('emodul_best_streak', bestStreak);
+          }
+        }
+
+        const streakCount = document.getElementById('streak-count');
+        const streakBest = document.getElementById('streak-best');
+        if (streakCount) streakCount.textContent = streak;
+        if (streakBest) streakBest.textContent = bestStreak;
+      } catch {}
+
+      // 10. Greeting
+      const greetEl = document.getElementById('hero-greeting');
+      if (greetEl) {
+        const h = new Date().getHours();
+        if (h < 10) greetEl.textContent = 'Selamat pagi ☀️';
+        else if (h < 15) greetEl.textContent = 'Selamat siang 🌤️';
+        else if (h < 18) greetEl.textContent = 'Selamat sore 🌅';
+        else greetEl.textContent = 'Selamat malam 🌙';
+      }
+
+      // 11. Tip of the day
+      const tips = [
+        'Konsistensi mengalahkan intensitas. Belajar 15 menit setiap hari lebih efektif dari 2 jam sekali seminggu!',
+        'Ucapkan kata-kata baru dengan lantang — telinga dan mulut ikut belajar, bukan hanya mata.',
+        'Jangan takut salah! Setiap kesalahan adalah langkah menuju penguasaan.',
+        'Coba gunakan kosakata baru dalam kalimat sehari-hari, misalnya ketika berbelanja.',
+        'Dengarkan lagu atau tonton film berbahasa Inggris — hiburan bisa jadi alat belajar!',
+        'Tulis catatan kecil berisi 3 kata baru setiap hari. Dalam sebulan Anda punya 90 kata baru!',
+        'Baca label makanan dalam bahasa Inggris saat belanja — latihan gratis setiap hari!',
+      ];
+      const tipEl = document.getElementById('hero-tip');
+      if (tipEl) {
+        const dayIndex = Math.floor(Date.now() / 86400000) % tips.length;
+        tipEl.textContent = tips[dayIndex];
+      }
+
+      // 12. Avatar initial
+      const navAvatar = document.getElementById('nav-avatar');
+      if (navAvatar && savedName) {
+        navAvatar.textContent = savedName.charAt(0).toUpperCase();
+      }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initDashboard);
+    } else {
+      initDashboard();
+    }
+  </script>
+</body>
+</html>
