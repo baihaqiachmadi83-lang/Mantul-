@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Materi Penunjang – Tata Bahasa kontekstual untuk mendukung kemampuan Speaking dan Reading." />
+  <title>Tata Bahasa: Simple Present Tense | MANTUL</title>
+
+  <link rel="stylesheet" href="css/design-system.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/animations.css" />
+  <link rel="stylesheet" href="css/feedback.css" />
+
+  <style>
+    /* ══════════════════════════════════════════════════════
+       MATERIAL PAGE (TEMPLATE) – Page-specific styles
+       ══════════════════════════════════════════════════════ */
+    body { background: var(--surface); }
+
+    /* ── BADGE PENUNJANG ── */
+    .badge-support {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 4px 10px; border-radius: var(--radius-full);
+      font-size: 10px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: .08em; background: rgba(255,255,255,.2); color: white;
+      margin-bottom: var(--space-2); border: 1px solid rgba(255,255,255,.4);
+    }
+
+    /* ── HERO CARD ── */
+    .sess-hero {
+      border-radius: var(--radius-2xl); padding: var(--space-5) var(--space-6);
+      color: white; position: relative; overflow: hidden; margin-bottom: var(--space-4);
+      background: linear-gradient(135deg, var(--accent), var(--accent-700));
+    }
+    .sess-hero-deco {
+      position: absolute; right: -10px; top: 50%; transform: translateY(-50%);
+      font-size: 5rem; opacity: .15; pointer-events: none; line-height: 1;
+    }
+
+    /* ── TOPIC TABS ── */
+    .sess-tabs {
+      display: flex; gap: var(--space-2); overflow-x: auto;
+      scrollbar-width: none; -webkit-overflow-scrolling: touch;
+      padding-bottom: var(--space-1); margin-bottom: var(--space-4);
+    }
+    .sess-tabs::-webkit-scrollbar { display: none; }
+    .sess-tab {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: var(--space-2) var(--space-3); border-radius: var(--radius-full);
+      font-size: var(--font-size-sm); font-weight: var(--font-weight-semibold);
+      border: 1.5px solid var(--border); background: var(--card);
+      color: var(--text-muted); cursor: pointer; white-space: nowrap;
+      flex-shrink: 0; transition: all var(--transition-fast);
+      -webkit-tap-highlight-color: transparent;
+    }
+    .sess-tab.active  { background: var(--accent); border-color: var(--accent); color: white; }
+    .sess-tab.done    { background: var(--accent-50); border-color: var(--accent); color: var(--accent-700); }
+    .sess-tab.locked  { opacity: .4; cursor: not-allowed; pointer-events: none; }
+
+    /* ── CONTENT BOXES ── */
+    .concept-box {
+      background: white; border: 1px solid var(--border-2);
+      border-left: 4px solid var(--primary); border-radius: var(--radius-lg);
+      padding: var(--space-4) var(--space-5); margin-bottom: var(--space-4);
+    }
+    .concept-box h3 { font-size: var(--font-size-base); color: var(--primary-700); margin-bottom: var(--space-2); }
+    .concept-box p { font-size: var(--font-size-sm); color: var(--text-body); line-height: 1.6; }
+    
+    .example-list {
+      list-style: none; padding: 0; margin: var(--space-3) 0 0 0;
+      display: flex; flex-direction: column; gap: var(--space-2);
+    }
+    .example-list li {
+      background: var(--surface-2); padding: var(--space-2) var(--space-3);
+      border-radius: var(--radius-md); font-size: var(--font-size-sm);
+    }
+    .ex-en { font-weight: 700; color: var(--text-main); }
+    .ex-id { color: var(--text-muted); font-style: italic; font-size: var(--font-size-xs); display: block; }
+    .hl-verb { color: var(--accent-600); font-weight: 800; background: var(--accent-50); padding: 0 4px; border-radius: 4px; }
+
+    /* ── INTERACTIVE: TRUE/FALSE ── */
+    .tf-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3); margin-top: var(--space-4); }
+    .btn-tf {
+      padding: var(--space-3); border-radius: var(--radius-lg); border: 2px solid var(--border);
+      background: var(--card); font-weight: 800; font-size: var(--font-size-base);
+      cursor: pointer; transition: all .2s;
+    }
+    .btn-tf.true { color: var(--accent-700); }
+    .btn-tf.true:hover { border-color: var(--accent); background: var(--accent-50); }
+    .btn-tf.false { color: var(--danger-700); }
+    .btn-tf.false:hover { border-color: var(--danger); background: var(--danger-100); }
+
+    /* ── INTERACTIVE: FILL BLANKS (TAP) ── */
+    .blank-sentence {
+      font-size: var(--font-size-lg); font-weight: 700; line-height: 1.8;
+      text-align: center; margin-bottom: var(--space-5); color: var(--text-main);
+    }
+    .blank-slot {
+      display: inline-block; min-width: 80px; height: 32px;
+      border-bottom: 2px dashed var(--accent); margin: 0 6px;
+      vertical-align: bottom; color: var(--accent-700); font-size: var(--font-size-base);
+    }
+    .blank-slot.filled { border-bottom-style: solid; border-color: var(--primary); color: var(--primary-700); }
+
+    .chip-bank { display: flex; flex-wrap: wrap; gap: var(--space-2); justify-content: center; }
+    .fill-chip {
+      padding: 6px 16px; border-radius: var(--radius-full); font-weight: 700;
+      background: white; border: 2px solid var(--border-2); color: var(--text-main);
+      cursor: pointer; transition: all .2s; font-family: var(--font-family);
+      font-size: var(--font-size-sm);
+    }
+    .fill-chip:hover:not(.used) { border-color: var(--primary); background: var(--primary-50); color: var(--primary-700); }
+    .fill-chip.used { opacity: 0.3; pointer-events: none; }
+
+    /* ── ACTIVITY TAG ── */
+    .act-tag {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 3px var(--space-2); border-radius: var(--radius-full);
+      font-size: 10px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: .07em; margin-bottom: var(--space-3);
+    }
+    .act-learn { background: var(--primary-100); color: var(--primary-700); }
+    .act-tf    { background: var(--accent-100); color: var(--accent-700); }
+    .act-fill  { background: var(--warm-100); color: var(--warm-700); }
+    .act-audio { background: #EDE9FE; color: #7C3AED; }
+
+    /* TTS Button Mini */
+    .btn-tts-mini {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 40px; height: 40px; border-radius: 50%;
+      background: var(--primary-100); color: var(--primary-700); border: none;
+      font-size: 1.2rem; cursor: pointer; transition: all .2s;
+    }
+    .btn-tts-mini.playing { animation: pulsePlay 1s infinite; background: var(--primary); color: white; }
+
+  </style>
+</head>
+<body>
+
+  <div class="confetti-container" id="confetti-container" aria-hidden="true"></div>
+
+  <!-- ══════════════════════════════════════════════════════
+       NAVBAR
+       ══════════════════════════════════════════════════════ -->
+  <nav class="navbar" role="navigation" aria-label="Navigasi halaman">
+    <div class="container">
+      <a href="index.html" class="btn-back" aria-label="Kembali ke beranda">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+        Beranda
+      </a>
+      <div style="display:flex;align-items:center;gap:var(--space-2);">
+        <span class="chip" style="background:var(--surface-2);color:var(--text-muted);border:1px solid var(--border-2);">Grammar</span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ══════════════════════════════════════════════════════
+       MAIN
+       ══════════════════════════════════════════════════════ -->
+  <main class="page-content" id="main-content" style="padding-bottom:90px;">
+    <div class="container">
+
+      <!-- SESSION HERO -->
+      <div class="sess-hero anim-fade-in-up" id="sess-hero">
+        <span class="sess-hero-deco" id="hero-deco" aria-hidden="true">📚</span>
+        <div style="position:relative;z-index:1;">
+          <span class="badge-support">Materi Penunjang</span>
+          <h1 id="hero-title" style="font-size:var(--font-size-xl);font-weight:800; color:white;margin-bottom:var(--space-2);">
+            Simple Present Tense
+          </h1>
+          <p id="hero-desc" style="font-size:var(--font-size-sm);color:rgba(255,255,255,.9); line-height:1.5;">
+            Materi pendukung opsional untuk memperkuat Speaking & Reading. Tidak memengaruhi progres unit.
+          </p>
+        </div>
+      </div>
+
+      <!-- SESSION TABS -->
+      <div class="sess-tabs anim-fade-in-up delay-100" role="tablist" id="sess-tabs-container">
+        <!-- Generated by JS -->
+      </div>
+
+      <!-- PROGRESS TRACKER -->
+      <div class="progress-bar-track progress-bar-track--thin anim-fade-in-up delay-200" style="margin-bottom:var(--space-4);">
+        <div id="top-progress-bar" class="progress-bar-fill" style="width:0%;transition:width .4s ease;"></div>
+      </div>
+
+      <!-- ACTIVITY AREA -->
+      <div id="activity-area" class="anim-fade-in-up delay-300">
+        <!-- Rendered by JS -->
+      </div>
+
+    </div>
+  </main>
+
+  <script src="js/app.js"></script>
+  <script src="js/quiz-store.js"></script>
+  <script src="js/feedback.js"></script>
+  <script>
+  'use strict';
+
+  /* ════════════════════════════════════════════════════════
+     1. MATERIAL DATA (TEMPLATE FORMAT)
+     Topik: Simple Present Tense (Kehidupan Nyata)
+     ════════════════════════════════════════════════════════ */
+  const MATERIAL_DATA = {
+    meta: {
+      id: 'grammar_present',
+      title: 'Simple Present Tense',
+      emoji: '🔁',
+      desc: 'Pelajari cara menyatakan rutinitas, fakta, dan jadwal dalam bahasa Inggris (sangat berguna untuk Speaking & Reading).',
+      bg: 'linear-gradient(135deg, var(--accent), var(--accent-700))'
+    },
+    sessions: [
+      /* SESI 0: KONSEP (Paham Konsep) */
+      {
+        id: 0, title: 'Konsep Dasar', emoji: '💡', type: 'concept',
+        concept: {
+          title: 'Kapan kita menggunakannya?',
+          body: 'Gunakan Simple Present Tense untuk menceritakan <strong>Kebiasaan (Rutinitas)</strong> dan <strong>Fakta</strong> yang benar saat ini. Aturannya sederhana: tambahkan <span class="hl-verb">-s</span> atau <span class="hl-verb">-es</span> pada kata kerja jika subjeknya Dia/Itu (He, She, It).',
+          examples: [
+            { en: 'I <span class="hl-verb">work</span> at the market.', id: 'Saya bekerja di pasar. (Rutinitas)' },
+            { en: 'The bank <span class="hl-verb">opens</span> at 8 AM.', id: 'Bank buka jam 8 pagi. (Fakta/Jadwal, "The bank" = It)' },
+            { en: 'She <span class="hl-verb">cooks</span> rice every day.', id: 'Dia memasak nasi setiap hari. (Rutinitas, subjek She)' }
+          ]
+        },
+        quiz: [
+          {
+            id: 'm0_1', type: 'mcq',
+            text: 'Manakah kalimat yang menyatakan fakta/rutinitas dengan benar?',
+            options: ['He go to the factory.', 'He goes to the factory.', 'He going to the factory.', 'He is go to the factory.'],
+            correct: 1, whyCorrect: 'Untuk subjek "He" (Dia laki-laki), kata kerja "go" ditambah "-es" menjadi "goes".',
+            whyWrong: ['Kurang -es.', null, 'Going digunakan untuk hal yang sedang terjadi sekarang (Present Continuous).', 'Salah struktur.'],
+            example: 'He goes to the factory every morning.'
+          }
+        ]
+      },
+      /* SESI 1: TRUE/FALSE (Fakta Sains / Umum) */
+      {
+        id: 1, title: 'Fakta (True/False)', emoji: '⚖️', type: 'tf',
+        questions: [
+          {
+            id: 'm1_1',
+            text: 'Air mendidih pada suhu 100 derajat Celcius.',
+            enStatement: 'Water <span class="hl-verb">boils</span> at 100 degrees Celsius.',
+            isTrue: true,
+            whyCorrect: 'Benar! "Water" adalah benda tunggal (It), maka kata kerja "boil" ditambah "-s". Ini adalah fakta.',
+            whyWrong: 'Ini adalah fakta sains. "Water boils" adalah bentuk yang benar.'
+          },
+          {
+            id: 'm1_2',
+            text: 'Matahari terbit dari barat.',
+            enStatement: 'The sun <span class="hl-verb">rises</span> in the west.',
+            isTrue: false,
+            whyCorrect: 'Tentu saja salah (False). Matahari terbit dari timur (east). Secara tata bahasa, "rises" sudah benar untuk subjek "The sun".',
+            whyWrong: 'Pernyataan bahasanya benar, tapi secara fakta salah. Matahari terbit dari timur.'
+          }
+        ]
+      },
+      /* SESI 2: FILL THE BLANKS (Keluarga & Pekerjaan) */
+      {
+        id: 2, title: 'Lengkapi Kalimat', emoji: '✍️', type: 'fill',
+        questions: [
+          {
+            id: 'm2_1',
+            parts: ['My mother ', 'blank', ' vegetables at the market every day.'],
+            options: ['sell', 'sells', 'selling', 'sold'],
+            correct: 1, // sells
+            whyCorrect: '"My mother" sama dengan "She" (Dia perempuan tunggal), sehingga butuh akhiran -s.',
+            whyWrong: ['Kurang -s.', null, 'Bukan bentuk rutinitas.', 'Ini bentuk masa lalu (lampau).']
+          },
+          {
+            id: 'm2_2',
+            parts: ['We ', 'blank', ' early in the morning.'],
+            options: ['wakes up', 'waking up', 'wake up', 'woke up'],
+            correct: 2, // wake up
+            whyCorrect: 'Untuk subjek "We" (Kami), kata kerja TIDAK ditambah -s atau -es.',
+            whyWrong: ['Hanya untuk He, She, It.', 'Salah tense.', null, 'Ini masa lalu.']
+          }
+        ]
+      },
+      /* SESI 3: AUDIO (Layanan Publik / Kesehatan) */
+      {
+        id: 3, title: 'Dengar & Pilih', emoji: '🎧', type: 'audio',
+        questions: [
+          {
+            id: 'm3_1',
+            audioText: 'The doctor examines patients in the clinic.',
+            text: 'Apa yang dilakukan dokter menurut audio tersebut?',
+            options: ['Menjual obat di apotek.', 'Memeriksa pasien di klinik.', 'Menjalankan operasi di rumah sakit.', 'Beristirahat di klinik.'],
+            correct: 1,
+            whyCorrect: '"The doctor examines (memeriksa) patients in the clinic."',
+            whyWrong: ['Bukan menjual obat.', null, 'Bukan operasi.', 'Bukan beristirahat.'],
+            example: 'The doctor examines patients.'
+          }
+        ]
+      }
+    ]
+  };
+
+  /* ════════════════════════════════════════════════════════
+     2. APP STATE & CONFIG
+     ════════════════════════════════════════════════════════ */
+  const App = {
+    sess: 0,
+    qi: 0,
+    done: [false,false,false,false],
+    quizSess: null,
+
+    init(){
+      this._loadProgress();
+      
+      document.getElementById('hero-title').textContent = MATERIAL_DATA.meta.title;
+      document.getElementById('hero-desc').textContent = MATERIAL_DATA.meta.desc;
+      document.getElementById('sess-hero').style.background = MATERIAL_DATA.meta.bg;
+
+      FeedbackEngine.init({
+        onNext:  () => this._nextQuestion(),
+        onRetry: () => this._retryQuestion(),
+        onSkip:  () => this._nextQuestion(),
+      });
+
+      if('speechSynthesis' in window) window.speechSynthesis.getVoices();
+
+      this.render();
+    },
+
+    goTo(n){
+      if(n>0 && !this.done[n-1]) return;
+      FeedbackEngine.dismiss();
+      if('speechSynthesis' in window) window.speechSynthesis.cancel();
+      this.sess = n; this.qi = 0;
+      this.quizSess = QuizStore.startSession(`mat_${MATERIAL_DATA.meta.id}_s${n}`);
+      this.render();
+      window.scrollTo({top:0,behavior:'smooth'});
+    },
+
+    render(){
+      this._updateTabs();
+      
+      const session = MATERIAL_DATA.sessions[this.sess];
+      const qTotal = (session.type === 'concept') ? session.quiz.length : session.questions.length;
+      
+      if(!this.quizSess) {
+        this.quizSess = QuizStore.startSession(`mat_${MATERIAL_DATA.meta.id}_s${this.sess}`);
+      }
+
+      if(this.qi >= qTotal){
+        this._renderResult();
+        return;
+      }
+
+      const pct = Math.round((this.qi / qTotal) * 100);
+      const pb = document.getElementById('top-progress-bar');
+      if(pb) pb.style.width = `${pct}%`;
+
+      const renderMap = {
+        'concept': this._renderConcept,
+        'tf':      this._renderTF,
+        'fill':    this._renderFill,
+        'audio':   this._renderAudio
+      };
+      
+      renderMap[session.type].call(this);
+    },
+
+    _updateTabs(){
+      const container = document.getElementById('sess-tabs-container');
+      let html = '';
+      MATERIAL_DATA.sessions.forEach((s, i) => {
+        const isDone = this.done[i];
+        const isAct = i === this.sess;
+        const isLock = i > 0 && !this.done[i-1];
+        
+        let cls = 'sess-tab';
+        if(isAct) cls += ' active';
+        else if(isDone) cls += ' done';
+        else if(isLock) cls += ' locked';
+
+        html += `<button class="${cls}" onclick="App.goTo(${i})">${s.emoji} ${s.title}</button>`;
+      });
+      container.innerHTML = html;
+    },
+
+    /* ── TEMPLATE: CONCEPT + MCQ ── */
+    _renderConcept(){
+      const s = MATERIAL_DATA.sessions[this.sess];
+      const q = s.quiz[this.qi];
+      const keys = ['A','B','C','D'];
+
+      let html = `
+        <span class="act-tag act-learn">${s.emoji} ${s.title}</span>
+      `;
+
+      if(this.qi === 0) {
+        html += `
+          <div class="concept-box">
+            <h3>${s.concept.title}</h3>
+            <p>${s.concept.body}</p>
+            <ul class="example-list">
+              ${s.concept.examples.map(ex => `
+                <li><span class="ex-en">${ex.en}</span><span class="ex-id">${ex.id}</span></li>
+              `).join('')}
+            </ul>
+          </div>
+        `;
+      }
+
+      html += `
+        <div class="card" style="padding:var(--space-5);">
+          <p style="font-weight:700;margin-bottom:var(--space-4);text-align:center;">${q.text}</p>
+          <div style="display:flex;flex-direction:column;gap:var(--space-2);" id="quiz-opts">
+            ${q.options.map((opt, i) => `
+              <button class="quiz-option" onclick="App._handleMCQAns(${i})" aria-label="${opt}">
+                <span class="quiz-option-key">${keys[i]}</span>
+                <span class="quiz-option-text">${opt}</span>
+              </button>
+            `).join('')}
+          </div>
+        </div>
+      `;
+      document.getElementById('activity-area').innerHTML = html;
+    },
+
+    /* ── TEMPLATE: TRUE / FALSE ── */
+    _renderTF(){
+      const s = MATERIAL_DATA.sessions[this.sess];
+      const q = s.questions[this.qi];
+
+      document.getElementById('activity-area').innerHTML = `
+        <span class="act-tag act-tf">${s.emoji} ${s.title} &middot; Soal ${this.qi+1} / ${s.questions.length}</span>
+        
+        <div class="card" style="padding:var(--space-6);text-align:center;">
+          <p style="font-size:var(--font-size-sm);color:var(--text-muted);margin-bottom:var(--space-3);">Fakta atau Mitos?</p>
+          <p style="font-size:var(--font-size-xl);font-weight:800;color:var(--text-main);margin-bottom:var(--space-2);">
+            ${q.enStatement}
+          </p>
+          <p style="font-style:italic;color:var(--text-body);margin-bottom:var(--space-5);">
+            "${q.text}"
+          </p>
+
+          <div class="tf-grid" id="quiz-opts">
+            <button class="btn-tf true" onclick="App._handleTFAns(true)">TRUE (Benar)</button>
+            <button class="btn-tf false" onclick="App._handleTFAns(false)">FALSE (Salah)</button>
+          </div>
+        </div>
+      `;
+    },
+
+    /* ── TEMPLATE: FILL BLANKS ── */
+    _renderFill(){
+      const s = MATERIAL_DATA.sessions[this.sess];
+      const q = s.questions[this.qi];
+
+      const sentenceHtml = q.parts.map(p => {
+        if(p === 'blank') return `<span class="blank-slot" id="blank-slot"></span>`;
+        return p;
+      }).join('');
+
+      document.getElementById('activity-area').innerHTML = `
+        <span class="act-tag act-fill">${s.emoji} ${s.title} &middot; Soal ${this.qi+1} / ${s.questions.length}</span>
+        
+        <div class="card" style="padding:var(--space-6);">
+          <p style="text-align:center;color:var(--text-muted);font-size:var(--font-size-sm);margin-bottom:var(--space-3);">
+            Ketuk kata yang tepat untuk melengkapi.
+          </p>
+          <div class="blank-sentence">
+            ${sentenceHtml}
+          </div>
+
+          <div class="chip-bank" id="quiz-opts">
+            ${q.options.map((opt, i) => `
+              <button class="fill-chip" onclick="App._handleMCQAns(${i}, '${opt}')">${opt}</button>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    },
+
+    /* ── TEMPLATE: AUDIO ── */
+    _renderAudio(){
+      const s = MATERIAL_DATA.sessions[this.sess];
+      const q = s.questions[this.qi];
+      const keys = ['A','B','C','D'];
+
+      document.getElementById('activity-area').innerHTML = `
+        <span class="act-tag act-audio">${s.emoji} ${s.title} &middot; Soal ${this.qi+1} / ${s.questions.length}</span>
+        
+        <div class="card" style="padding:var(--space-5);text-align:center;">
+          <p style="color:var(--text-muted);font-size:var(--font-size-sm);margin-bottom:var(--space-4);">
+            Dengarkan baik-baik lalu jawab pertanyaannya.
+          </p>
+          
+          <button class="btn-tts-mini" id="btn-audio" onclick="App._playAudio('${q.audioText.replace(/'/g,"\\'")}')" style="width:70px;height:70px;font-size:2.5rem;margin-bottom:var(--space-4);">
+            🔊
+          </button>
+          
+          <p style="font-weight:700;margin-bottom:var(--space-4);">${q.text}</p>
+          
+          <div style="display:flex;flex-direction:column;gap:var(--space-2);" id="quiz-opts">
+            ${q.options.map((opt, i) => `
+              <button class="quiz-option" onclick="App._handleMCQAns(${i})" aria-label="${opt}">
+                <span class="quiz-option-key">${keys[i]}</span>
+                <span class="quiz-option-text">${opt}</span>
+              </button>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    },
+
+    _playAudio(text){
+      if(!('speechSynthesis' in window)) return;
+      window.speechSynthesis.cancel();
+      const btn = document.getElementById('btn-audio');
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'en-US';
+      utterance.onstart = () => btn.classList.add('playing');
+      utterance.onend = () => btn.classList.remove('playing');
+      utterance.onerror = () => btn.classList.remove('playing');
+      window.speechSynthesis.speak(utterance);
+    },
+
+    /* ── HANDLERS ── */
+    _handleMCQAns(sel, textOpt = null){
+      const s = MATERIAL_DATA.sessions[this.sess];
+      const q = (s.type === 'concept') ? s.quiz[this.qi] : s.questions[this.qi];
+      const ok = sel === q.correct;
+
+      // Special UI for Fill
+      if(s.type === 'fill' && textOpt){
+        const slot = document.getElementById('blank-slot');
+        if(slot) {
+          slot.textContent = textOpt;
+          slot.classList.add('filled');
+          if(!ok) slot.style.borderColor = 'var(--danger)';
+          else slot.style.borderColor = 'var(--accent)';
+        }
+        document.querySelectorAll('.fill-chip').forEach((btn, i) => {
+          if(i === q.correct) { btn.style.background = 'var(--accent)'; btn.style.color='white'; btn.style.borderColor='var(--accent)'; }
+          else if(i === sel && !ok) { btn.style.background = 'var(--danger)'; btn.style.color='white'; btn.style.borderColor='var(--danger)'; }
+          btn.classList.add('used');
+        });
+      } else {
+        document.querySelectorAll('.quiz-option').forEach((btn, i) => {
+          btn.classList.add('quiz-option--disabled');
+          if(i === q.correct) btn.classList.add('quiz-option--correct');
+          else if(i === sel && !ok) btn.classList.add('quiz-option--wrong');
+        });
+      }
+
+      this._recordAndFeedback(q, ok, sel);
+    },
+
+    _handleTFAns(selTrue){
+      const s = MATERIAL_DATA.sessions[this.sess];
+      const q = s.questions[this.qi];
+      const ok = selTrue === q.isTrue;
+
+      const btns = document.querySelectorAll('.btn-tf');
+      btns.forEach(btn => btn.style.pointerEvents = 'none');
+      
+      const selBtn = document.querySelector(selTrue ? '.btn-tf.true' : '.btn-tf.false');
+      const corBtn = document.querySelector(q.isTrue ? '.btn-tf.true' : '.btn-tf.false');
+
+      if(ok){
+        selBtn.style.background = 'var(--accent)'; selBtn.style.color = 'white'; selBtn.style.borderColor = 'var(--accent)';
+      } else {
+        selBtn.style.background = 'var(--danger)'; selBtn.style.color = 'white'; selBtn.style.borderColor = 'var(--danger)';
+        corBtn.style.borderColor = 'var(--accent)';
+      }
+
+      // Convert TF into standard feedback format
+      const qMock = {
+        whyCorrect: q.whyCorrect,
+        whyWrong: ok ? null : [q.whyWrong, q.whyWrong], // dummy array just to pass text
+        correct: q.isTrue ? 0 : 1,
+        options: ['TRUE (Benar)', 'FALSE (Salah)']
+      };
+      this._recordAndFeedback(qMock, ok, selTrue ? 0 : 1);
+    },
+
+    _recordAndFeedback(qObj, isOk, selIdx){
+      QuizStore.recordAnswer(this.quizSess, qObj.id, isOk, 0, selIdx);
+      if(isOk){
+        FeedbackEngine.showCorrect(qObj, selIdx);
+      } else {
+        // Mock feedback array if not present (like in TF)
+        if(!Array.isArray(qObj.whyWrong)){
+           const arr = []; arr[selIdx] = qObj.whyWrong; qObj.whyWrong = arr;
+        }
+        FeedbackEngine.showWrong(qObj, selIdx);
+      }
+    },
+
+    _nextQuestion(){
+      this.qi++;
+      this.render();
+    },
+    
+    _retryQuestion(){
+      const s = MATERIAL_DATA.sessions[this.sess];
+      if(s.type === 'fill'){
+        const slot = document.getElementById('blank-slot');
+        if(slot){ slot.textContent=''; slot.classList.remove('filled'); slot.style.borderColor='var(--accent)'; }
+        document.querySelectorAll('.fill-chip').forEach(btn => {
+          btn.classList.remove('used'); btn.style.background=''; btn.style.color=''; btn.style.borderColor='';
+        });
+      } else if(s.type === 'tf'){
+        document.querySelectorAll('.btn-tf').forEach(btn => {
+          btn.style.pointerEvents = 'auto'; btn.style.background=''; btn.style.color=''; btn.style.borderColor='';
+        });
+      } else {
+        document.querySelectorAll('.quiz-option').forEach(btn => {
+          btn.classList.remove('quiz-option--disabled','quiz-option--wrong','quiz-option--correct');
+        });
+      }
+    },
+
+    /* ── RESULT / COMPLETE ── */
+    _renderResult(){
+      const s = MATERIAL_DATA.sessions[this.sess];
+      const qTotal = (s.type === 'concept') ? s.quiz.length : s.questions.length;
+      const res = QuizStore.finishSession(this.quizSess, qTotal);
+      
+      this.done[this.sess] = true;
+      this._saveProgress();
+      
+      const pb = document.getElementById('top-progress-bar');
+      if(pb) pb.style.width = `100%`;
+
+      const next = MATERIAL_DATA.sessions[this.sess+1];
+      const allDone = this.done.every(Boolean);
+
+      document.getElementById('activity-area').innerHTML = `
+        <div class="card" style="padding:var(--space-6);text-align:center;border:2px solid var(--accent);">
+          <div style="font-size:3.5rem;animation:badgeBounce .6s ease both;margin-bottom:var(--space-3);" aria-hidden="true">🏆</div>
+          <h2 style="font-size:var(--font-size-2xl);font-weight:800;color:var(--accent-700);margin-bottom:var(--space-2);">
+            Latihan Selesai!
+          </h2>
+          <p style="color:var(--text-muted);margin-bottom:var(--space-5);">
+            Skor Anda: <strong>${res.score}%</strong>
+          </p>
+          
+          <div style="display:flex;flex-direction:column;gap:var(--space-3);">
+            ${next ? `<button class="btn btn-accent btn-block" onclick="App.goTo(${this.sess+1})">Lanjut Topik: ${next.title} →</button>` : ''}
+            ${allDone ? `<a href="index.html" class="btn btn-primary btn-block">Selesai Semua! Kembali ke Beranda 🏠</a>` : ''}
+          </div>
+        </div>
+      `;
+
+      if(typeof Utils !== 'undefined') Utils.showConfetti?.();
+    },
+
+    _saveProgress(){
+      try{ localStorage.setItem(`emodul_${MATERIAL_DATA.meta.id}_prog`, JSON.stringify(this.done)); }catch{}
+    },
+    _loadProgress(){
+      try{ 
+        const d = JSON.parse(localStorage.getItem(`emodul_${MATERIAL_DATA.meta.id}_prog`));
+        if(d && d.length===MATERIAL_DATA.sessions.length) { this.done = d; return; }
+      }catch{}
+      this.done = new Array(MATERIAL_DATA.sessions.length).fill(false);
+    }
+  };
+
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded', ()=>App.init());
+  } else {
+    App.init();
+  }
+  </script>
+</body>
+</html>

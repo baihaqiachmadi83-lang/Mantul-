@@ -1,0 +1,1517 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Unit 1 Vocabulary – Belajar kosakata Bahasa Inggris dari kehidupan sehari-hari: benda, makanan, uang, dan aktivitas." />
+  <title>Unit 1: Vocabulary | MANTUL</title>
+
+  <link rel="stylesheet" href="css/design-system.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/animations.css" />
+  <link rel="stylesheet" href="css/feedback.css" />
+
+  <style>
+    /* ══════════════════════════════════════════════════════
+       VOCABULARY PAGE – Page-specific styles
+       ══════════════════════════════════════════════════════ */
+    body { background: var(--surface); }
+
+    /* ── SESSION TABS ── */
+    .sess-tabs {
+      display: flex;
+      gap: var(--space-2);
+      overflow-x: auto;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: var(--space-1);
+    }
+    .sess-tabs::-webkit-scrollbar { display: none; }
+
+    .sess-tab {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: var(--space-2) var(--space-3);
+      border-radius: var(--radius-full);
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-semibold);
+      border: 1.5px solid var(--border);
+      background: var(--card);
+      color: var(--text-muted);
+      cursor: pointer;
+      white-space: nowrap;
+      flex-shrink: 0;
+      transition: all var(--transition-fast);
+      -webkit-tap-highlight-color: transparent;
+    }
+    .sess-tab.active  { background: var(--primary); border-color: var(--primary); color: white; }
+    .sess-tab.done    { background: var(--accent-50); border-color: var(--accent); color: var(--accent-700); }
+    .sess-tab.locked  { opacity: .4; cursor: not-allowed; pointer-events: none; }
+
+    /* ── PHASE STRIP ── */
+    .phase-strip {
+      display: flex;
+      align-items: center;
+      gap: 0;
+    }
+    .phase-node {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      flex: 1;
+    }
+    .phase-dot {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+      transition: all var(--transition-base);
+      border: 2px solid transparent;
+    }
+    .phase-dot.done    { background: var(--accent); color: white; }
+    .phase-dot.active  { background: var(--primary); color: white;
+      box-shadow: 0 0 0 4px var(--primary-100); }
+    .phase-dot.upcoming{ background: var(--surface-2); color: var(--text-faint);
+      border-color: var(--border-2); }
+    .phase-label {
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      color: var(--text-faint);
+      text-align: center;
+    }
+    .phase-label.active-label { color: var(--primary); }
+    .phase-line {
+      flex: 1;
+      height: 2px;
+      background: var(--border);
+      margin: 0 -4px;
+      position: relative;
+      top: -10px;
+      transition: background var(--transition-base);
+    }
+    .phase-line.done { background: var(--accent); }
+
+    /* ── HERO CARD ── */
+    .sess-hero {
+      border-radius: var(--radius-2xl);
+      padding: var(--space-5) var(--space-6);
+      color: white;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: var(--space-4);
+    }
+    .sess-hero-deco {
+      position: absolute;
+      right: -10px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 5rem;
+      opacity: .1;
+      pointer-events: none;
+      line-height: 1;
+    }
+
+    /* ── FLASHCARD ── */
+    .fc-wrap {
+      perspective: 1100px;
+      cursor: pointer;
+      width: 100%;
+      min-height: 230px;
+      position: relative;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .fc-inner {
+      width: 100%;
+      min-height: 230px;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.52s cubic-bezier(0.4,0,0.2,1);
+    }
+    .fc-wrap.flipped .fc-inner { transform: rotateY(180deg); }
+
+    .fc-face {
+      position: absolute;
+      inset: 0;
+      min-height: 230px;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      border-radius: var(--radius-2xl);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: var(--space-6);
+      text-align: center;
+      box-shadow: var(--shadow-md);
+    }
+    .fc-front {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-700) 100%);
+      color: white;
+    }
+    .fc-back {
+      background: linear-gradient(135deg, #ECFDF5 0%, #ffffff 100%);
+      border: 2px solid var(--accent-200);
+      transform: rotateY(180deg);
+    }
+    .fc-emoji   { font-size: 3.5rem; line-height:1; margin-bottom:var(--space-3); }
+    .fc-word    { font-size: 2.1rem; font-weight: 800; letter-spacing: -.02em; line-height: 1; margin-bottom: var(--space-2); }
+    .fc-pronounce{ font-size: var(--font-size-sm); opacity: .7; font-style: italic; }
+    .fc-trans   { font-size: 1.8rem; font-weight: 800; color: var(--accent-700); margin-bottom: var(--space-3); line-height: 1.1; }
+    .fc-example { font-size: var(--font-size-sm); color: var(--text-body); line-height: 1.6; max-width: 280px; }
+    .fc-hint    { position: absolute; bottom: var(--space-3); font-size: 10px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .08em; opacity: .5; }
+    .fc-actions { display: flex; gap: var(--space-3); margin-top: var(--space-5);
+      transition: opacity .3s ease; }
+
+    /* Word dots */
+    .w-dots { display: flex; gap: 5px; flex-wrap: wrap; margin-top: var(--space-3); }
+    .w-dot  { width: 9px; height: 9px; border-radius: 50%; background: rgba(255,255,255,.2);
+      transition: background var(--transition-fast); }
+    .w-dot.seen  { background: rgba(255,255,255,.55); }
+    .w-dot.known { background: white; }
+
+    /* ── MATCHING GAME ── */
+    .match-col { display: flex; flex-direction: column; gap: var(--space-2); }
+    .match-col-label {
+      font-size: var(--font-size-xs); font-weight: 700; text-transform: uppercase;
+      letter-spacing: .07em; color: var(--text-faint); text-align: center;
+      margin-bottom: var(--space-1);
+    }
+    .match-item {
+      padding: var(--space-3) var(--space-3);
+      border-radius: var(--radius-lg);
+      border: 2px solid var(--border);
+      background: var(--card);
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-semibold);
+      text-align: center;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      min-height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1.3;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .match-item:hover:not(.matched):not(.selected) {
+      border-color: var(--primary-200); background: var(--primary-50); }
+    .match-item.selected {
+      border-color: var(--primary); background: var(--primary-50);
+      color: var(--primary-700); box-shadow: 0 0 0 3px var(--primary-100); }
+    .match-item.matched {
+      border-color: var(--accent); background: var(--accent-50);
+      color: var(--accent-700); opacity: .6; pointer-events: none; }
+    .match-item.wrong {
+      border-color: var(--danger); background: var(--danger-100);
+      animation: shake 0.45s ease; }
+    @keyframes shake {
+      0%,100%{ transform:translateX(0); }
+      20%{ transform:translateX(-5px); }
+      40%{ transform:translateX(5px); }
+      60%{ transform:translateX(-3px); }
+      80%{ transform:translateX(3px); }
+    }
+
+    /* ── SPEED QUIZ ── */
+    .timer-track { height: 6px; background: var(--surface-2);
+      border-radius: var(--radius-full); overflow: hidden; }
+    .timer-fill  { height: 100%; border-radius: var(--radius-full);
+      background: linear-gradient(90deg, var(--accent), var(--primary));
+      transition: background .5s ease; }
+    .timer-fill.urgent { background: linear-gradient(90deg, #F59E0B, var(--danger)); }
+
+    /* ── SENTENCE BUILDER ── */
+    .drop-zone {
+      min-height: 58px;
+      border: 2px dashed var(--border-2);
+      border-radius: var(--radius-xl);
+      background: var(--surface);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-2);
+      padding: var(--space-3) var(--space-4);
+      transition: border-color var(--transition-base), background var(--transition-base);
+    }
+    .drop-zone.correct { border-color: var(--accent); background: var(--accent-50); }
+    .drop-zone.wrong   { border-color: var(--danger); background: var(--danger-100);
+      animation: shake .4s ease; }
+    .drop-hint { color: var(--text-faint); font-size: var(--font-size-sm);
+      font-style: italic; pointer-events: none; }
+    .w-chip {
+      display: inline-flex; align-items: center; padding: 5px var(--space-3);
+      border-radius: var(--radius-full); font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-semibold); cursor: pointer;
+      transition: all var(--transition-fast); user-select: none;
+      -webkit-tap-highlight-color: transparent; border: none;
+      font-family: var(--font-family);
+    }
+    .w-chip.source {
+      background: var(--primary-100); color: var(--primary-700);
+      border: 1px solid var(--primary-200); }
+    .w-chip.source:hover:not(.used) {
+      background: var(--primary); color: white; transform: translateY(-1px); }
+    .w-chip.source.used { opacity: .28; pointer-events: none; }
+    .w-chip.placed {
+      background: var(--primary); color: white; }
+    .w-chip.placed:hover { background: var(--danger); }
+
+    /* ── ACTIVITY TAG ── */
+    .act-tag {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 3px var(--space-2); border-radius: var(--radius-full);
+      font-size: 10px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: .07em;
+    }
+    .act-learn  { background: var(--primary-100); color: var(--primary-700); }
+    .act-match  { background: var(--warm-100);    color: var(--warm-700); }
+    .act-speed  { background: #EDE9FE;            color: #7C3AED; }
+    .act-build  { background: var(--accent-100);  color: var(--accent-700); }
+    .act-quiz   { background: #FFE4E6;            color: #E11D48; }
+    .act-sr     { background: var(--warm-100);    color: var(--warm-700); }
+
+    /* ── SCORE RING ── */
+    .score-ring {
+      width: 110px; height: 110px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto var(--space-4); position: relative;
+    }
+    .score-ring-inner {
+      width: 80px; height: 80px; border-radius: 50%; background: white;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+    }
+
+    /* ── RESULT ── */
+    .result-grade {
+      font-size: 2.5rem; font-weight: 800;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* ── Pulse correct ── */
+    @keyframes correctPulse {
+      0%   { box-shadow: 0 0 0 0 rgba(16,185,129,.5); }
+      70%  { box-shadow: 0 0 0 10px rgba(16,185,129,0); }
+      100% { box-shadow: 0 0 0 0 rgba(16,185,129,0); }
+    }
+    .pulse-correct { animation: correctPulse .6s ease-out; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 380px) {
+      .fc-word  { font-size: 1.65rem; }
+      .fc-trans { font-size: 1.45rem; }
+      .fc-emoji { font-size: 2.8rem; }
+      .match-item { font-size: var(--font-size-xs); padding: var(--space-2) var(--space-2); }
+      .sess-hero { padding: var(--space-4); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .fc-inner  { transition: none !important; }
+      .fc-actions{ transition: none !important; }
+      .match-item.wrong { animation: none !important; }
+      .drop-zone.wrong  { animation: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="confetti-container" id="confetti-container" aria-hidden="true"></div>
+
+  <!-- ══════════════════════════════════════════════════════
+       NAVBAR
+       ══════════════════════════════════════════════════════ -->
+  <nav class="navbar" role="navigation" aria-label="Navigasi halaman">
+    <div class="container">
+      <div style="display: flex; align-items: center; gap: var(--space-4);">
+        <a href="index.html" class="btn-back" aria-label="Kembali ke beranda">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2.5" stroke-linecap="round" aria-hidden="true">
+            <polyline points="15 18 9 12 15 6"/>
+          </svg>
+          Beranda
+        </a>
+        <!-- Quick Tools -->
+        <div style="display: flex; gap: var(--space-2); align-items: center;">
+          <button onclick="toggleTheme()" class="btn" style="background: var(--surface-2); border-radius: var(--radius-full); width: 32px; height: 32px; padding: 0; display: flex; align-items: center; justify-content: center; color: var(--text-main); font-size: 14px; transition: transform 0.2s ease;" title="Ganti Mode (Siang/Malam)" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+            <span id="theme-icon">🌙</span>
+          </button>
+          <button onclick="unlockAllSteps()" class="btn" style="background: var(--surface-2); border-radius: var(--radius-full); height: 32px; padding: 0 10px; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; color: var(--text-main); transition: transform 0.2s ease, color 0.2s ease;" title="Unlock Semua Step" onmouseover="this.style.transform='scale(1.05)'; this.style.color='var(--accent)'" onmouseout="this.style.transform='scale(1)'; this.style.color='var(--text-main)'">
+            🔓 Unlock
+          </button>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:var(--space-2);">
+        <span class="chip chip--primary">Unit 1</span>
+        <span style="font-size:var(--font-size-sm);font-weight:700;color:var(--text-main);">Vocabulary</span>
+      </div>
+      <!-- XP counter -->
+      <div style="display:flex;align-items:center;gap:6px;
+        background:var(--warm-50);border:1px solid var(--warm-200);
+        border-radius:var(--radius-full);padding:4px var(--space-3);"
+        aria-label="XP yang diperoleh">
+        <span style="font-size:.9rem;" aria-hidden="true">⭐</span>
+        <span id="nav-xp" style="font-size:var(--font-size-xs);font-weight:800;
+          color:var(--warm-700);">0 XP</span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ══════════════════════════════════════════════════════
+       MAIN
+       ══════════════════════════════════════════════════════ -->
+  <main class="page-content" id="main-content" style="padding-bottom:90px;">
+    <div class="container">
+
+      <!-- SESSION HERO -->
+      <div class="sess-hero anim-fade-in-up" id="sess-hero"
+        style="background:linear-gradient(135deg,var(--primary),var(--primary-700));">
+        <span class="sess-hero-deco" id="hero-deco" aria-hidden="true">🏠</span>
+        <div style="position:relative;z-index:1;">
+          <p style="font-size:10px;font-weight:800;text-transform:uppercase;
+            letter-spacing:.09em;color:rgba(255,255,255,.65);margin-bottom:2px;">
+            UNIT 1 · VOCABULARY</p>
+          <h1 id="hero-title" style="font-size:var(--font-size-xl);font-weight:800;
+            color:white;margin-bottom:var(--space-3);">Benda Sehari-hari</h1>
+
+          <!-- Progress bar sesi -->
+          <div class="progress-bar-label" style="margin-bottom:4px;">
+            <span style="font-size:var(--font-size-xs);color:rgba(255,255,255,.75);">Progress sesi</span>
+            <span id="hero-pct" style="font-size:var(--font-size-xs);color:white;font-weight:700;">0%</span>
+          </div>
+          <div class="progress-bar-track" style="background:rgba(255,255,255,.2);margin-bottom:var(--space-3);">
+            <div id="hero-bar" class="progress-bar-fill"
+              style="width:0%;background:white;transition:width .8s ease;"></div>
+          </div>
+
+          <!-- Word-seen dots -->
+          <div class="w-dots" id="hero-dots" aria-hidden="true"></div>
+        </div>
+      </div>
+
+      <!-- SESSION TABS -->
+      <div class="sess-tabs anim-fade-in-up delay-100" role="tablist"
+        aria-label="Pilih sesi pembelajaran" style="margin-bottom:var(--space-4);">
+        <button class="sess-tab active" id="tab-0" role="tab" aria-selected="true"
+          onclick="App.goTo(0)">🏠 Benda</button>
+        <button class="sess-tab locked" id="tab-1" role="tab" aria-selected="false"
+          onclick="App.goTo(1)">🍚 Makanan</button>
+        <button class="sess-tab locked" id="tab-2" role="tab" aria-selected="false"
+          onclick="App.goTo(2)">💵 Uang &amp; Waktu</button>
+        <button class="sess-tab locked" id="tab-3" role="tab" aria-selected="false"
+          onclick="App.goTo(3)">🔧 Aktivitas</button>
+        <button class="sess-tab locked" id="tab-4" role="tab" aria-selected="false"
+          onclick="App.goTo(4)">🎯 Quiz Penutup</button>
+      </div>
+
+      <!-- PHASE PROGRESS -->
+      <div class="card anim-fade-in-up delay-200"
+        style="padding:var(--space-4);margin-bottom:var(--space-4);" id="phase-panel">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--space-3);">
+          <span style="font-size:10px;font-weight:800;color:var(--text-faint);
+            text-transform:uppercase;letter-spacing:.07em;">Tahap</span>
+          <span id="phase-label-text"
+            style="font-size:var(--font-size-xs);color:var(--primary);font-weight:700;"></span>
+        </div>
+        <div class="phase-strip" id="phase-strip">
+          <!-- rendered by JS -->
+        </div>
+      </div>
+
+      <!-- ACTIVITY AREA -->
+      <div id="activity-area" class="anim-fade-in-up delay-300">
+        <!-- Rendered by JS -->
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ══════════════════════════════════════════════════════
+       SCRIPTS
+       ══════════════════════════════════════════════════════ -->
+  <script src="js/app.js"></script>
+  <script src="js/quiz-store.js"></script>
+  <script src="js/feedback.js"></script>
+  <script>
+  'use strict';
+
+  /* ════════════════════════════════════════════════════════
+     1. VOCABULARY DATA  (40 kata × 4 sesi)
+     ════════════════════════════════════════════════════════ */
+  const VOCAB = [
+    /* Sesi 0: Benda Sehari-hari */
+    {
+      id:0, title:'Benda Sehari-hari', emoji:'🏠', color:'blue',
+      bg:'linear-gradient(135deg,#2563EB,#1D4ED8)',
+      words:[
+        {wid:'b1',en:'table',   id_:'meja',   e:'🪑', pr:'tei-bel',
+          ex:'There is a table in the room.',   exId:'Ada meja di dalam ruangan.'},
+        {wid:'b2',en:'chair',   id_:'kursi',  e:'🪑', pr:'cher',
+          ex:'Please sit on the chair.',         exId:'Silakan duduk di kursi.'},
+        {wid:'b3',en:'bag',     id_:'tas',    e:'👜', pr:'bæg',
+          ex:'My bag is on the table.',          exId:'Tas saya ada di atas meja.'},
+        {wid:'b4',en:'book',    id_:'buku',   e:'📖', pr:'buk',
+          ex:'I read a book every day.',         exId:'Saya membaca buku setiap hari.'},
+        {wid:'b5',en:'pen',     id_:'pena',   e:'✏️', pr:'pen',
+          ex:'Can I borrow your pen?',           exId:'Boleh saya pinjam penamu?'},
+        {wid:'b6',en:'phone',   id_:'HP',     e:'📱', pr:'fon',
+          ex:'My phone is in my bag.',           exId:'HP saya ada di dalam tas.'},
+        {wid:'b7',en:'water',   id_:'air',    e:'💧', pr:'wɔ-ter',
+          ex:'I drink water every morning.',     exId:'Saya minum air setiap pagi.'},
+        {wid:'b8',en:'door',    id_:'pintu',  e:'🚪', pr:'dɔr',
+          ex:'Please close the door.',           exId:'Tolong tutup pintunya.'},
+        {wid:'b9',en:'clock',   id_:'jam',    e:'⏰', pr:'klɒk',
+          ex:'The clock on the wall is broken.', exId:'Jam di dinding itu rusak.'},
+        {wid:'b10',en:'lamp',   id_:'lampu',  e:'💡', pr:'læmp',
+          ex:'Turn on the lamp, it is dark.',    exId:'Nyalakan lampu, sudah gelap.'},
+      ],
+      sentences:[
+        {words:['My','bag','is','on','the','table'], id_:'Tas saya ada di atas meja.'},
+        {words:['Please','close','the','door'],      id_:'Tolong tutup pintunya.'},
+      ]
+    },
+    /* Sesi 1: Makanan & Jualan */
+    {
+      id:1, title:'Makanan & Jualan', emoji:'🍚', color:'amber',
+      bg:'linear-gradient(135deg,#D97706,#92400E)',
+      words:[
+        {wid:'m1',en:'rice',       id_:'nasi',    e:'🍚', pr:'rais',
+          ex:'We eat rice three times a day.',    exId:'Kami makan nasi tiga kali sehari.'},
+        {wid:'m2',en:'bread',      id_:'roti',    e:'🍞', pr:'bred',
+          ex:'I buy bread at the market.',        exId:'Saya membeli roti di pasar.'},
+        {wid:'m3',en:'vegetables', id_:'sayur',   e:'🥬', pr:'vedʒ-ta-belz',
+          ex:'Eat vegetables for good health.',   exId:'Makan sayur agar sehat.'},
+        {wid:'m4',en:'fish',       id_:'ikan',    e:'🐟', pr:'fɪʃ',
+          ex:'She sells fresh fish every day.',   exId:'Dia menjual ikan segar setiap hari.'},
+        {wid:'m5',en:'chicken',    id_:'ayam',    e:'🍗', pr:'tʃɪk-ɪn',
+          ex:'Chicken is cheap at this market.',  exId:'Ayam murah di pasar ini.'},
+        {wid:'m6',en:'market',     id_:'pasar',   e:'🛒', pr:'mɑr-kɪt',
+          ex:'The market opens at six.',          exId:'Pasar buka jam enam.'},
+        {wid:'m7',en:'price',      id_:'harga',   e:'🏷️', pr:'prais',
+          ex:'What is the price of this fish?',   exId:'Berapa harga ikan ini?'},
+        {wid:'m8',en:'buy',        id_:'membeli', e:'🛍️', pr:'bai',
+          ex:'I want to buy some vegetables.',    exId:'Saya ingin membeli sayur.'},
+        {wid:'m9',en:'sell',       id_:'menjual', e:'💰', pr:'sel',
+          ex:'She sells rice and vegetables.',    exId:'Dia menjual nasi dan sayur.'},
+        {wid:'m10',en:'cheap',     id_:'murah',   e:'👍', pr:'tʃiːp',
+          ex:'This bread is very cheap.',         exId:'Roti ini sangat murah.'},
+      ],
+      sentences:[
+        {words:['She','sells','fish','at','the','market'], id_:'Dia menjual ikan di pasar.'},
+        {words:['I','want','to','buy','some','rice'],      id_:'Saya ingin membeli nasi.'},
+      ]
+    },
+    /* Sesi 2: Angka, Waktu & Uang */
+    {
+      id:2, title:'Angka, Waktu & Uang', emoji:'💵', color:'green',
+      bg:'linear-gradient(135deg,#059669,#065F46)',
+      words:[
+        {wid:'u1',en:'money',     id_:'uang',       e:'💵', pr:'mʌn-i',
+          ex:'Do you have money to buy rice?',   exId:'Apakah kamu punya uang beli nasi?'},
+        {wid:'u2',en:'pay',       id_:'membayar',   e:'💳', pr:'peɪ',
+          ex:'I pay ten thousand for bread.',    exId:'Saya membayar sepuluh ribu untuk roti.'},
+        {wid:'u3',en:'change',    id_:'kembalian',  e:'🔄', pr:'tʃeɪndʒ',
+          ex:'Here is your change, five thousand.', exId:'Ini kembaliannya, lima ribu.'},
+        {wid:'u4',en:'morning',   id_:'pagi',       e:'🌅', pr:'mɔːr-nɪŋ',
+          ex:'The market opens in the morning.', exId:'Pasar buka di pagi hari.'},
+        {wid:'u5',en:'afternoon', id_:'siang',      e:'☀️', pr:'æf-tər-nuːn',
+          ex:'I rest in the afternoon.',         exId:'Saya beristirahat di siang hari.'},
+        {wid:'u6',en:'evening',   id_:'malam',      e:'🌙', pr:'iːv-nɪŋ',
+          ex:'We close the shop in the evening.',exId:'Kami menutup toko di malam hari.'},
+        {wid:'u7',en:'thousand',  id_:'ribu',       e:'💰', pr:'θaʊ-zənd',
+          ex:'This costs twenty thousand.',      exId:'Ini harganya dua puluh ribu.'},
+        {wid:'u8',en:'expensive', id_:'mahal',      e:'😮', pr:'ɪk-spen-sɪv',
+          ex:'This phone is very expensive.',    exId:'HP ini sangat mahal.'},
+        {wid:'u9',en:'free',      id_:'gratis',     e:'🎁', pr:'friː',
+          ex:'The vegetables are free today!',   exId:'Sayurnya gratis hari ini!'},
+        {wid:'u10',en:'count',    id_:'menghitung', e:'🔢', pr:'kaʊnt',
+          ex:'Please count the money carefully.',exId:'Tolong hitung uang dengan teliti.'},
+      ],
+      sentences:[
+        {words:['I','pay','ten','thousand','for','bread'],    id_:'Saya membayar sepuluh ribu untuk roti.'},
+        {words:['The','market','opens','in','the','morning'], id_:'Pasar buka di pagi hari.'},
+      ]
+    },
+    /* Sesi 3: Aktivitas Rumah & Usaha */
+    {
+      id:3, title:'Aktivitas Rumah & Usaha', emoji:'🔧', color:'purple',
+      bg:'linear-gradient(135deg,#7C3AED,#4C1D95)',
+      words:[
+        {wid:'a1',en:'cook',  id_:'memasak',      e:'🍳', pr:'kʊk',
+          ex:'I cook rice every morning.',        exId:'Saya memasak nasi setiap pagi.'},
+        {wid:'a2',en:'clean', id_:'membersihkan', e:'🧹', pr:'kliːn',
+          ex:'We clean the house on Sunday.',     exId:'Kami membersihkan rumah hari Minggu.'},
+        {wid:'a3',en:'wash',  id_:'mencuci',      e:'🫧', pr:'wɒʃ',
+          ex:'Please wash the vegetables first.', exId:'Tolong cuci sayurannya dulu.'},
+        {wid:'a4',en:'open',  id_:'membuka',      e:'🔓', pr:'oʊ-pən',
+          ex:'Open the shop at seven.',           exId:'Buka toko jam tujuh.'},
+        {wid:'a5',en:'close', id_:'menutup',      e:'🔒', pr:'kloʊz',
+          ex:'Close the door before you sleep.',  exId:'Tutup pintu sebelum tidur.'},
+        {wid:'a6',en:'work',  id_:'bekerja',      e:'💼', pr:'wɜːrk',
+          ex:'I work from 7 to 5 every day.',     exId:'Saya bekerja dari jam 7 sampai 5.'},
+        {wid:'a7',en:'help',  id_:'membantu',     e:'🤝', pr:'help',
+          ex:'Can you help me count the money?',  exId:'Bisakah kamu membantuku menghitung uang?'},
+        {wid:'a8',en:'learn', id_:'belajar',      e:'📚', pr:'lɜːrn',
+          ex:'I learn English every evening.',    exId:'Saya belajar Bahasa Inggris setiap malam.'},
+        {wid:'a9',en:'count', id_:'menghitung',   e:'🔢', pr:'kaʊnt',
+          ex:'Count the money before you close.', exId:'Hitung uangnya sebelum tutup.'},
+        {wid:'a10',en:'carry',id_:'membawa',      e:'🎒', pr:'kær-i',
+          ex:'I carry my bag to the market.',     exId:'Saya membawa tas ke pasar.'},
+      ],
+      sentences:[
+        {words:['I','cook','rice','every','morning'],    id_:'Saya memasak nasi setiap pagi.'},
+        {words:['Open','the','shop','at','seven'],       id_:'Buka toko jam tujuh.'},
+      ]
+    },
+  ];
+
+  /* ════════════════════════════════════════════════════════
+     2. SPACED REPETITION ENGINE
+     ════════════════════════════════════════════════════════ */
+  const SR = {
+    KEY: 'emodul_sr_v1',
+    load(){ try{ return JSON.parse(localStorage.getItem(this.KEY)||'{}'); }catch{ return {}; } },
+    save(d){ try{ localStorage.setItem(this.KEY,JSON.stringify(d)); }catch{} },
+    markWrong(wid){
+      const d=this.load();
+      d[wid]={seen:(d[wid]?.seen||0)+1, wrong:(d[wid]?.wrong||0)+1, ts:Date.now()};
+      this.save(d);
+    },
+    markRight(wid){
+      const d=this.load();
+      d[wid]={seen:(d[wid]?.seen||0)+1, wrong:Math.max(0,(d[wid]?.wrong||1)-1), ts:Date.now()};
+      this.save(d);
+    },
+    getHardIds(limit=5){
+      const d=this.load();
+      return Object.entries(d)
+        .filter(([,v])=>v.wrong>0)
+        .sort((a,b)=>b[1].wrong-a[1].wrong)
+        .slice(0,limit)
+        .map(([id])=>id);
+    },
+    getHardWords(limit=5){
+      const ids=this.getHardIds(limit);
+      const all=VOCAB.flatMap(s=>s.words);
+      return ids.map(id=>all.find(w=>w.wid===id)).filter(Boolean);
+    }
+  };
+
+  /* ════════════════════════════════════════════════════════
+     3. APP STATE & CONFIG
+     ════════════════════════════════════════════════════════ */
+  const App = {
+    /* state */
+    sess:     0,       // 0-3 session, 4 = closing quiz
+    phase:    0,       // 0=learn,1=match,2=speed,3=build
+    wIdx:     0,       // word index in learn phase
+    xp:       0,       // accumulated XP this visit
+    done:     [false,false,false,false], // sessions completed
+
+    /* match state */
+    ms: { sel:null, matched:0, enW:[], idW:[], total:0 },
+    /* speed state */
+    ss: { qi:0, score:0, qs:[], left:15, interval:null },
+    /* build state */
+    bs: { si:0, placed:[], sents:[] },
+    /* closing quiz state */
+    cs: { qi:0, score:0, qs:[], quizSess:null },
+
+    PHASE_ICONS:  ['📖','🔗','⚡','✍️'],
+    PHASE_NAMES:  ['Belajar','Cocokkan','Speed','Kalimat'],
+
+    get curSess(){ return VOCAB[this.sess]; },
+
+    /* ─── INIT ─── */
+    init(){
+      this._loadProgress();
+      this._loadXP();
+      FeedbackEngine.init({
+        onNext:  (q)   => this._closingNext(),
+        onRetry: (q,n) => this._closingRetry(),
+        onSkip:  (q)   => this._closingNext(),
+      });
+      if('speechSynthesis' in window) window.speechSynthesis.getVoices();
+      this.render();
+    },
+
+    /* ─── NAVIGATE ─── */
+    goTo(n){
+      FeedbackEngine.dismiss();
+      clearInterval(this.ss.interval);
+      this.sess=n; this.phase=0; this.wIdx=0;
+      this.render();
+      window.scrollTo({top:0,behavior:'smooth'});
+    },
+
+    goPhase(n){
+      clearInterval(this.ss.interval);
+      this.phase=n; this.wIdx=0;
+      this.render();
+      setTimeout(()=>window.scrollTo({top:60,behavior:'smooth'}),50);
+    },
+
+    nextPhase(){
+      if(this.phase<3){ this.goPhase(this.phase+1); }
+      else { this._completeSess(); }
+    },
+
+    /* ─── RENDER ─── */
+    render(){
+      this._updateHero();
+      this._updateTabs();
+      this._updatePhaseStrip();
+      if(this.sess===4){ this._renderClosingQuiz(); return; }
+      [this._renderLearn,this._renderMatch,this._renderSpeed,this._renderBuild]
+        [this.phase].call(this);
+    },
+
+    /* ─── HERO ─── */
+    _updateHero(){
+      const hero=document.getElementById('sess-hero');
+      const deco=document.getElementById('hero-deco');
+      const title=document.getElementById('hero-title');
+      const pct=document.getElementById('hero-pct');
+      const bar=document.getElementById('hero-bar');
+      const dots=document.getElementById('hero-dots');
+
+      if(this.sess===4){
+        hero.style.background='linear-gradient(135deg,#DC2626,#7F1D1D)';
+        if(deco) deco.textContent='🎯';
+        if(title) title.textContent='Quiz Penutup';
+        if(pct) pct.textContent='';
+        if(bar) bar.style.width='0%';
+        if(dots) dots.innerHTML='';
+        return;
+      }
+      const s=this.curSess;
+      if(hero) hero.style.background=s.bg;
+      if(deco) deco.textContent=s.emoji;
+      if(title) title.textContent=s.title;
+
+      const sessPct=Math.round((this.phase/4)*100 + (this.phase===0 ? (this.wIdx/s.words.length)*25 : 0));
+      if(pct) pct.textContent=`${sessPct}%`;
+      if(bar){ bar.style.width='0%'; setTimeout(()=>{ bar.style.width=`${sessPct}%`; },100); }
+
+      if(dots){
+        dots.innerHTML=s.words.map((w,i)=>{
+          const cls=i<this.wIdx?'known':i===this.wIdx?'seen':'';
+          return `<div class="w-dot ${cls}" title="${w.en}"></div>`;
+        }).join('');
+      }
+    },
+
+    /* ─── TABS ─── */
+    _updateTabs(){
+      for(let i=0;i<5;i++){
+        const el=document.getElementById(`tab-${i}`);
+        if(!el) continue;
+        el.className='sess-tab';
+        if(i===this.sess){ el.classList.add('active'); }
+        else if(i<4 && this.done[i]){ el.classList.add('done'); }
+        el.setAttribute('aria-selected', i===this.sess?'true':'false');
+      }
+    },
+
+    /* ─── PHASE STRIP ─── */
+    _updatePhaseStrip(){
+      const pp=document.getElementById('phase-panel');
+      const strip=document.getElementById('phase-strip');
+      const lbl=document.getElementById('phase-label-text');
+      if(this.sess===4){
+        if(pp) pp.style.display='none'; return;
+      }
+      if(pp) pp.style.display='';
+      if(lbl) lbl.textContent=`${this.PHASE_ICONS[this.phase]} ${this.PHASE_NAMES[this.phase]}`;
+      if(!strip) return;
+
+      let html='';
+      this.PHASE_NAMES.forEach((name,i)=>{
+        const isDone=i<this.phase;
+        const isAct=i===this.phase;
+        const cls=isDone?'done':isAct?'active':'upcoming';
+        const icon=isDone?'✓':this.PHASE_ICONS[i];
+        const lblCls=isAct?'phase-label active-label':'phase-label';
+        html+=`<div class="phase-node">
+          <div class="phase-dot ${cls}" title="${name}">${icon}</div>
+          <span class="${lblCls}">${name}</span>
+        </div>`;
+        if(i<3) html+=`<div class="phase-line ${isDone?'done':''}"></div>`;
+      });
+      strip.innerHTML=html;
+    },
+
+    /* ═══════════════════════════════════════════════════════
+       PHASE 0: LEARN (Flashcards)
+       ═══════════════════════════════════════════════════════ */
+    _renderLearn(){
+      const words=this.curSess.words;
+      const w=words[this.wIdx];
+      const isLast=this.wIdx>=words.length-1;
+
+      document.getElementById('activity-area').innerHTML=`
+        <span class="act-tag act-learn" style="margin-bottom:var(--space-3);display:inline-flex;">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2.5" aria-hidden="true">
+            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+          </svg>
+          Kartu Kosakata &middot; ${this.wIdx+1} / ${words.length}
+        </span>
+
+        <div class="fc-wrap" id="fc" role="button" tabindex="0"
+          aria-label="Kartu kata: ${w.en}. Ketuk untuk melihat terjemahan."
+          onclick="App._flipCard()"
+          onkeydown="if(event.key==='Enter'||event.key===' ')App._flipCard()">
+          <div class="fc-inner" id="fc-inner">
+
+            <!-- DEPAN -->
+            <div class="fc-face fc-front">
+              <span class="fc-emoji" aria-hidden="true">${w.e}</span>
+              <p class="fc-word">${w.en.toUpperCase()}</p>
+              <div style="display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:12px;">
+                <p class="fc-pronounce" style="margin:0;">/${w.pr}/</p>
+                <button onclick="event.stopPropagation(); App._speakWord('${w.en.replace(/'/g, "\\'")}')" aria-label="Dengarkan pengucapan Amerika" style="background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:white;transition:transform 0.2s, background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,.25)';this.style.transform='scale(1.05)'" onmouseout="this.style.background='rgba(255,255,255,.15)';this.style.transform='scale(1)'">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+                  </svg>
+                </button>
+              </div>
+              <span class="fc-hint" style="color:rgba(255,255,255,.55);">
+                👆 Ketuk area kosong untuk terjemahan
+              </span>
+            </div>
+
+            <!-- BELAKANG -->
+            <div class="fc-face fc-back">
+              <span class="fc-emoji" aria-hidden="true">${w.e}</span>
+              <p class="fc-trans">${w.id_}</p>
+              <div style="display:flex;align-items:center;justify-content:center;gap:12px;">
+                <p class="fc-example" style="margin:0;"><em>&ldquo;${w.ex}&rdquo;</em></p>
+                <button onclick="event.stopPropagation(); App._speakWord('${w.ex.replace(/'/g, "\\'")}')" aria-label="Dengarkan kalimat" style="background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:white;transition:transform 0.2s, background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,.25)';this.style.transform='scale(1.05)'" onmouseout="this.style.background='rgba(255,255,255,.15)';this.style.transform='scale(1)'">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+                  </svg>
+                </button>
+              </div>
+              <p style="font-size:var(--font-size-xs);color:var(--text-muted);margin-top:var(--space-2);">
+                🇮🇩 ${w.exId}</p>
+            </div>
+          </div>
+        </div>
+
+        <div id="fc-actions" class="fc-actions" style="opacity:.35;pointer-events:none;">
+          <button class="btn btn-outline btn-block" onclick="App._learnAgain()"
+            aria-label="Belum hafal – tampilkan lagi nanti">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+              <polyline points="1 4 1 10 7 10"/>
+              <path d="M3.51 15a9 9 0 1 0 .49-4.11"/>
+            </svg>
+            Belum Hafal
+          </button>
+          <button class="btn btn-accent btn-block" onclick="App._learnKnow()"
+            aria-label="${isLast?'Selesai belajar kartu':'Sudah hafal – lanjut kata berikutnya'}">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="3" aria-hidden="true">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+            ${isLast ? 'Selesai! 🎉' : 'Sudah Tahu!'}
+          </button>
+        </div>
+      `;
+    },
+
+    _speakWord(text){
+      if(!('speechSynthesis' in window)) return;
+      window.speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = 'en-US';
+      u.rate = 0.9;
+      const voices = window.speechSynthesis.getVoices();
+      const usVoice = voices.find(v => v.lang === 'en-US' && v.name.includes('Google')) || voices.find(v => v.lang.startsWith('en'));
+      if(usVoice) u.voice = usVoice;
+      window._synth_utterance = u;
+      window.speechSynthesis.speak(u);
+    },
+
+    _flipCard(){
+      const fc=document.getElementById('fc');
+      if(!fc) return;
+      fc.classList.toggle('flipped');
+      if(fc.classList.contains('flipped')){
+        const a=document.getElementById('fc-actions');
+        if(a){ a.style.opacity='1'; a.style.pointerEvents='auto'; }
+      }
+    },
+
+    _learnKnow(){
+      SR.markRight(this.curSess.words[this.wIdx].wid);
+      this._addXP(10);
+      this._advanceLearn();
+    },
+    _learnAgain(){
+      SR.markWrong(this.curSess.words[this.wIdx].wid);
+      this._advanceLearn();
+    },
+    _advanceLearn(){
+      if(this.wIdx<this.curSess.words.length-1){
+        this.wIdx++;
+        this._renderLearn();
+        this._updateHero();
+      } else {
+        this._addXP(20);
+        this.nextPhase();
+      }
+    },
+
+    /* ═══════════════════════════════════════════════════════
+       PHASE 1: MATCH
+       ═══════════════════════════════════════════════════════ */
+    _renderMatch(){
+      const pool=this._shuffle([...this.curSess.words]).slice(0,5);
+      this.ms={
+        sel:null, selSide:null, matched:0, total:pool.length,
+        enW:this._shuffle([...pool]),
+        idW:this._shuffle([...pool]),
+      };
+
+      document.getElementById('activity-area').innerHTML=`
+        <span class="act-tag act-match" style="margin-bottom:var(--space-4);display:inline-flex;">
+          🔗 Cocokkan &middot; Hubungkan kata dengan artinya
+        </span>
+        <div class="card" style="padding:var(--space-5);">
+          <p style="font-size:var(--font-size-sm);color:var(--text-muted);
+            text-align:center;margin-bottom:var(--space-4);">
+            Ketuk kata Inggris, lalu ketuk artinya dalam Bahasa Indonesia.
+          </p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-3);
+            margin-bottom:var(--space-5);">
+            <div>
+              <p class="match-col-label">English 🇬🇧</p>
+              <div class="match-col" id="m-en">
+                ${this.ms.enW.map((w,i)=>`
+                  <button class="match-item" id="men-${i}" data-wid="${w.wid}"
+                    onclick="App._handleMatch('en',${i},'${w.wid}')"
+                    aria-label="${w.en}">${w.en}</button>`).join('')}
+              </div>
+            </div>
+            <div>
+              <p class="match-col-label">Indonesia 🇮🇩</p>
+              <div class="match-col" id="m-id">
+                ${this.ms.idW.map((w,i)=>`
+                  <button class="match-item" id="mid-${i}" data-wid="${w.wid}"
+                    onclick="App._handleMatch('id',${i},'${w.wid}')"
+                    aria-label="${w.id_}">${w.id_}</button>`).join('')}
+              </div>
+            </div>
+          </div>
+          <div class="progress-bar-label">
+            <span class="progress-bar-label-text">Pasangan benar</span>
+            <span id="match-score" class="progress-bar-label-value">0 / ${pool.length}</span>
+          </div>
+          <div class="progress-bar-track progress-bar-track--thin">
+            <div class="progress-bar-fill" id="match-bar" style="width:0%;"></div>
+          </div>
+        </div>`;
+    },
+
+    _handleMatch(side, idx, wid){
+      const ms=this.ms;
+      const elId=side==='en'?`men-${idx}`:`mid-${idx}`;
+      const el=document.getElementById(elId);
+      if(!el || el.classList.contains('matched')) return;
+
+      if(!ms.sel){
+        ms.sel={side,idx,wid}; el.classList.add('selected');
+      } else if(ms.sel.side===side){
+        // same side — switch
+        document.getElementById(ms.sel.side==='en'?`men-${ms.sel.idx}`:`mid-${ms.sel.idx}`)
+          ?.classList.remove('selected');
+        ms.sel={side,idx,wid}; el.classList.add('selected');
+      } else {
+        const prevEl=document.getElementById(ms.sel.side==='en'?`men-${ms.sel.idx}`:`mid-${ms.sel.idx}`);
+        prevEl?.classList.remove('selected');
+
+        if(ms.sel.wid===wid){
+          // ✅ CORRECT
+          [prevEl,el].forEach(e=>e?.classList.replace('selected','matched')||e?.classList.add('matched'));
+          ms.matched++;
+          SR.markRight(wid);
+          this._addXP(15);
+
+          const pct=Math.round((ms.matched/ms.total)*100);
+          const bar=document.getElementById('match-bar');
+          if(bar){ bar.style.width=`${pct}%`; bar.style.transition='width .4s ease'; }
+          const sc=document.getElementById('match-score');
+          if(sc) sc.textContent=`${ms.matched} / ${ms.total}`;
+
+          if(ms.matched>=ms.total){
+            this._addXP(25);
+            setTimeout(()=>this.nextPhase(),900);
+          }
+        } else {
+          // ❌ WRONG
+          [prevEl,el].forEach(e=>{
+            if(e&&!e.classList.contains('matched')){
+              e.classList.add('wrong');
+              setTimeout(()=>e.classList.remove('wrong','selected'),700);
+            }
+          });
+          SR.markWrong(ms.sel.wid);
+        }
+        ms.sel=null;
+      }
+    },
+
+    /* ═══════════════════════════════════════════════════════
+       PHASE 2: SPEED QUIZ
+       ═══════════════════════════════════════════════════════ */
+    _renderSpeed(){
+      const pool=this._shuffle([...this.curSess.words]).slice(0,5);
+      const qs=pool.map(target=>{
+        const dist=this._shuffle(this.curSess.words.filter(w=>w.wid!==target.wid)).slice(0,3);
+        const opts=this._shuffle([target,...dist]);
+        return {target, opts, correct:opts.indexOf(target)};
+      });
+      this.ss={qi:0, score:0, qs, left:15, interval:null};
+      this._renderSpeedQ();
+    },
+
+    _renderSpeedQ(){
+      const ss=this.ss;
+      if(ss.qi>=ss.qs.length){ this._renderSpeedResult(); return; }
+      const q=ss.qs[ss.qi];
+      const keys=['A','B','C','D'];
+
+      document.getElementById('activity-area').innerHTML=`
+        <span class="act-tag act-speed" style="margin-bottom:var(--space-3);display:inline-flex;">
+          ⚡ Speed Quiz &middot; Soal ${ss.qi+1} / ${ss.qs.length}
+        </span>
+
+        <div class="timer-track" style="margin-bottom:var(--space-2);">
+          <div class="timer-fill" id="tf" style="width:100%;transition:width 1s linear;"></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:var(--space-3);">
+          <span style="font-size:var(--font-size-sm);color:var(--text-muted);">
+            ⏱ <span id="tc">${ss.left}</span>s</span>
+          <span style="font-size:var(--font-size-sm);color:var(--accent);font-weight:700;">
+            Skor: <span id="sc">${ss.score}</span></span>
+        </div>
+
+        <div class="card" style="padding:var(--space-5);">
+          <div style="text-align:center;margin-bottom:var(--space-5);">
+            <p style="font-size:var(--font-size-sm);color:var(--text-muted);margin-bottom:var(--space-2);">
+              Apa arti kata ini?</p>
+            <div style="font-size:3rem;line-height:1;margin-bottom:var(--space-2);">${q.target.e}</div>
+            <p style="font-size:2.2rem;font-weight:800;color:var(--text-main);">
+              ${q.target.en.toUpperCase()}</p>
+            <p style="font-size:var(--font-size-xs);color:var(--text-muted);font-style:italic;">
+              /${q.target.pr}/</p>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:var(--space-2);" id="spd-opts">
+            ${q.opts.map((opt,i)=>`
+              <button class="quiz-option" id="so-${i}" data-i="${i}"
+                onclick="App._handleSpeedAns(${i})"
+                aria-label="Pilihan ${keys[i]}: ${opt.id_}">
+                <span class="quiz-option-key">${keys[i]}</span>
+                <span class="quiz-option-text">${opt.id_}</span>
+              </button>`).join('')}
+          </div>
+        </div>`;
+
+      clearInterval(ss.interval);
+      ss.left=15;
+
+      ss.interval=setInterval(()=>{
+        ss.left--;
+        const tc=document.getElementById('tc');
+        const tf=document.getElementById('tf');
+        if(tc) tc.textContent=ss.left;
+        if(tf){
+          tf.style.width=`${(ss.left/15)*100}%`;
+          if(ss.left<=5) tf.classList.add('urgent');
+        }
+        if(ss.left<=0){ clearInterval(ss.interval); this._handleSpeedAns(-1); }
+      },1000);
+    },
+
+    _handleSpeedAns(sel){
+      clearInterval(this.ss.interval);
+      const q=this.ss.qs[this.ss.qi];
+      const ok=sel===q.correct;
+
+      document.querySelectorAll('#spd-opts .quiz-option').forEach((btn,i)=>{
+        btn.classList.add('quiz-option--disabled');
+        if(i===q.correct) btn.classList.add('quiz-option--correct');
+        else if(i===sel&&!ok) btn.classList.add('quiz-option--wrong');
+      });
+
+      if(ok){ this.ss.score++; SR.markRight(q.target.wid); this._addXP(20); }
+      else   { SR.markWrong(q.target.wid); }
+
+      const sc=document.getElementById('sc');
+      if(sc) sc.textContent=this.ss.score;
+
+      setTimeout(()=>{ this.ss.qi++; this._renderSpeedQ(); },1100);
+    },
+
+    _renderSpeedResult(){
+      const ss=this.ss;
+      const pct=Math.round((ss.score/ss.qs.length)*100);
+      this._addXP(30);
+
+      document.getElementById('activity-area').innerHTML=`
+        <div class="card" style="padding:var(--space-6);text-align:center;">
+          <div style="font-size:3rem;margin-bottom:var(--space-2);">
+            ${pct>=80?'🏅':pct>=60?'💪':'🔄'}</div>
+          <div class="result-grade">${ss.score} / ${ss.qs.length}</div>
+          <p style="font-size:var(--font-size-lg);font-weight:700;color:var(--text-main);
+            margin-bottom:var(--space-1);">
+            ${pct>=80?'Sempurna!':pct>=60?'Bagus! Terus berlatih.':'Ayo coba lagi!'}
+          </p>
+          <p style="font-size:var(--font-size-sm);color:var(--text-muted);margin-bottom:var(--space-5);">
+            Speed Quiz selesai — lanjut menyusun kalimat!
+          </p>
+          <button class="btn btn-primary btn-block" onclick="App.nextPhase()">
+            Lanjut: Susun Kalimat ✍️
+          </button>
+        </div>`;
+    },
+
+    /* ═══════════════════════════════════════════════════════
+       PHASE 3: SENTENCE BUILDER
+       ═══════════════════════════════════════════════════════ */
+    _renderBuild(){
+      this.bs={ si:0, placed:[], sents:this.curSess.sentences, checked:false };
+      this._renderBuildSent();
+    },
+
+    _renderBuildSent(){
+      const bs=this.bs;
+      if(bs.si>=bs.sents.length){ this._renderBuildDone(); return; }
+      const sent=bs.sents[bs.si];
+      const chips=this._shuffle([...sent.words]);
+      bs.placed=[]; bs.checked=false;
+
+      document.getElementById('activity-area').innerHTML=`
+        <span class="act-tag act-build" style="margin-bottom:var(--space-4);display:inline-flex;">
+          ✍️ Susun Kalimat &middot; ${bs.si+1} / ${bs.sents.length}
+        </span>
+        <div class="card" style="padding:var(--space-5);">
+          <!-- Terjemahan petunjuk -->
+          <div style="background:var(--surface);border-left:3px solid var(--primary);
+            border-radius:var(--radius-lg);padding:var(--space-3) var(--space-4);
+            margin-bottom:var(--space-4);">
+            <p style="font-size:10px;font-weight:800;text-transform:uppercase;
+              letter-spacing:.06em;color:var(--text-faint);margin-bottom:4px;">🇮🇩 Petunjuk</p>
+            <p style="font-size:var(--font-size-sm);color:var(--text-body);">${sent.id_}</p>
+          </div>
+          <!-- Drop zone -->
+          <p style="font-size:10px;font-weight:800;text-transform:uppercase;
+            letter-spacing:.06em;color:var(--text-faint);margin-bottom:var(--space-2);">
+            Susun kata di sini ↓</p>
+          <div class="drop-zone" id="dz" aria-label="Area menyusun kalimat"
+            style="margin-bottom:var(--space-4);">
+            <span class="drop-hint">Ketuk kata di bawah untuk menambahkan...</span>
+          </div>
+          <!-- Word bank -->
+          <p style="font-size:10px;font-weight:800;text-transform:uppercase;
+            letter-spacing:.06em;color:var(--text-faint);margin-bottom:var(--space-2);">
+            Kata tersedia ↓</p>
+          <div style="display:flex;flex-wrap:wrap;gap:var(--space-2);min-height:40px;"
+            id="word-bank">
+            ${chips.map((word,i)=>`
+              <button class="w-chip source" id="chip-${i}" data-word="${word}" data-i="${i}"
+                onclick="App._tapChip(${i},'${word}')"
+                aria-label="Tambahkan: ${word}">${word}</button>`).join('')}
+          </div>
+          <div style="display:flex;gap:var(--space-3);margin-top:var(--space-4);">
+            <button class="btn btn-ghost btn-sm" onclick="App._resetBuild()">
+              ↺ Atur Ulang</button>
+            <button class="btn btn-primary btn-block" onclick="App._checkBuild()">
+              Periksa ✓</button>
+          </div>
+          <div id="build-fb" style="margin-top:var(--space-3);"></div>
+        </div>`;
+    },
+
+    _tapChip(i, word){
+      const chip=document.getElementById(`chip-${i}`);
+      if(!chip||chip.classList.contains('used')) return;
+      this.bs.placed.push({i,word});
+      chip.classList.add('used');
+      this._updateDZ();
+    },
+    _removePlaced(pi){
+      const item=this.bs.placed[pi];
+      document.getElementById(`chip-${item.i}`)?.classList.remove('used');
+      this.bs.placed.splice(pi,1);
+      this._updateDZ();
+    },
+    _updateDZ(){
+      const dz=document.getElementById('dz');
+      if(!dz) return;
+      dz.classList.remove('correct','wrong');
+      if(!this.bs.placed.length){
+        dz.innerHTML='<span class="drop-hint">Ketuk kata di bawah untuk menambahkan...</span>';
+        return;
+      }
+      dz.innerHTML=this.bs.placed.map((item,pi)=>`
+        <button class="w-chip placed" onclick="App._removePlaced(${pi})"
+          title="Ketuk untuk hapus" aria-label="Hapus: ${item.word}">${item.word}</button>`).join('');
+    },
+    _resetBuild(){
+      this.bs.placed=[];
+      document.querySelectorAll('#word-bank .w-chip').forEach(c=>c.classList.remove('used'));
+      this._updateDZ();
+      document.getElementById('build-fb').innerHTML='';
+    },
+    _checkBuild(){
+      if(this.bs.checked) return;
+      const sent=this.bs.sents[this.bs.si];
+      const user=this.bs.placed.map(p=>p.word).join(' ').toLowerCase().trim();
+      const ans=sent.words.join(' ').toLowerCase().trim();
+      const dz=document.getElementById('dz');
+      const fb=document.getElementById('build-fb');
+      if(user===ans){
+        dz.classList.add('correct');
+        this.bs.checked=true;
+        this._addXP(25);
+        fb.innerHTML=`
+          <div style="background:var(--accent-50);border:1.5px solid var(--accent);
+            border-radius:var(--radius-lg);padding:var(--space-3) var(--space-4);">
+            <p style="font-size:var(--font-size-sm);font-weight:700;color:var(--accent-700);">
+              ✅ Benar! Kalimat sempurna.</p>
+            <p style="font-size:var(--font-size-xs);color:var(--accent-600);">
+              "${sent.words.join(' ')}" = ${sent.id_}</p>
+          </div>
+          <button class="btn btn-accent btn-block" style="margin-top:var(--space-3);"
+            onclick="App._nextSent()">
+            ${this.bs.si<this.bs.sents.length-1?'Kalimat Berikutnya →':'Selesaikan Sesi! 🎉'}
+          </button>`;
+      } else {
+        dz.classList.add('wrong');
+        fb.innerHTML=`
+          <div style="background:var(--danger-100);border:1.5px solid #FCA5A5;
+            border-radius:var(--radius-lg);padding:var(--space-3) var(--space-4);">
+            <p style="font-size:var(--font-size-sm);font-weight:700;color:var(--danger-600);
+              margin-bottom:4px;">💙 Belum tepat — coba lagi!</p>
+            <p style="font-size:var(--font-size-xs);color:var(--danger-600);">
+              Jawaban: <strong>${sent.words.join(' ')}</strong></p>
+          </div>`;
+        setTimeout(()=>{
+          dz.classList.remove('wrong');
+          fb.innerHTML='';
+        },2200);
+      }
+    },
+    _nextSent(){
+      this.bs.si++;
+      this._renderBuildSent();
+    },
+    _renderBuildDone(){
+      document.getElementById('activity-area').innerHTML=`
+        <div class="card" style="padding:var(--space-6);text-align:center;
+          background:linear-gradient(135deg,var(--accent-50),white);border:2px solid var(--accent);">
+          <div style="font-size:3.5rem;margin-bottom:var(--space-3);
+            animation:badgeBounce .6s ease both;" aria-hidden="true">✍️</div>
+          <div class="result-grade">Selesai!</div>
+          <p style="font-size:var(--font-size-lg);font-weight:700;color:var(--text-main);
+            margin-bottom:var(--space-1);">Kalimat tersusun dengan baik!</p>
+          <p style="font-size:var(--font-size-sm);color:var(--text-muted);
+            margin-bottom:var(--space-5);">Semua tahap sesi ini telah diselesaikan.</p>
+          <button class="btn btn-accent btn-block" onclick="App._completeSess()">
+            Selesaikan Sesi ${this.sess+1} 🏆
+          </button>
+        </div>`;
+    },
+
+    /* ═══════════════════════════════════════════════════════
+       SESSION COMPLETE
+       ═══════════════════════════════════════════════════════ */
+    _completeSess(){
+      this.done[this.sess]=true;
+      this._addXP(50);
+      this._saveProgress();
+      this._updateTabs();
+
+      const next=VOCAB[this.sess+1];
+      const isLast=this.sess>=VOCAB.length-1;
+      const allDone=this.done.every(Boolean);
+
+      document.getElementById('activity-area').innerHTML=`
+        <div class="card" style="padding:var(--space-6);text-align:center;
+          background:linear-gradient(135deg,var(--accent-50),white);border:2px solid var(--accent);
+          overflow:hidden;">
+          <div style="font-size:3.5rem;animation:badgeBounce .6s ease both;
+            margin-bottom:var(--space-3);" aria-hidden="true">🏆</div>
+          <h2 style="font-size:var(--font-size-2xl);font-weight:800;color:var(--accent-700);
+            margin-bottom:var(--space-2);">Sesi ${this.sess+1} Selesai!</h2>
+          <p style="color:var(--text-muted);margin-bottom:var(--space-5);">
+            ${allDone?'Luar biasa! Semua sesi selesai. Quiz Penutup kini terbuka.':
+              next?`Selanjutnya: <strong>${next.title}</strong>`:''}</p>
+          <div style="display:flex;flex-direction:column;gap:var(--space-3);">
+            ${!isLast?`<button class="btn btn-accent btn-block" onclick="App.goTo(${this.sess+1})">
+              Mulai Sesi ${this.sess+2}: ${next.title} →</button>`:''}
+            ${allDone?`<button class="btn btn-primary btn-block" onclick="App.goTo(4)">
+              Mulai Quiz Penutup 🎯</button>`:''}
+            <a href="index.html" class="btn btn-outline btn-block">← Kembali ke Beranda</a>
+          </div>
+        </div>`;
+
+      if(typeof Utils!=='undefined') Utils.showConfetti?.() || Utils.showToast?.('🏆 Sesi selesai!');
+    },
+
+    /* ═══════════════════════════════════════════════════════
+       CLOSING QUIZ (FeedbackEngine + Spaced Repetition)
+       ═══════════════════════════════════════════════════════ */
+    _renderClosingQuiz(){
+      const all=VOCAB.flatMap(s=>s.words);
+      const hard=SR.getHardWords(4);
+
+      // 6 random + up to 4 difficult (deduplicated)
+      let pool=this._shuffle([...all]).slice(0,6);
+      hard.forEach(hw=>{ if(!pool.find(w=>w.wid===hw.wid)) pool.push(hw); });
+      pool=this._shuffle(pool).slice(0,10);
+
+      const qs=pool.map((target,qi)=>{
+        const dist=this._shuffle(all.filter(w=>w.wid!==target.wid)).slice(0,3);
+        const opts=this._shuffle([target,...dist]);
+        const correct=opts.indexOf(target);
+        const isHard=hard.some(h=>h.wid===target.wid);
+        return {
+          id:qi+1,
+          text:`Apa arti kata "<b>${target.en}</b>" dalam Bahasa Indonesia?`,
+          options:opts.map(o=>o.id_),
+          correct,
+          whyCorrect:`"${target.en}" = <strong>${target.id_}</strong>. ${target.ex}`,
+          whyWrong:opts.map((o,i)=>i===correct?null
+            :`"${o.id_}" adalah terjemahan dari "${o.en}", bukan "${target.en}".`),
+          example:`${target.ex} (${target.exId})`,
+          _w:target, _hard:isHard
+        };
+      });
+
+      this.cs={
+        qi:0, score:0, qs,
+        quizSess:QuizStore.startSession('vocab_unit1_close'),
+      };
+
+      this._renderClosingQ();
+    },
+
+    _renderClosingQ(){
+      const cs=this.cs;
+      if(cs.qi>=cs.qs.length){ this._renderClosingResult(); return; }
+      const q=cs.qs[cs.qi];
+      const keys=['A','B','C','D'];
+      const pct=Math.round((cs.qi/cs.qs.length)*100);
+
+      document.getElementById('activity-area').innerHTML=`
+        ${q._hard?`
+          <span class="act-tag act-sr" style="margin-bottom:var(--space-3);display:inline-flex;">
+            ⚡ Pengulangan Spaced Repetition
+          </span>`:
+          `<span class="act-tag act-quiz" style="margin-bottom:var(--space-3);display:inline-flex;">
+            🎯 Quiz Penutup &middot; ${cs.qi+1} / ${cs.qs.length}
+          </span>`}
+
+        <div class="progress-bar-track progress-bar-track--thin" style="margin-bottom:var(--space-4);">
+          <div class="progress-bar-fill" style="width:${pct}%;transition:width .4s ease;"></div>
+        </div>
+
+        <div class="card" style="padding:var(--space-5);" id="quiz-question-card">
+          <div style="text-align:center;margin-bottom:var(--space-5);">
+            <div style="font-size:3rem;margin-bottom:var(--space-2);" aria-hidden="true">
+              ${q._w.e}</div>
+            <p style="font-size:var(--font-size-xl);font-weight:800;color:var(--text-main);">
+              Apa arti "<span style="color:var(--primary);">${q._w.en}</span>"?</p>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:var(--space-2);" id="quiz-options">
+            ${q.options.map((opt,i)=>`
+              <button class="quiz-option" id="option-${i}" data-index="${i}"
+                onclick="App._handleCloseAns(${i})"
+                aria-label="Pilihan ${keys[i]}: ${opt}">
+                <span class="quiz-option-key">${keys[i]}</span>
+                <span class="quiz-option-text">${opt}</span>
+              </button>`).join('')}
+          </div>
+        </div>`;
+    },
+
+    _handleCloseAns(sel){
+      const cs=this.cs;
+      const q=cs.qs[cs.qi];
+      const ok=sel===q.correct;
+
+      document.querySelectorAll('#quiz-options .quiz-option').forEach((btn,i)=>{
+        btn.classList.add('quiz-option--disabled');
+        if(i===q.correct) btn.classList.add('quiz-option--correct');
+        else if(i===sel&&!ok) btn.classList.add('quiz-option--wrong');
+      });
+
+      QuizStore.recordAnswer(cs.quizSess, q.id, ok, 0, sel);
+      if(ok){ cs.score++; SR.markRight(q._w.wid); this._addXP(20);
+        FeedbackEngine.showCorrect(q,sel); }
+      else  { SR.markWrong(q._w.wid); FeedbackEngine.showWrong(q,sel); }
+    },
+
+    _closingNext(){ this.cs.qi++; this._renderClosingQ(); },
+    _closingRetry(){
+      document.querySelectorAll('#quiz-options .quiz-option').forEach((btn,i)=>{
+        btn.classList.remove('quiz-option--disabled','quiz-option--wrong','quiz-option--correct');
+        btn.onclick=()=>this._handleCloseAns(i);
+      });
+    },
+
+    _renderClosingResult(){
+      const cs=this.cs;
+      const total=cs.qs.length;
+      const pct=Math.round((cs.score/total)*100);
+      this._addXP(60);
+
+      const res=QuizStore.finishSession(cs.quizSess, total);
+
+      // Sync ke AppState
+      try{
+        const raw=localStorage.getItem('emodul_state');
+        if(raw){
+          const state=JSON.parse(raw);
+          const u=(state.units||[]).find(u=>u.id===1);
+          if(u){ u.progress=Math.max(u.progress||0,pct); if(pct>=60) u.status='done'; }
+          localStorage.setItem('emodul_state',JSON.stringify(state));
+        }
+      }catch{}
+
+      const hardWords=SR.getHardWords(5);
+      const allDone=this.done.every(Boolean);
+
+      document.getElementById('activity-area').innerHTML=`
+        <div class="card" style="padding:var(--space-6);text-align:center;overflow:hidden;">
+          <!-- Score ring -->
+          <div class="score-ring" style="background:conic-gradient(
+            var(--accent) ${pct*3.6}deg, var(--surface-2) ${pct*3.6}deg);">
+            <div class="score-ring-inner">
+              <span style="font-size:1.65rem;font-weight:800;color:var(--accent-700);">${pct}%</span>
+              <span style="font-size:9px;color:var(--text-faint);font-weight:700;">SKOR</span>
+            </div>
+          </div>
+
+          <h2 style="font-size:var(--font-size-2xl);font-weight:800;margin-bottom:var(--space-2);">
+            ${pct>=80?'🏆 Luar Biasa!':pct>=60?'💪 Bagus!':'🔄 Terus Berlatih!'}</h2>
+          <p style="color:var(--text-muted);margin-bottom:var(--space-4);">
+            Benar: <strong>${cs.score} dari ${total} soal</strong></p>
+
+          ${res.isNewBest?`
+            <div style="background:var(--warm-50);border:1px solid var(--warm-200);
+              border-radius:var(--radius-lg);padding:var(--space-3);margin-bottom:var(--space-4);">
+              <p style="font-size:var(--font-size-sm);font-weight:700;color:var(--warm-700);">
+                🎉 Rekor baru! Skor terbaik: ${pct}%</p>
+            </div>`:''}
+
+          ${hardWords.length?`
+            <div style="background:var(--primary-50);border:1px solid var(--primary-200);
+              border-radius:var(--radius-lg);padding:var(--space-4);margin-bottom:var(--space-4);
+              text-align:left;">
+              <p style="font-size:var(--font-size-xs);font-weight:800;color:var(--primary-700);
+                text-transform:uppercase;letter-spacing:.06em;margin-bottom:var(--space-2);">
+                ⚡ Perlu diulang (Spaced Repetition):</p>
+              <div style="display:flex;flex-wrap:wrap;gap:var(--space-2);">
+                ${hardWords.map(w=>`
+                  <span style="background:var(--primary-100);color:var(--primary-700);
+                    border-radius:var(--radius-full);padding:3px var(--space-2);
+                    font-size:var(--font-size-xs);font-weight:700;">
+                    ${w.en} → ${w.id_}</span>`).join('')}
+              </div>
+            </div>`:''}
+
+          <!-- XP earned -->
+          <div style="background:var(--warm-50);border:1px solid var(--warm-200);
+            border-radius:var(--radius-lg);padding:var(--space-3);margin-bottom:var(--space-5);
+            display:flex;align-items:center;justify-content:center;gap:var(--space-2);">
+            <span style="font-size:1.2rem;" aria-hidden="true">⭐</span>
+            <span style="font-size:var(--font-size-base);font-weight:800;color:var(--warm-700);">
+              ${this.xp} XP diperoleh sesi ini!</span>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:var(--space-3);">
+            <button class="btn btn-primary btn-block" onclick="App._renderClosingQuiz()">
+              ↺ Ulangi Quiz</button>
+            ${allDone?`<a href="unit2-speaking.html" class="btn btn-accent btn-block">
+              Lanjut ke Unit 2 Speaking 🎙️
+            </a>` : ''}
+            <a href="index.html" class="btn btn-outline btn-block">
+              ← Kembali ke Beranda</a>
+          </div>
+        </div>`;
+
+      if(pct>=80 && typeof Utils!=='undefined') Utils.showConfetti?.();
+    },
+
+    /* ═══════════════════════════════════════════════════════
+       XP & PROGRESS PERSISTENCE
+       ═══════════════════════════════════════════════════════ */
+    _addXP(n){
+      this.xp+=n;
+      this._saveXP();
+      const el=document.getElementById('nav-xp');
+      if(el){
+        el.textContent=`${this.xp} XP`;
+        el.style.animation='none';
+        el.offsetHeight;
+        el.style.animation='heartbeat .4s ease both';
+      }
+    },
+    _saveXP(){
+      try{ localStorage.setItem('emodul_vocab_xp_session', this.xp); }catch{}
+    },
+    _loadXP(){
+      try{ this.xp=parseInt(localStorage.getItem('emodul_vocab_xp_session')||'0',10)||0; }catch{}
+    },
+    _saveProgress(){
+      try{ localStorage.setItem('emodul_vocab_progress',
+        JSON.stringify({done:this.done,ts:Date.now()})); }catch{}
+    },
+    _loadProgress(){
+      try{
+        const raw=localStorage.getItem('emodul_vocab_progress');
+        if(raw){ const d=JSON.parse(raw); this.done=d.done||[false,false,false,false]; return; }
+      }catch{}
+      // Demo default: sesi pertama bisa langsung dimulai
+      this.done=[false,false,false,false];
+    },
+
+    /* ═══════════════════════════════════════════════════════
+       UTILITY
+       ═══════════════════════════════════════════════════════ */
+    _shuffle(arr){
+      for(let i=arr.length-1;i>0;i--){
+        const j=Math.floor(Math.random()*(i+1));
+        [arr[i],arr[j]]=[arr[j],arr[i]];
+      }
+      return arr;
+    },
+  };
+
+  /* ════════════════════════════════════════════════════════
+     INIT
+     ════════════════════════════════════════════════════════ */
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',()=>App.init());
+  } else {
+    App.init();
+  }
+  </script>
+</body>
+</html>
