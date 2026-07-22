@@ -68,7 +68,7 @@ function unlockAllSteps() {
 
 /* ============================================================
    Shared UI utilities for the E-Modul (confetti + toast).
-   Referenced by all pages via <script src="js/app.js">.
+   Referenced by all pages via <script src="app.js">.
    ============================================================ */
 window.Utils = (function () {
   function showConfetti(count) {
@@ -127,6 +127,58 @@ window.Utils = (function () {
       setTimeout(function () { if (t && t.remove) t.remove(); }, 300);
     }, 2600);
   }
-
   return { showConfetti: showConfetti, showToast: showToast };
 })();
+
+window.playTTS = function(text, btnElement) {
+  if (!('speechSynthesis' in window)) {
+    alert('Browser Anda tidak mendukung fitur suara.');
+    return;
+  }
+  
+  if (window.speechSynthesis.speaking || window.speechSynthesis.pending) {
+    window.speechSynthesis.cancel();
+  }
+  
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.rate = 0.9;
+  
+  const setVoiceAndPlay = () => {
+    const voices = window.speechSynthesis.getVoices();
+    let selectedVoice = voices.find(v => (v.lang === 'en-GB' || v.lang === 'en_GB') && (v.name.includes('Google') || v.name.includes('Natural'))) 
+                        || voices.find(v => v.lang === 'en-US' && v.name.includes('Google'))
+                        || voices.find(v => v.lang.startsWith('en'));
+                        
+    if (selectedVoice) {
+      utterance.voice = selectedVoice;
+      utterance.lang = selectedVoice.lang;
+    } else {
+      utterance.lang = 'en-US';
+    }
+    
+    if (btnElement && btnElement.classList) {
+      document.querySelectorAll('.playing').forEach(el => el.classList.remove('playing'));
+      btnElement.classList.add('playing');
+      utterance.onend = () => btnElement.classList.remove('playing');
+      utterance.onerror = () => btnElement.classList.remove('playing');
+    }
+    
+    window._synth_utterance = utterance; 
+    window.speechSynthesis.speak(utterance);
+    
+    if (window.speechSynthesis.pause && window.speechSynthesis.resume) {
+        window.speechSynthesis.pause();
+        window.speechSynthesis.resume();
+    }
+  };
+
+  if (window.speechSynthesis.getVoices().length === 0) {
+    window.speechSynthesis.onvoiceschanged = () => {
+      setVoiceAndPlay();
+      window.speechSynthesis.onvoiceschanged = null;
+    };
+    window.speechSynthesis.getVoices();
+  } else {
+    setVoiceAndPlay();
+  }
+};

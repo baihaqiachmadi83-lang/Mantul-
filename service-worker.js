@@ -10,15 +10,15 @@ const ASSETS_TO_CACHE = [
   './student.html',
   './teacher.html',
   './admin.html',
-  './css/design-system.css',
-  './css/components.css',
-  './css/animations.css',
-  './css/feedback.css',
-  './js/app.js',
-  './js/quiz-store.js',
-  './js/feedback.js',
+  './design-system.css',
+  './components.css',
+  './animations.css',
+  './feedback.css',
+  './app.js',
+  './quiz-store.js',
+  './feedback.js',
   './manifest.json',
-  './assets/icon.svg'
+  './icon.svg'
 ];
 
 self.addEventListener('install', (e) => {

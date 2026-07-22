@@ -4,7 +4,7 @@
 
    CARA PAKAI:
    ─────────────────────────────────────────────────────────
-   1. Sertakan di HTML: <script src="js/feedback.js"></script>
+   1. Sertakan di HTML: <script src="feedback.js"></script>
    2. Inisialisasi sekali per halaman kuis:
       FeedbackEngine.init({
         onNext:   (question) => goNextQuestion(),  // callback lanjut

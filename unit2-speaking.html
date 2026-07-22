@@ -6,10 +6,10 @@
   <meta name="description" content="Unit 2 Speaking – Latih percakapan Bahasa Inggris dalam situasi nyata tanpa rasa cemas." />
   <title>Unit 2: Speaking | MANTUL</title>
 
-  <link rel="stylesheet" href="css/design-system.css" />
-  <link rel="stylesheet" href="css/components.css" />
-  <link rel="stylesheet" href="css/animations.css" />
-  <link rel="stylesheet" href="css/feedback.css" />
+  <link rel="stylesheet" href="design-system.css" />
+  <link rel="stylesheet" href="components.css" />
+  <link rel="stylesheet" href="animations.css" />
+  <link rel="stylesheet" href="feedback.css" />
 
   <style>
     /* ══════════════════════════════════════════════════════
@@ -299,9 +299,9 @@
   <!-- ══════════════════════════════════════════════════════
        SCRIPTS
        ══════════════════════════════════════════════════════ -->
-  <script src="js/app.js"></script>
-  <script src="js/quiz-store.js"></script>
-  <script src="js/feedback.js"></script>
+  <script src="app.js"></script>
+  <script src="quiz-store.js"></script>
+  <script src="feedback.js"></script>
   <script>
   'use strict';
 
@@ -548,7 +548,7 @@
             <div class="chat-bubble-wrap">
               <div class="chat-bubble">
                 ${line.en}
-                <button class="btn-tts" onclick="App.speak('${line.en.replace(/'/g,"\\'")}', this)" aria-label="Dengarkan kalimat ini">🔊</button>
+                <button class="btn-tts" onclick="window.playTTS('${line.en.replace(/'/g,"\\'")}', this)" aria-label="Dengarkan kalimat ini">🔊</button>
               </div>
               <span class="chat-trans">${line.id_}</span>
             </div>
@@ -575,7 +575,7 @@
       s.dialogue.forEach((line, i) => {
         setTimeout(() => {
           const btn = document.querySelector(`#lr-${i} .btn-tts`);
-          this.speak(line.en, btn);
+          window.playTTS(line.en, btn);
         }, delay);
         delay += 2500; // rough delay between sentences
       });
@@ -616,7 +616,7 @@
             <div class="chat-bubble-wrap">
               <div class="chat-bubble" style="font-size:var(--font-size-lg);">
                 ${line.en}
-                <button class="btn-tts" onclick="App.speak('${line.en.replace(/'/g,"\\'")}', this)">🔊</button>
+                <button class="btn-tts" onclick="window.playTTS('${line.en.replace(/'/g,"\\'")}', this)">🔊</button>
               </div>
               <span class="chat-trans" style="text-align:center;">${line.id_}</span>
             </div>
@@ -635,7 +635,7 @@
       // Auto play the line first
       setTimeout(() => {
         const btn = document.querySelector('.btn-tts');
-        this.speak(line.en, btn);
+        window.playTTS(line.en, btn);
       }, 500);
     },
 

@@ -6,10 +6,10 @@
   <meta name="description" content="Unit 3 Reading – Latih kemampuan membaca tanda, label, menu, dan cerita pendek berbahasa Inggris." />
   <title>Unit 3: Reading | MANTUL</title>
 
-  <link rel="stylesheet" href="css/design-system.css" />
-  <link rel="stylesheet" href="css/components.css" />
-  <link rel="stylesheet" href="css/animations.css" />
-  <link rel="stylesheet" href="css/feedback.css" />
+  <link rel="stylesheet" href="design-system.css" />
+  <link rel="stylesheet" href="components.css" />
+  <link rel="stylesheet" href="animations.css" />
+  <link rel="stylesheet" href="feedback.css" />
 
   <style>
     /* ══════════════════════════════════════════════════════
@@ -247,9 +247,9 @@
     </div>
   </main>
 
-  <script src="js/app.js"></script>
-  <script src="js/quiz-store.js"></script>
-  <script src="js/feedback.js"></script>
+  <script src="app.js"></script>
+  <script src="quiz-store.js"></script>
+  <script src="feedback.js"></script>
   <script>
   'use strict';
 
@@ -543,53 +543,62 @@
       const s = READING_DATA[this.sess];
       const btn = document.getElementById('btn-read-aloud');
       
-      const utterance = new SpeechSynthesisUtterance(s.plainText);
-      utterance.lang = 'en-US'; // Fallback aman
-      utterance.rate = 0.85; // slightly slower for learners
-
-      // Pilih suara native Australia secara acak, fallback jika tidak ada
-      const voices = window.speechSynthesis.getVoices();
-      let auVoices = voices.filter(v => v.lang === 'en-AU' || v.lang === 'en_AU');
-      if (auVoices.length === 0) {
-        auVoices = voices.filter(v => v.lang.startsWith('en'));
-      }
-      
-      if (auVoices.length > 0) {
-        utterance.voice = auVoices[Math.floor(Math.random() * auVoices.length)];
-        utterance.lang = utterance.voice.lang;
-      }
-
-      // Mencegah Garbage Collection bug pada Chrome/Safari
-      window._synth_utterance = utterance;
-
-      utterance.onstart = () => {
-        btn.classList.add('playing');
-        btn.innerHTML = '⏸️ Sedang Membaca...';
-      };
-      utterance.onend = () => {
-        btn.classList.remove('playing');
-        btn.innerHTML = '🔊 Bacakan Teks';
-        this._removeHighlights();
-      };
-      utterance.onerror = () => {
-        btn.classList.remove('playing');
-        btn.innerHTML = '🔊 Bacakan Teks';
-      };
-
-      // Very simple word boundary highlighting approximation (browser support varies widely)
-      let wordIndex = 0;
-      utterance.onboundary = (event) => {
-        if(event.name === 'word') {
-          this._removeHighlights();
-          const el = document.getElementById(`w${wordIndex}`);
-          if(el){
-            el.classList.add('word-highlight');
-            wordIndex++;
-          }
+      const play = () => {
+        const voices = window.speechSynthesis.getVoices();
+        let auVoices = voices.filter(v => v.lang === 'en-AU' || v.lang === 'en_AU');
+        if (auVoices.length === 0) auVoices = voices.filter(v => v.lang.startsWith('en'));
+        
+        const utterance = new SpeechSynthesisUtterance(s.plainText);
+        utterance.lang = 'en-US'; // Fallback aman
+        utterance.rate = 0.85; // slightly slower for learners
+        
+        if (auVoices.length > 0) {
+          utterance.voice = auVoices[Math.floor(Math.random() * auVoices.length)];
+          utterance.lang = utterance.voice.lang;
         }
+
+        // Mencegah Garbage Collection bug pada Chrome/Safari
+        window._synth_utterance = utterance;
+
+        utterance.onstart = () => {
+          btn.classList.add('playing');
+          btn.innerHTML = '⏸️ Sedang Membaca...';
+        };
+        utterance.onend = () => {
+          btn.classList.remove('playing');
+          btn.innerHTML = '🔊 Bacakan Teks';
+          this._removeHighlights();
+        };
+        utterance.onerror = () => {
+          btn.classList.remove('playing');
+          btn.innerHTML = '🔊 Bacakan Teks';
+        };
+
+        // Very simple word boundary highlighting approximation (browser support varies widely)
+        let wordIndex = 0;
+        utterance.onboundary = (event) => {
+          if(event.name === 'word') {
+            this._removeHighlights();
+            const el = document.getElementById(`w${wordIndex}`);
+            if(el){
+              el.classList.add('word-highlight');
+              wordIndex++;
+            }
+          }
+        };
+
+        window.speechSynthesis.speak(utterance);
       };
 
-      window.speechSynthesis.speak(utterance);
+      if (window.speechSynthesis.getVoices().length === 0) {
+        window.speechSynthesis.onvoiceschanged = () => {
+          play();
+          window.speechSynthesis.onvoiceschanged = null;
+        };
+        window.speechSynthesis.getVoices();
+      } else {
+        play();
+      }
     },
 
     _removeHighlights(){
