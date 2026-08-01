@@ -1,9 +1,14 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
+<script>/*MANTUL_THEME_BOOT*/
+(function(){try{var t=localStorage.getItem('mantul_theme');if(!t){t=(window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches)?'dark':'light';}document.documentElement.setAttribute('data-theme',t);}catch(e){}})();
+window.toggleTheme=function(){try{var cur=document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',cur);localStorage.setItem('mantul_theme',cur);var ic=document.getElementById('theme-icon');if(ic)ic.textContent=cur==='dark'?'☀️':'🌙';var fic=document.getElementById('mantul-float-icon');if(fic)fic.textContent=cur==='dark'?'☀️':'🌙';}catch(e){}};
+document.addEventListener('DOMContentLoaded',function(){try{var cur=document.documentElement.getAttribute('data-theme');var ic=document.getElementById('theme-icon');if(ic){ic.textContent=cur==='dark'?'☀️':'🌙';return;}var b=document.createElement('button');b.type='button';b.title='Toggle Light/Dark Mode';b.setAttribute('aria-label','Toggle light and dark mode');b.onclick=window.toggleTheme;b.style.cssText='position:fixed;top:14px;right:14px;z-index:99999;width:40px;height:40px;border-radius:9999px;border:none;background:rgba(120,120,120,.18);color:inherit;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.18);';var s=document.createElement('span');s.id='mantul-float-icon';s.textContent=cur==='dark'?'☀️':'🌙';b.appendChild(s);document.body.appendChild(b);}catch(e){}});
+</script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Materi Penunjang – Tata Bahasa kontekstual untuk mendukung kemampuan Speaking dan Reading." />
+  <meta name="description" content="Support Material – contextual grammar to support Speaking and Reading skills." />
   <title>Tata Bahasa: Simple Present Tense | MANTUL</title>
 
   <link rel="stylesheet" href="design-system.css" />
@@ -144,9 +149,9 @@
        ══════════════════════════════════════════════════════ -->
   <nav class="navbar" role="navigation" aria-label="Navigasi halaman">
     <div class="container">
-      <a href="index.html" class="btn-back" aria-label="Kembali ke beranda">
+      <a href="index.html" class="btn-back" aria-label="Back to home">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
-        Beranda
+        Home
       </a>
       <div style="display:flex;align-items:center;gap:var(--space-2);">
         <span class="chip" style="background:var(--surface-2);color:var(--text-muted);border:1px solid var(--border-2);">Grammar</span>
@@ -164,12 +169,12 @@
       <div class="sess-hero anim-fade-in-up" id="sess-hero">
         <span class="sess-hero-deco" id="hero-deco" aria-hidden="true">📚</span>
         <div style="position:relative;z-index:1;">
-          <span class="badge-support">Materi Penunjang</span>
+          <span class="badge-support">Support Material</span>
           <h1 id="hero-title" style="font-size:var(--font-size-xl);font-weight:800; color:white;margin-bottom:var(--space-2);">
             Simple Present Tense
           </h1>
           <p id="hero-desc" style="font-size:var(--font-size-sm);color:rgba(255,255,255,.9); line-height:1.5;">
-            Materi pendukung opsional untuk memperkuat Speaking & Reading. Tidak memengaruhi progres unit.
+            Optional supporting material to strengthen Speaking & Reading. It does not affect unit progress.
           </p>
         </div>
       </div>
@@ -207,16 +212,16 @@
       id: 'grammar_present',
       title: 'Simple Present Tense',
       emoji: '🔁',
-      desc: 'Pelajari cara menyatakan rutinitas, fakta, dan jadwal dalam bahasa Inggris (sangat berguna untuk Speaking & Reading).',
+      desc: 'Learn how to express routines, facts, and schedules in English (very useful for Speaking & Reading).',
       bg: 'linear-gradient(135deg, var(--accent), var(--accent-700))'
     },
     sessions: [
       /* SESI 0: KONSEP (Paham Konsep) */
       {
-        id: 0, title: 'Konsep Dasar', emoji: '💡', type: 'concept',
+        id: 0, title: 'Basic Concept', emoji: '💡', type: 'concept',
         concept: {
-          title: 'Kapan kita menggunakannya?',
-          body: 'Gunakan Simple Present Tense untuk menceritakan <strong>Kebiasaan (Rutinitas)</strong> dan <strong>Fakta</strong> yang benar saat ini. Aturannya sederhana: tambahkan <span class="hl-verb">-s</span> atau <span class="hl-verb">-es</span> pada kata kerja jika subjeknya Dia/Itu (He, She, It).',
+          title: 'When do we use it?',
+          body: 'Use the Simple Present Tense to talk about <strong>Habits (Routines)</strong> and <strong>Facts</strong> that are true now. The rule is simple: add <span class="hl-verb">-s</span> or <span class="hl-verb">-es</span> to the verb when the subject is He, She, or It.',
           examples: [
             { en: 'I <span class="hl-verb">work</span> at the market.', id: 'Saya bekerja di pasar. (Rutinitas)' },
             { en: 'The bank <span class="hl-verb">opens</span> at 8 AM.', id: 'Bank buka jam 8 pagi. (Fakta/Jadwal, "The bank" = It)' },
@@ -226,7 +231,7 @@
         quiz: [
           {
             id: 'm0_1', type: 'mcq',
-            text: 'Manakah kalimat yang menyatakan fakta/rutinitas dengan benar?',
+            text: 'Which sentence states a fact/routine correctly?',
             options: ['He go to the factory.', 'He goes to the factory.', 'He going to the factory.', 'He is go to the factory.'],
             correct: 1, whyCorrect: 'Untuk subjek "He" (Dia laki-laki), kata kerja "go" ditambah "-es" menjadi "goes".',
             whyWrong: ['Kurang -es.', null, 'Going digunakan untuk hal yang sedang terjadi sekarang (Present Continuous).', 'Salah struktur.'],
@@ -236,7 +241,7 @@
       },
       /* SESI 1: TRUE/FALSE (Fakta Sains / Umum) */
       {
-        id: 1, title: 'Fakta (True/False)', emoji: '⚖️', type: 'tf',
+        id: 1, title: 'Facts (True/False)', emoji: '⚖️', type: 'tf',
         questions: [
           {
             id: 'm1_1',
@@ -258,7 +263,7 @@
       },
       /* SESI 2: FILL THE BLANKS (Keluarga & Pekerjaan) */
       {
-        id: 2, title: 'Lengkapi Kalimat', emoji: '✍️', type: 'fill',
+        id: 2, title: 'Complete the Sentence', emoji: '✍️', type: 'fill',
         questions: [
           {
             id: 'm2_1',
@@ -280,13 +285,13 @@
       },
       /* SESI 3: AUDIO (Layanan Publik / Kesehatan) */
       {
-        id: 3, title: 'Dengar & Pilih', emoji: '🎧', type: 'audio',
+        id: 3, title: 'Listen & Choose', emoji: '🎧', type: 'audio',
         questions: [
           {
             id: 'm3_1',
             audioText: 'The doctor examines patients in the clinic.',
-            text: 'Apa yang dilakukan dokter menurut audio tersebut?',
-            options: ['Menjual obat di apotek.', 'Memeriksa pasien di klinik.', 'Menjalankan operasi di rumah sakit.', 'Beristirahat di klinik.'],
+            text: 'What does the doctor do according to the audio?',
+            options: ['Sell medicine at a pharmacy.', 'Examine patients at the clinic.', 'Perform surgery at the hospital.', 'Rest at the clinic.'],
             correct: 1,
             whyCorrect: '"The doctor examines (memeriksa) patients in the clinic."',
             whyWrong: ['Bukan menjual obat.', null, 'Bukan operasi.', 'Bukan beristirahat.'],
@@ -427,10 +432,10 @@
       const q = s.questions[this.qi];
 
       document.getElementById('activity-area').innerHTML = `
-        <span class="act-tag act-tf">${s.emoji} ${s.title} &middot; Soal ${this.qi+1} / ${s.questions.length}</span>
+        <span class="act-tag act-tf">${s.emoji} ${s.title} &middot; Question ${this.qi+1} / ${s.questions.length}</span>
         
         <div class="card" style="padding:var(--space-6);text-align:center;">
-          <p style="font-size:var(--font-size-sm);color:var(--text-muted);margin-bottom:var(--space-3);">Fakta atau Mitos?</p>
+          <p style="font-size:var(--font-size-sm);color:var(--text-muted);margin-bottom:var(--space-3);">Fact or Myth?</p>
           <p style="font-size:var(--font-size-xl);font-weight:800;color:var(--text-main);margin-bottom:var(--space-2);">
             ${q.enStatement}
           </p>
@@ -439,8 +444,8 @@
           </p>
 
           <div class="tf-grid" id="quiz-opts">
-            <button class="btn-tf true" onclick="App._handleTFAns(true)">TRUE (Benar)</button>
-            <button class="btn-tf false" onclick="App._handleTFAns(false)">FALSE (Salah)</button>
+            <button class="btn-tf true" onclick="App._handleTFAns(true)">TRUE</button>
+            <button class="btn-tf false" onclick="App._handleTFAns(false)">FALSE</button>
           </div>
         </div>
       `;
@@ -457,11 +462,11 @@
       }).join('');
 
       document.getElementById('activity-area').innerHTML = `
-        <span class="act-tag act-fill">${s.emoji} ${s.title} &middot; Soal ${this.qi+1} / ${s.questions.length}</span>
+        <span class="act-tag act-fill">${s.emoji} ${s.title} &middot; Question ${this.qi+1} / ${s.questions.length}</span>
         
         <div class="card" style="padding:var(--space-6);">
           <p style="text-align:center;color:var(--text-muted);font-size:var(--font-size-sm);margin-bottom:var(--space-3);">
-            Ketuk kata yang tepat untuk melengkapi.
+            Tap the correct word to complete it.
           </p>
           <div class="blank-sentence">
             ${sentenceHtml}
@@ -483,11 +488,11 @@
       const keys = ['A','B','C','D'];
 
       document.getElementById('activity-area').innerHTML = `
-        <span class="act-tag act-audio">${s.emoji} ${s.title} &middot; Soal ${this.qi+1} / ${s.questions.length}</span>
+        <span class="act-tag act-audio">${s.emoji} ${s.title} &middot; Question ${this.qi+1} / ${s.questions.length}</span>
         
         <div class="card" style="padding:var(--space-5);text-align:center;">
           <p style="color:var(--text-muted);font-size:var(--font-size-sm);margin-bottom:var(--space-4);">
-            Dengarkan baik-baik lalu jawab pertanyaannya.
+            Listen carefully then answer the question.
           </p>
           
           <button class="btn-tts-mini" id="btn-audio" onclick="App._playAudio('${q.audioText.replace(/'/g,"\\'")}')" style="width:70px;height:70px;font-size:2.5rem;margin-bottom:var(--space-4);">
@@ -574,7 +579,7 @@
         whyCorrect: q.whyCorrect,
         whyWrong: ok ? null : [q.whyWrong, q.whyWrong], // dummy array just to pass text
         correct: q.isTrue ? 0 : 1,
-        options: ['TRUE (Benar)', 'FALSE (Salah)']
+        options: ['TRUE', 'FALSE']
       };
       this._recordAndFeedback(qMock, ok, selTrue ? 0 : 1);
     },
@@ -635,15 +640,15 @@
         <div class="card" style="padding:var(--space-6);text-align:center;border:2px solid var(--accent);">
           <div style="font-size:3.5rem;animation:badgeBounce .6s ease both;margin-bottom:var(--space-3);" aria-hidden="true">🏆</div>
           <h2 style="font-size:var(--font-size-2xl);font-weight:800;color:var(--accent-700);margin-bottom:var(--space-2);">
-            Latihan Selesai!
+            Practice Complete!
           </h2>
           <p style="color:var(--text-muted);margin-bottom:var(--space-5);">
-            Skor Anda: <strong>${res.score}%</strong>
+            Your Score: <strong>${res.score}%</strong>
           </p>
           
           <div style="display:flex;flex-direction:column;gap:var(--space-3);">
-            ${next ? `<button class="btn btn-accent btn-block" onclick="App.goTo(${this.sess+1})">Lanjut Topik: ${next.title} →</button>` : ''}
-            ${allDone ? `<a href="index.html" class="btn btn-primary btn-block">Selesai Semua! Kembali ke Beranda 🏠</a>` : ''}
+            ${next ? `<button class="btn btn-accent btn-block" onclick="App.goTo(${this.sess+1})">Next Topic: ${next.title} →</button>` : ''}
+            ${allDone ? `<a href="index.html" class="btn btn-primary btn-block">All done! Back to Home 🏠</a>` : ''}
           </div>
         </div>
       `;

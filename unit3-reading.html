@@ -1,10 +1,15 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
+<script>/*MANTUL_THEME_BOOT*/
+(function(){try{var t=localStorage.getItem('mantul_theme');if(!t){t=(window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches)?'dark':'light';}document.documentElement.setAttribute('data-theme',t);}catch(e){}})();
+window.toggleTheme=function(){try{var cur=document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',cur);localStorage.setItem('mantul_theme',cur);var ic=document.getElementById('theme-icon');if(ic)ic.textContent=cur==='dark'?'☀️':'🌙';var fic=document.getElementById('mantul-float-icon');if(fic)fic.textContent=cur==='dark'?'☀️':'🌙';}catch(e){}};
+document.addEventListener('DOMContentLoaded',function(){try{var cur=document.documentElement.getAttribute('data-theme');var ic=document.getElementById('theme-icon');if(ic){ic.textContent=cur==='dark'?'☀️':'🌙';return;}var b=document.createElement('button');b.type='button';b.title='Toggle Light/Dark Mode';b.setAttribute('aria-label','Toggle light and dark mode');b.onclick=window.toggleTheme;b.style.cssText='position:fixed;top:14px;right:14px;z-index:99999;width:40px;height:40px;border-radius:9999px;border:none;background:rgba(120,120,120,.18);color:inherit;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.18);';var s=document.createElement('span');s.id='mantul-float-icon';s.textContent=cur==='dark'?'☀️':'🌙';b.appendChild(s);document.body.appendChild(b);}catch(e){}});
+</script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Unit 3 Reading – Latih kemampuan membaca tanda, label, menu, dan cerita pendek berbahasa Inggris." />
-  <title>Unit 3: Reading | MANTUL</title>
+  <meta name="description" content="Unit 3 Reading – Learn to read and understand common public signs in English." />
+  <title>Unit 3: Read the Signs | MANTUL</title>
 
   <link rel="stylesheet" href="design-system.css" />
   <link rel="stylesheet" href="components.css" />
@@ -74,14 +79,17 @@
       font-family: var(--font-family);
     }
     .reading-box.style-sign {
-      background: #FEF2F2; border: 3px solid #DC2626; text-align: center;
-      color: #991B1B; font-weight: 800; font-size: 2rem;
+      background: var(--danger-50); border: 3px solid var(--danger-600); text-align: center;
+      color: var(--danger-900); font-weight: 800; font-size: 2rem;
+    }
+    .reading-box.style-notice {
+      background: var(--primary-50); border: 1px solid var(--primary-400); color: var(--primary-800);
     }
     .reading-box.style-menu {
-      background: #FFFBEB; border: 1px dashed #D97706; color: #78350F;
+      background: var(--warm-50); border: 1px dashed var(--warm-600); color: var(--warm-700);
     }
     .reading-box.style-label {
-      background: #ECFDF5; border-left: 6px solid #059669; color: #064E3B;
+      background: var(--accent-50); border-left: 6px solid var(--accent-600); color: var(--accent-700);
     }
     .reading-box.style-story {
       line-height: 1.8; font-size: 1.1rem; color: var(--text-main);
@@ -151,10 +159,28 @@
       margin: 0 auto var(--space-4); position: relative;
     }
     .score-ring-inner {
-      width: 80px; height: 80px; border-radius: 50%; background: white;
+      width: 80px; height: 80px; border-radius: 50%; background: var(--card);
       display: flex; flex-direction: column;
       align-items: center; justify-content: center;
     }
+    /* SIGN BOARD (added) */
+    .sign-board{ background:#fff; color:#111; border:4px solid #DC2626; border-radius:var(--radius-xl); padding:var(--space-6); text-align:center; box-shadow:var(--shadow-md); }
+    .sign-ico{ font-size:3.5rem; line-height:1; margin-bottom:var(--space-2); }
+    .sign-text{ font-size:1.8rem; font-weight:900; letter-spacing:.02em; }
+    .sign-explain{ padding:var(--space-4); margin-top:var(--space-3); }
+    .sign-explain-title{ font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:var(--text-faint);margin-bottom:var(--space-2); }
+    .sign-explain-meaning{ font-size:var(--font-size-lg);font-weight:700;color:var(--text-main);margin-bottom:var(--space-2); }
+    .sign-explain-where{ font-size:var(--font-size-sm);color:var(--text-muted); }
+    .act-game{ background:#EDE9FE; color:#6D28D9; }
+    .match-grid{ display:grid; grid-template-columns:1fr 1fr; gap:var(--space-3); }
+    .match-col{ display:flex; flex-direction:column; gap:var(--space-2); }
+    .match-item{ display:flex;align-items:center;gap:8px;justify-content:center;text-align:center; padding:var(--space-3); border-radius:var(--radius-lg); border:2px solid var(--border); background:var(--card); color:var(--text-main); font-weight:700; font-size:var(--font-size-sm); cursor:pointer; transition:all .15s; min-height:60px; -webkit-tap-highlight-color:transparent; }
+    .match-item.selected{ border-color:var(--primary); background:var(--primary-50); }
+    .match-item.matched{ border-color:var(--accent); background:var(--accent-50); color:var(--accent-700); cursor:default; opacity:.85; }
+    .match-item.wrong{ border-color:var(--danger); background:#FEF2F2; }
+    .match-ico{ font-size:1.2rem; }
+    @keyframes mgshake{ 0%,100%{transform:translateX(0);}25%{transform:translateX(-4px);}75%{transform:translateX(4px);} }
+    .match-item.shake{ animation:mgshake .4s; }
   </style>
 </head>
 <body>
@@ -173,23 +199,20 @@
   <nav class="navbar" role="navigation" aria-label="Navigasi halaman">
     <div class="container">
       <div style="display: flex; align-items: center; gap: var(--space-4);">
-        <a href="index.html" class="btn-back" aria-label="Kembali ke beranda">
+        <a href="index.html" class="btn-back" aria-label="Back to home">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
-          Beranda
+          Home
         </a>
         <!-- Quick Tools -->
         <div style="display: flex; gap: var(--space-2); align-items: center;">
-          <button onclick="toggleTheme()" class="btn" style="background: var(--surface-2); border-radius: var(--radius-full); width: 32px; height: 32px; padding: 0; display: flex; align-items: center; justify-content: center; color: var(--text-main); font-size: 14px; transition: transform 0.2s ease;" title="Ganti Mode (Siang/Malam)" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+          <button onclick="toggleTheme()" class="btn" style="background: var(--surface-2); border-radius: var(--radius-full); width: 32px; height: 32px; padding: 0; display: flex; align-items: center; justify-content: center; color: var(--text-main); font-size: 14px; transition: transform 0.2s ease;" title="Toggle Light/Dark Mode" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
             <span id="theme-icon">🌙</span>
-          </button>
-          <button onclick="unlockAllSteps()" class="btn" style="background: var(--surface-2); border-radius: var(--radius-full); height: 32px; padding: 0 10px; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; color: var(--text-main); transition: transform 0.2s ease, color 0.2s ease;" title="Unlock Semua Step" onmouseover="this.style.transform='scale(1.05)'; this.style.color='var(--accent)'" onmouseout="this.style.transform='scale(1)'; this.style.color='var(--text-main)'">
-            🔓 Unlock
           </button>
         </div>
       </div>
       <div style="display:flex;align-items:center;gap:var(--space-2);">
         <span class="chip" style="background:var(--warm-100);color:var(--warm-700);">Unit 3</span>
-        <span style="font-size:var(--font-size-sm);font-weight:700;color:var(--text-main);">Reading</span>
+        <span style="font-size:var(--font-size-sm);font-weight:700;color:var(--text-main);">Read the Signs</span>
       </div>
       <!-- XP counter -->
       <div style="display:flex;align-items:center;gap:6px; background:var(--warm-50);border:1px solid var(--warm-200); border-radius:var(--radius-full);padding:4px var(--space-3);">
@@ -212,9 +235,9 @@
         <div style="position:relative;z-index:1;">
           <p style="font-size:10px;font-weight:800;text-transform:uppercase; letter-spacing:.09em;color:rgba(255,255,255,.65);margin-bottom:2px;">
             UNIT 3 · READING</p>
-          <h1 id="hero-title" style="font-size:var(--font-size-xl);font-weight:800; color:white;margin-bottom:var(--space-3);">Papan Tanda</h1>
+          <h1 id="hero-title" style="font-size:var(--font-size-xl);font-weight:800; color:white;margin-bottom:var(--space-3);">Read the Signs</h1>
           <p id="hero-desc" style="font-size:var(--font-size-sm);color:rgba(255,255,255,.8); margin-bottom:var(--space-3);line-height:1.5;">
-            Memahami tanda dan peringatan di tempat umum.</p>
+            Understand common public signs and what they mean.</p>
           <div class="progress-bar-track" style="background:rgba(255,255,255,.2);">
             <div id="hero-bar" class="progress-bar-fill" style="width:0%;background:white;transition:width .8s ease;"></div>
           </div>
@@ -223,18 +246,19 @@
 
       <!-- SESSION TABS -->
       <div class="sess-tabs anim-fade-in-up delay-100" role="tablist"
-        aria-label="Pilih jenis bacaan" style="margin-bottom:var(--space-4);">
-        <button class="sess-tab active" id="tab-0" role="tab" onclick="App.goTo(0)">🛑 Papan Tanda</button>
-        <button class="sess-tab" id="tab-1" role="tab" onclick="App.goTo(1)">📋 Menu & Harga</button>
-        <button class="sess-tab" id="tab-2" role="tab" onclick="App.goTo(2)">🏷️ Label Produk</button>
-        <button class="sess-tab" id="tab-3" role="tab" onclick="App.goTo(3)">📖 Cerita Pendek</button>
+        aria-label="Choose reading type" style="margin-bottom:var(--space-4);">
+        <button class="sess-tab active" id="tab-0" role="tab" onclick="App.goTo(0)">🚫 Prohibition</button>
+        <button class="sess-tab" id="tab-1" role="tab" onclick="App.goTo(1)">⚠️ Warnings</button>
+        <button class="sess-tab" id="tab-2" role="tab" onclick="App.goTo(2)">ℹ️ Information</button>
+        <button class="sess-tab" id="tab-3" role="tab" onclick="App.goTo(3)">📢 Notices</button>
+        <button class="sess-tab locked" id="tab-4" role="tab" onclick="App.goTo(4)">🎯 Quiz</button>
       </div>
 
       <!-- PHASE PROGRESS -->
       <div class="card anim-fade-in-up delay-200" style="padding:var(--space-4);margin-bottom:var(--space-4);" id="phase-panel">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--space-3);">
-          <span style="font-size:10px;font-weight:800;color:var(--text-faint); text-transform:uppercase;letter-spacing:.07em;">Tahap Latihan</span>
-          <span id="phase-label-text" style="font-size:var(--font-size-xs);color:var(--primary);font-weight:700;"></span>
+          <span style="font-size:10px;font-weight:800;color:var(--text-faint); text-transform:uppercase;letter-spacing:.07em;">Practice Steps</span>
+          <span id="phase-label-text" style="display:none;"></span>
         </div>
         <div class="phase-strip" id="phase-strip"></div>
       </div>
@@ -253,548 +277,598 @@
   <script>
   'use strict';
 
-  /* ════════════════════════════════════════════════════════
-     1. READING DATA (Texts & Comprehension)
-     ════════════════════════════════════════════════════════ */
-  const READING_DATA = [
+  /* ============================================================
+     UNIT 3 - READING PUBLIC SIGNS (each sign separated + meaning)
+     Flow per set: Signs (Material) -> Quiz -> Matching Game
+     ============================================================ */
+  const UNITS = [
+    /* ─── SECTION 0: Prohibition Signs ─── */
     {
-      id: 0, title: 'Papan Tanda', emoji: '🛑', bg: 'linear-gradient(135deg,#DC2626,#991B1B)',
-      desc: 'Memahami tanda dan peringatan di tempat umum.',
-      textType: 'style-sign',
-      textHtml: `
-        <div style="margin-bottom:20px;">
-          <span id="w0">PLEASE</span> <span id="w1">KEEP</span> <span id="w2">THE</span> <span id="w3">DOOR</span> <span id="w4">CLOSED</span>
-        </div>
-        <div style="font-size:1rem;color:#B91C1C;">
-          <span id="w5">NO</span> <span id="w6" class="gl-word" onclick="App.showGlossary('smoking', 'merokok')">SMOKING</span> <span id="w7">IN</span> <span id="w8">THIS</span> <span id="w9">AREA</span>
-        </div>
-      `,
-      plainText: "Please keep the door closed. No smoking in this area.",
-      quiz: [
-        {
-          id:'r0_1', text:'What should we do with the door based on the sign?',
-          options: ['Open it', 'Keep it closed', 'Lock it', 'Fix it'],
-          correct: 1, whyCorrect: '"Keep the door closed" artinya "Biarkan pintu tertutup".',
-          whyWrong: ['"Open" means membuka.', null, 'There is no instruction to lock.', 'There is no instruction to fix.'],
-          example: 'Please keep the door closed.'
-        },
-        {
-          id:'r0_2', text:'Are visitors allowed to smoke in this area?',
-          options: ['Yes, they are', 'Only outside', 'No, they are not', 'Yes, during breaks'],
-          correct: 2, whyCorrect: '"No smoking" artinya dilarang merokok.',
-          whyWrong: ['Contradicts the "No smoking" sign.', 'The sign does not mention outside.', null, 'There is no time exception.'],
-          example: 'No smoking in this area.'
-        }
+      title:'Prohibition Signs', emoji:'\u{1F6AB}', color:'#DC2626',
+      bg:'linear-gradient(135deg,#DC2626,#991B1B)',
+      desc:'Signs that tell you what you must NOT do.',
+      tips:[
+        { icon:'💡', title:'How to read prohibition signs', body:'Prohibition signs usually start with <b>NO</b> or <b>DO NOT</b>. They have a red circle with a line through it. They mean you are <b>not allowed</b> to do something.' },
+        { icon:'📌', title:'Key vocabulary', body:'<b>No / Do Not</b> = Dilarang / Jangan · <b>Keep off</b> = Jauhi / Jangan injak · <b>Entry</b> = Masuk · <b>Littering</b> = Membuang sampah sembarangan' },
+        { icon:'⚠️', title:'Penalty notice', body:'Some signs also add a warning like <b>"Fine: Rp 500,000"</b>. This tells you there is a penalty (denda) if you break the rule.' }
+      ],
+      signs:[
+        { text:'NO SMOKING', icon:'\u{1F6AD}', meaning:'You must not smoke in this area.', where:'Hospitals, petrol stations, restaurants.', short:'Do not smoke here' },
+        { text:'NO PARKING', icon:'\u26D4', meaning:'You must not park your vehicle here.', where:'In front of gates, hospital entrances, and fire lanes.', short:'Do not park here' },
+        { text:'NO LITTERING', icon:'\u{1F5D1}\uFE0F', meaning:'Do not throw rubbish here. Always use the bin.', where:'Parks, streets, markets, and public places.', short:'Do not throw rubbish' },
+        { text:'KEEP OFF THE GRASS', icon:'\u{1F331}', meaning:'Do not walk or step on the grass.', where:'Parks, gardens, and school grounds.', short:'Stay off the grass' },
+        { text:'NO ENTRY', icon:'\u26D4', meaning:'You are not allowed to enter this area.', where:'Restricted rooms, staff-only areas, one-way streets.', short:'Do not enter here' },
+        { text:'DO NOT DISTURB', icon:'\u{1F6AA}', meaning:'Please do not knock or make noise. Someone is busy or resting.', where:'Hotel rooms, offices, hospitals.', short:'Do not make noise here' }
+      ],
+      quiz:[
+        { id:'r0_1', text:"You see a 'NO SMOKING' sign. What should you do?",
+          options:['Smoke quietly','Do not smoke here','Smoke near the door','Ask for permission'],
+          correct:1, whyCorrect:'"No smoking" means you must not smoke in this area at all.',
+          whyWrong:['You still may not smoke, even quietly.', null, 'The sign covers the entire area, not just certain spots.', 'Smoking is simply not allowed — no permission needed.'],
+          example:'No smoking is allowed in this restaurant.' },
+        { id:'r0_2', text:"What does 'KEEP OFF THE GRASS' mean?",
+          options:['Sit on the grass','Do not step on the grass','Cut the grass','Water the grass'],
+          correct:1, whyCorrect:'"Keep off" means do not step on or walk on something.',
+          whyWrong:['You should not sit on it either.', null, 'It is not an instruction to cut the grass.', 'It is not about watering the grass.'],
+          example:'Keep off the grass — please use the path.' },
+        { id:'r0_3', text:"Which word on a sign means 'Dilarang'?",
+          options:['Caution','Please','No / Do Not','Exit'],
+          correct:2, whyCorrect:'"No" and "Do Not" are the English words that mean dilarang. They prohibit an action.',
+          whyWrong:['"Caution" means hati-hati — a warning, not a prohibition.', '"Please" is a polite request, not a prohibition.', null, '"Exit" means the way out.'],
+          example:'No entry. Do not enter this area.' },
+        { id:'r0_4', text:"Where would you most likely see a 'NO PARKING' sign?",
+          options:['Inside a restaurant','In front of a hospital entrance','In a park','On the roof'],
+          correct:1, whyCorrect:'"No parking" signs are common in front of hospital entrances, fire lanes, and gates to keep them clear.',
+          whyWrong:['Restaurants usually park in a separate lot — not the sign location.', null, 'Parks usually allow parking in designated areas.', 'Signs are placed where vehicles park, not on rooftops.'],
+          example:'No parking in front of the hospital entrance.' },
+        { id:'r0_5', text:"A sign says 'NO ENTRY'. What does this mean?",
+          options:['You may enter freely','Only staff can exit','You are not allowed to go in','Come in and sit'],
+          correct:2, whyCorrect:'"No entry" means you are not permitted to enter that area.',
+          whyWrong:['It means the opposite — you cannot enter freely.', '"No entry" is about entering, not exiting.', null, 'It is a prohibition sign, not an invitation.'],
+          example:'No entry — this area is for staff only.' }
       ]
     },
+
+    /* ─── SECTION 1: Warning Signs ─── */
     {
-      id: 1, title: 'Menu Makanan', emoji: '📋', bg: 'linear-gradient(135deg,#D97706,#92400E)',
-      desc: 'Membaca daftar menu dan harganya di warung.',
-      textType: 'style-menu',
-      textHtml: `
-        <h3 style="text-align:center;margin-bottom:15px;font-size:1.5rem;">Warung Makan "Suka Rasa"</h3>
-        <ul style="list-style:none;padding:0;margin:0;">
-          <li style="display:flex;justify-content:space-between;margin-bottom:10px;border-bottom:1px dashed #FCD34D;">
-            <span><span id="w0">Fried</span> <span id="w1">Rice</span></span>
-            <span id="w2">Rp 15.000</span>
-          </li>
-          <li style="display:flex;justify-content:space-between;margin-bottom:10px;border-bottom:1px dashed #FCD34D;">
-            <span><span id="w3">Fried</span> <span id="w4">Chicken</span></span>
-            <span id="w5">Rp 20.000</span>
-          </li>
-          <li style="display:flex;justify-content:space-between;margin-bottom:10px;border-bottom:1px dashed #FCD34D;">
-            <span><span id="w6">Ice</span> <span id="w7">Tea</span></span>
-            <span id="w8">Rp 5.000</span>
-          </li>
-          <li style="display:flex;justify-content:space-between;margin-bottom:10px;">
-            <span><span id="w9">Mineral</span> <span id="w10">Water</span></span>
-            <span id="w11">Rp 3.000</span>
-          </li>
-        </ul>
-      `,
-      plainText: "Fried Rice, fifteen thousand rupiah. Fried Chicken, twenty thousand rupiah. Ice Tea, five thousand rupiah. Mineral Water, three thousand rupiah.",
-      quiz: [
-        {
-          id:'r1_1', text:'How much is the Fried Rice?',
-          options: ['Rp 5.000', 'Rp 15.000', 'Rp 20.000', 'Rp 3.000'],
-          correct: 1, whyCorrect: 'Di menu tertulis Fried Rice Rp 15.000.',
-          whyWrong: ['That is the price of Ice Tea.', null, 'That is the price of Fried Chicken.', 'That is the price of Mineral Water.'],
-          example: 'Fried Rice is fifteen thousand rupiah.'
-        }
+      title:'Warning Signs', emoji:'\u26A0\uFE0F', color:'#D97706',
+      bg:'linear-gradient(135deg,#D97706,#92400E)',
+      desc:'Signs that warn you to be careful and stay safe.',
+      tips:[
+        { icon:'💡', title:'How to read warning signs', body:'Warning signs usually have a <b>yellow or orange triangle</b>. Words like <b>CAUTION</b>, <b>WARNING</b>, <b>DANGER</b>, or <b>BEWARE</b> tell you something could be hazardous.' },
+        { icon:'📌', title:'Key vocabulary', body:'<b>Caution / Beware</b> = Hati-hati / Waspada · <b>Slippery</b> = Licin · <b>Voltage</b> = Tegangan listrik · <b>Fragile</b> = Mudah pecah' },
+        { icon:'🛡️', title:'What to do', body:'When you see a warning sign: <b>slow down</b>, <b>be careful</b>, and <b>follow any instructions</b>. Warning signs are placed to protect you from getting hurt.' }
+      ],
+      signs:[
+        { text:'CAUTION: WET FLOOR', icon:'\u26A0\uFE0F', meaning:'Be careful. The floor is wet and may be slippery.', where:'Malls, toilets, and corridors after cleaning.', short:'The floor is wet and slippery' },
+        { text:'HIGH VOLTAGE', icon:'\u26A1', meaning:'Danger! Strong electricity here. Do not touch anything.', where:'Electrical boxes, power stations, generators.', short:'Danger: strong electricity' },
+        { text:'MIND THE STEP', icon:'\u{1F6B6}', meaning:'Watch your step. The floor level changes here.', where:'Doorways, stairs, and train platforms.', short:'Watch your step' },
+        { text:'SLIPPERY WHEN WET', icon:'\u{1F4A7}', meaning:'This surface becomes very slippery when it rains or gets wet.', where:'Parking lots, ramps, and bathrooms.', short:'Floor is slippery when wet' },
+        { text:'BEWARE OF DOG', icon:'\u{1F415}', meaning:'There is a dog here that may bite. Be careful.', where:'Houses, factories, and private property.', short:'Dog may bite, be careful' },
+        { text:'FRAGILE: HANDLE WITH CARE', icon:'\u{1F4E6}', meaning:'This item breaks easily. Carry it gently.', where:'Delivery packages and storage rooms.', short:'Handle gently, easily broken' }
+      ],
+      quiz:[
+        { id:'r1_1', text:"You see 'CAUTION: WET FLOOR'. What should you do?",
+          options:['Run fast to cross quickly','Walk slowly and carefully','Sit on the floor and wait','Ignore the sign'],
+          correct:1, whyCorrect:'A wet floor is slippery. Walking slowly and carefully prevents you from falling.',
+          whyWrong:['Running increases the risk of slipping.', null, 'Sitting on a wet floor is dangerous and impractical.', 'Ignoring a warning sign can lead to an accident.'],
+          example:'Caution: wet floor — please walk carefully.' },
+        { id:'r1_2', text:"What does 'HIGH VOLTAGE' warn you about?",
+          options:['Loud noise nearby','Dangerous electricity','Hot water pipe','Heavy falling objects'],
+          correct:1, whyCorrect:'"High voltage" warns about dangerous levels of electricity that can cause serious injury or death.',
+          whyWrong:['It is not related to noise.', null, 'It is not about water.', 'It is not about falling objects — that would be "Falling Hazard".'],
+          example:'High voltage: do not touch! Danger of electrocution.' },
+        { id:'r1_3', text:"What is the meaning of 'BEWARE OF DOG'?",
+          options:['The dog is friendly and safe','A dog is present and may bite','The dog needs feeding','No dogs allowed here'],
+          correct:1, whyCorrect:'"Beware of dog" means there is a dog nearby that could be dangerous.',
+          whyWrong:['If the dog were friendly, no warning sign would be needed.', null, 'It is not about feeding the dog.', '"No dogs allowed" would be a prohibition sign, not a warning.'],
+          example:'Beware of dog — enter at your own risk.' },
+        { id:'r1_4', text:"A sign says 'MIND THE STEP'. Where would you see this?",
+          options:['On a swimming pool wall','At the top of stairs or a doorway','On a parking sign','Inside a lift'],
+          correct:1, whyCorrect:'"Mind the step" is placed at staircases, doorways, and anywhere the floor level changes suddenly.',
+          whyWrong:['Swimming pools have different warnings like "No Diving".', null, 'Parking signs do not relate to steps.', 'Lifts have different safety signs.'],
+          example:'Mind the step at the entrance.' },
+        { id:'r1_5', text:"Which of these is a WARNING sign?",
+          options:['PUSH','EXIT','CAUTION: WET FLOOR','NO SMOKING'],
+          correct:2, whyCorrect:'"Caution: Wet Floor" is a warning sign because it alerts you to a potential hazard.',
+          whyWrong:['"Push" is an instruction for opening a door.', '"Exit" is an information sign showing the way out.', null, '"No smoking" is a prohibition sign.'],
+          example:'Caution: wet floor ahead.' }
       ]
     },
+
+    /* ─── SECTION 2: Information Signs ─── */
     {
-      id: 2, title: 'Label Produk', emoji: '🏷️', bg: 'linear-gradient(135deg,#059669,#065F46)',
-      desc: 'Memahami instruksi dan tanggal kedaluwarsa pada kemasan.',
-      textType: 'style-label',
-      textHtml: `
-        <h3 style="margin-bottom:10px;font-size:1.3rem;">Fresh Milk</h3>
-        <p style="margin-bottom:8px;">
-          <strong id="w0">Ingredients:</strong> <span id="w1">100%</span> <span id="w2" class="gl-word" onclick="App.showGlossary('cow\\'s milk', 'susu sapi')">cow's milk</span>.
-        </p>
-        <p style="margin-bottom:8px;">
-          <strong id="w3">Store</strong> <span id="w4">in</span> <span id="w5">a</span> <span id="w6" class="gl-word" onclick="App.showGlossary('cool', 'dingin')">cool</span> <span id="w7">place</span>.
-        </p>
-        <p style="color:#047857;font-weight:bold;">
-          <span id="w8" class="gl-word" onclick="App.showGlossary('Best before', 'Baik digunakan sebelum')">Best before:</span> <span id="w9">25</span> <span id="w10">October</span> <span id="w11">2026</span>.
-        </p>
-      `,
-      plainText: "Ingredients: 100% cow's milk. Store in a cool place. Best before: 25 October 2026.",
-      quiz: [
-        {
-          id:'r2_1', text:'Where should you store this milk?',
-          options: ['In a hot place', 'Outside', 'In a cool place', 'Under the sunlight'],
-          correct: 2, whyCorrect: '"Store in a cool place" artinya simpan di tempat yang sejuk/dingin (seperti kulkas).',
-          whyWrong: ['A hot place will spoil the milk.', 'Outside is not recommended.', null, 'Sunlight will spoil the milk.'],
-          example: 'Store in a cool place.'
-        },
-        {
-          id:'r2_2', text:'When is the best time to consume this milk?',
-          options: ['On 25 October 2026', 'Before 25 October 2026', 'After 25 October 2026', 'Anytime'],
-          correct: 1, whyCorrect: '"Best before" berarti baik digunakan SEBELUM tanggal yang tertera.',
-          whyWrong: ['The quality might have decreased on that exact date.', null, 'It might be expired after that date.', 'Fresh milk has an expiration date.'],
-          example: 'Best before: 25 October 2026.'
-        }
+      title:'Information Signs', emoji:'\u2139\uFE0F', color:'#059669',
+      bg:'linear-gradient(135deg,#059669,#065F46)',
+      desc:'Signs that give you helpful information about places and services.',
+      tips:[
+        { icon:'💡', title:'How to read information signs', body:'Information signs are usually <b>blue or green</b>. They do not warn or prohibit — they simply <b>tell you where things are</b> or give you helpful directions.' },
+        { icon:'📌', title:'Key vocabulary', body:'<b>Exit</b> = Keluar · <b>Entrance</b> = Masuk · <b>Restroom / Toilet</b> = Toilet · <b>Push</b> = Dorong · <b>Pull</b> = Tarik · <b>Emergency</b> = Darurat' },
+        { icon:'🗺️', title:'Reading directions', body:'Signs like <b>PUSH</b> and <b>PULL</b> tell you <b>how to open a door</b>. <b>PUSH</b> = dorong, <b>PULL</b> = tarik. Always look for the arrow direction too!' }
+      ],
+      signs:[
+        { text:'EXIT', icon:'\u{1F6AA}', meaning:'This is the way out of the building.', where:'Buildings, cinemas, malls, schools.', short:'The way out' },
+        { text:'ENTRANCE', icon:'\u{1F6B6}', meaning:'This is the way into the building.', where:'Shops, offices, hospitals, malls.', short:'The way in' },
+        { text:'RESTROOM / TOILET', icon:'\u{1F6BB}', meaning:'This is where the toilets or bathrooms are.', where:'Public places, offices, restaurants.', short:'Toilets are here' },
+        { text:'PUSH / PULL', icon:'\u{1F6AA}', meaning:'PUSH the door to open it away from you. PULL to open it towards you.', where:'Shop and office doors everywhere.', short:'How to open the door' },
+        { text:'KEEP THE DOOR CLOSED', icon:'\u{1F512}', meaning:'Always close the door after entering or leaving.', where:'Cold storage rooms, offices, air-conditioned rooms.', short:'Always close this door' },
+        { text:'EMERGENCY EXIT', icon:'\u{1F6A8}', meaning:'Use this door only in an emergency like a fire. Do not use normally.', where:'Buildings, cinemas, factories.', short:'Emergency door only' }
+      ],
+      quiz:[
+        { id:'r2_1', text:'You want to leave the building. Which sign do you follow?',
+          options:['Entrance','Exit','Restroom','No entry'],
+          correct:1, whyCorrect:'"Exit" (Keluar) shows the way out of the building.',
+          whyWrong:['"Entrance" is the way into the building, not out.', null, '"Restroom" leads to the toilet, not the exit.', '"No entry" means you cannot go somewhere — it is a prohibition sign.'],
+          example:'Follow the exit signs to leave the building safely.' },
+        { id:'r2_2', text:"A door says 'PULL'. How do you open it?",
+          options:['Push it away from you','Pull it towards you','Kick it open','Slide it sideways'],
+          correct:1, whyCorrect:'"Pull" (tarik) means you grab the handle and pull the door towards you to open it.',
+          whyWrong:['"Push" is the opposite — you push a door away from you.', null, 'You do not kick a door to open it.', 'This is not a sliding door.'],
+          example:'Pull the door handle to open this door.' },
+        { id:'r2_3', text:"Where would you find a 'RESTROOM' sign?",
+          options:['On a fire extinguisher','On a toilet door in a public place','On a parking space','At a bus stop'],
+          correct:1, whyCorrect:'"Restroom" (also called Toilet) signs are placed on the door or near the bathroom in public places.',
+          whyWrong:['Fire extinguishers have their own label.', null, 'Parking spaces have parking signs.', 'Bus stops have different information signs.'],
+          example:'The restroom is on the second floor.' },
+        { id:'r2_4', text:"What is the difference between 'EXIT' and 'EMERGENCY EXIT'?",
+          options:['They are the same','Exit is for daily use; Emergency Exit is only for emergencies','Emergency Exit is locked always','Exit is only for staff'],
+          correct:1, whyCorrect:'The regular EXIT is for everyday use. The EMERGENCY EXIT is only used during emergencies like fires — do not use it normally.',
+          whyWrong:['They serve different purposes.', null, 'Emergency exits are not always locked — they open easily in an emergency.', 'Exits are for everyone, not just staff.'],
+          example:'In a fire, use the emergency exit immediately.' },
+        { id:'r2_5', text:"The sign 'ENTRANCE' means:",
+          options:['The way out','The toilets are here','The way in','No entry'],
+          correct:2, whyCorrect:'"Entrance" (Masuk/Pintu Masuk) is the point where you enter a building.',
+          whyWrong:['"The way out" is the EXIT.', '"Toilets are here" is the Restroom sign.', null, '"No entry" is a prohibition sign, not an information sign.'],
+          example:'The entrance to the mall is on the main road.' }
       ]
     },
+
+    /* ─── SECTION 3: Public Notices ─── */
     {
-      id: 3, title: 'Cerita Pendek', emoji: '📖', bg: 'linear-gradient(135deg,#7C3AED,#4C1D95)',
-      desc: 'Membaca narasi pendek tentang rutinitas.',
-      textType: 'style-story',
-      textHtml: `
-        <h3 style="margin-bottom:10px;font-size:1.4rem;">Joko the Farmer</h3>
-        <p style="text-align:justify;">
-          <span id="w0">Joko</span> <span id="w1">is</span> <span id="w2">a</span> <span id="w3" class="gl-word" onclick="App.showGlossary('farmer', 'petani')">farmer</span>. 
-          <span id="w4">He</span> <span id="w5">wakes</span> <span id="w6">up</span> <span id="w7">at</span> <span id="w8">4</span> <span id="w9">AM</span> <span id="w10">every</span> <span id="w11">morning</span>. 
-          <span id="w12">He</span> <span id="w13">goes</span> <span id="w14">to</span> <span id="w15">the</span> <span id="w16" class="gl-word" onclick="App.showGlossary('field', 'sawah/ladang')">field</span> 
-          <span id="w17">to</span> <span id="w18">plant</span> <span id="w19">rice</span>. 
-          <span id="w20">He</span> <span id="w21">works</span> <span id="w22" class="gl-word" onclick="App.showGlossary('hard', 'keras/giat')">hard</span> 
-          <span id="w23">to</span> <span id="w24" class="gl-word" onclick="App.showGlossary('feed', 'memberi makan/menghidupi')">feed</span> <span id="w25">his</span> <span id="w26">family</span>. 
-          <span id="w27">In</span> <span id="w28">the</span> <span id="w29">afternoon,</span> <span id="w30">he</span> <span id="w31">rests</span> 
-          <span id="w32">under</span> <span id="w33">a</span> <span id="w34">big</span> <span id="w35">tree</span>.
-        </p>
-      `,
-      plainText: "Joko is a farmer. He wakes up at 4 AM every morning. He goes to the field to plant rice. He works hard to feed his family. In the afternoon, he rests under a big tree.",
-      quiz: [
-        {
-          id:'r3_1', text:"What is Joko's job?",
-          options: ['Teacher', 'Farmer', 'Seller', 'Fisherman'],
-          correct: 1, whyCorrect: 'Teks menyebutkan "Joko is a farmer". Farmer artinya petani.',
-          whyWrong: ['Teacher = Guru', null, 'Seller/Merchant = Pedagang', 'Fisherman = Nelayan'],
-          example: 'Joko is a farmer.'
-        },
-        {
-          id:'r3_2', text:'Where does Joko rest in the afternoon?',
-          options: ['Inside the house', 'In the field', 'Under a big tree', 'At the market'],
-          correct: 2, whyCorrect: '"he rests under a big tree" artinya dia beristirahat di bawah pohon besar.',
-          whyWrong: ['House = rumah', 'He rests under a tree, not exactly in the field.', null, 'Market = pasar'],
-          example: 'He rests under a big tree.'
-        }
+      title:'Public Notices', emoji:'\u{1F4E2}', color:'#7C3AED',
+      bg:'linear-gradient(135deg,#7C3AED,#4C1D95)',
+      desc:'Everyday notices and instructions you see in public places.',
+      tips:[
+        { icon:'💡', title:'What are public notices?', body:'Public notices are signs or written messages that give <b>instructions or information</b> to people in public places. They often use polite language like <b>PLEASE</b> or direct words like <b>QUEUE HERE</b>.' },
+        { icon:'📌', title:'Key vocabulary', body:'<b>Open / Closed</b> = Buka / Tutup · <b>Queue</b> = Antri · <b>Out of order</b> = Rusak · <b>Reserved</b> = Sudah dipesan · <b>First Aid</b> = P3K' },
+        { icon:'🤝', title:'Polite vs direct language', body:'Notices that say <b>PLEASE</b> are polite requests. Notices like <b>DO NOT</b> are direct orders. Both must be followed. Example: "Please queue here" = Tolong antri di sini.' }
+      ],
+      signs:[
+        { text:'OPEN / CLOSED', icon:'\u{1FAA7}', meaning:'"Open" means you can enter and the shop is serving. "Closed" means it is not open for business.', where:'Shops, cafes, clinics, and service counters.', short:'Shows if a shop is open or shut' },
+        { text:'PLEASE QUEUE HERE', icon:'\u{1F9CD}', meaning:'Wait in line here. Do not skip the queue. Wait for your turn.', where:'Banks, hospitals, post offices, and counters.', short:'Form a line and wait your turn' },
+        { text:'OUT OF ORDER', icon:'\u{1F6E0}\uFE0F', meaning:'This machine or service is not working. Do not use it now.', where:'Lifts, ATMs, vending machines, toilets.', short:'Machine is broken, do not use' },
+        { text:'FIRST AID', icon:'\u26D1\uFE0F', meaning:'You can get basic medical help here. Go here if you are injured.', where:'Schools, offices, factories, public events.', short:'Get medical help here' },
+        { text:'RESERVED', icon:'\u{1F4CB}', meaning:'This seat or space is kept for a specific person. Do not sit or use it.', where:'Restaurants, meeting rooms, parking spaces.', short:'This seat is saved for someone' },
+        { text:'WET PAINT', icon:'\u{1F58C}\uFE0F', meaning:'The paint here is still wet. Do not touch or lean against this surface.', where:'Freshly painted walls, benches, and fences.', short:'Fresh paint, do not touch' }
+      ],
+      quiz:[
+        { id:'r3_1', text:"An ATM shows an 'OUT OF ORDER' sign. What does this mean?",
+          options:['It gives bonus money','The ATM is broken and cannot be used','The ATM is brand new','It is free to use today'],
+          correct:1, whyCorrect:'"Out of order" means the machine is broken and not working. You should find another ATM.',
+          whyWrong:['It does not give bonus money.', null, '"Out of order" means broken, not new.', 'It is not about being free.'],
+          example:'Sorry, this lift is out of order. Please use the stairs.' },
+        { id:'r3_2', text:'Where should you go if you are hurt and need medical help?',
+          options:['Exit','Restroom','First Aid','Queue here'],
+          correct:2, whyCorrect:'"First Aid" is where basic medical treatment is provided for injuries.',
+          whyWrong:['"Exit" is the way out of the building.', '"Restroom" is the toilet area.', null, '"Queue here" is for waiting in line.'],
+          example:'The First Aid room is next to the security office.' },
+        { id:'r3_3', text:"You arrive at a café and the door says 'CLOSED'. What do you do?",
+          options:['Go inside anyway','Come back later or find another café','Wait outside all day','Knock loudly'],
+          correct:1, whyCorrect:'"Closed" means the café is not open for service. You should come back when it is open or find another place.',
+          whyWrong:['Going in when it says CLOSED is disrespectful.', null, 'Waiting all day is unnecessary and impractical.', 'Knocking will not help if the café is genuinely closed.'],
+          example:'The café is closed on Sundays.' },
+        { id:'r3_4', text:"What does 'PLEASE QUEUE HERE' ask you to do?",
+          options:['Leave quickly','Wait in a line for your turn','Sit and wait anywhere','Skip to the front'],
+          correct:1, whyCorrect:'"Queue" means to stand in a line and wait for your turn in order.',
+          whyWrong:['It does not ask you to leave.', null, 'You must queue in the designated spot, not just anywhere.', 'Skipping the queue is unfair and not allowed.'],
+          example:'Please queue here for the cashier.' },
+        { id:'r3_5', text:"You see a bench with a 'WET PAINT' sign. What should you do?",
+          options:['Sit on it','Touch it to check','Do not touch or sit on it','Clean it with water'],
+          correct:2, whyCorrect:'"Wet paint" means the paint is still drying. If you touch it, you will get paint on you and damage the surface.',
+          whyWrong:['Sitting on wet paint will stain your clothes.', 'Touching it will damage the surface and dirty your hands.', null, 'Adding water will ruin the paint.'],
+          example:'Wet paint — please do not touch the bench.' }
       ]
     }
   ];
 
-  /* ════════════════════════════════════════════════════════
-     2. APP STATE & CONFIG
-     ════════════════════════════════════════════════════════ */
   const App = {
-    sess: 0,
-    phase: 0, // 0=Membaca, 1=Kuis Pemahaman
-    xp: 0,
-    done: [false,false,false,false],
-    
-    cs: { qi: 0, qs: [], quizSess: null },
-
-    PHASE_ICONS: ['👀', '✍️'],
-    PHASE_NAMES: ['Membaca', 'Pemahaman'],
-
-    glTimeout: null,
+    sess:0, phase:0, si:0, xp:0, done:[false,false,false,false],
+    cs:{ qi:0, qs:[], quizSess:null },
+    cq:{ qi:0, score:0, qs:[], quizSess:null },
+    mg:{ sel:null, matched:0, total:0 },
+    PHASE_ICONS:['\u{1F4D6}','\u270D\uFE0F','\u{1F3AE}'],
+    PHASE_NAMES:['Material','Exercise','Game'],
 
     init(){
-      this._loadProgress();
-      this._loadXP();
-      FeedbackEngine.init({
-        onNext:  () => this._quizNext(),
-        onRetry: () => this._quizRetry(),
-        onSkip:  () => this._quizNext(),
+      this._loadProgress(); this._loadXP();
+      FeedbackEngine.init({ 
+        onNext:()=>this.sess===4?this._closingQuizNext():this._quizNext(), 
+        onRetry:()=>this.sess===4?this._closingQuizRetry():this._quizRetry(), 
+        onSkip:()=>this.sess===4?this._closingQuizNext():this._quizNext() 
       });
       if('speechSynthesis' in window) window.speechSynthesis.getVoices();
       this.render();
     },
+    goTo(n){ FeedbackEngine.dismiss(); if('speechSynthesis' in window) window.speechSynthesis.cancel();
+      this.sess=n; this.phase=0; this.si=0; this.render(); window.scrollTo({top:0,behavior:'smooth'}); },
+    nextPhase(){ if(this.phase<2){ this.phase++; this.render(); } else { this._completeSess(); } },
 
-    goTo(n){
-      FeedbackEngine.dismiss();
-      if('speechSynthesis' in window) window.speechSynthesis.cancel();
-      this.sess=n; this.phase=0;
-      this.render();
-      window.scrollTo({top:0,behavior:'smooth'});
+    render(){ this._updateHero(); this._updateTabs(); this._updatePhaseStrip();
+      if(this.sess===4){ this._renderClosingQuiz(); return; }
+      if(this.phase===0) this._renderSigns();
+      else if(this.phase===1) this._renderQuiz();
+      else this._renderGameHub();
     },
 
-    nextPhase(){
-      if(this.phase < 1){
-        this.phase++;
-        this.render();
-      } else {
-        this._completeSess();
-      }
-    },
-
-    render(){
-      this._updateHero();
-      this._updateTabs();
-      this._updatePhaseStrip();
-
-      if(this.phase === 0) this._renderReading();
-      else this._renderQuiz();
-    },
-
-    _updateHero(){
-      const s = READING_DATA[this.sess];
-      document.getElementById('sess-hero').style.background = s.bg;
-      document.getElementById('hero-deco').textContent = s.emoji;
-      document.getElementById('hero-title').textContent = s.title;
-      document.getElementById('hero-desc').textContent = s.desc;
-      
-      const sessPct = Math.round((this.phase/1)*50);
-      const bar = document.getElementById('hero-bar');
-      if(bar){ bar.style.width='0%'; setTimeout(()=>{ bar.style.width=`${sessPct}%`; },100); }
-    },
-
-    _updateTabs(){
-      for(let i=0;i<4;i++){
-        const el=document.getElementById(`tab-${i}`);
-        if(!el) continue;
-        el.className='sess-tab';
-        if(i===this.sess){ el.classList.add('active'); }
-        else if(this.done[i]){ el.classList.add('done'); }
-      }
-    },
-
-    _updatePhaseStrip(){
-      const strip=document.getElementById('phase-strip');
-      const lbl=document.getElementById('phase-label-text');
-      if(!strip) return;
-      lbl.textContent = `${this.PHASE_ICONS[this.phase]} ${this.PHASE_NAMES[this.phase]}`;
-
-      let html='';
-      this.PHASE_NAMES.forEach((name,i)=>{
-        const isDone=i<this.phase;
-        const isAct=i===this.phase;
-        const cls=isDone?'done':isAct?'active':'upcoming';
-        const icon=isDone?'✓':this.PHASE_ICONS[i];
-        const lblCls=isAct?'phase-label active-label':'phase-label';
-        
-        html+=`<div class="phase-node">
-          <div class="phase-dot ${cls}" title="${name}">${icon}</div>
-          <span class="${lblCls}">${name}</span>
-        </div>`;
-        if(i<1) html+=`<div class="phase-line ${isDone?'done':''}"></div>`;
-      });
-      strip.innerHTML=html;
-    },
-
-    /* ═══════════════════════════════════════════════════════
-       PHASE 0: READING (Membaca & Mendengar)
-       ═══════════════════════════════════════════════════════ */
-    _renderReading(){
-      const s = READING_DATA[this.sess];
-
-      document.getElementById('activity-area').innerHTML=`
-        <span class="act-tag act-read">
-          👀 Bacalah Teks Berikut
-        </span>
-        
-        <div style="margin-bottom:var(--space-3);">
-          <button class="btn-tts-large" id="btn-read-aloud" onclick="App.readAloud()">
-            🔊 Bacakan Teks
-          </button>
-        </div>
-
-        <div class="reading-box ${s.textType}" id="reading-content">
-          ${s.textHtml}
-        </div>
-        
-        <p style="font-size:var(--font-size-sm);color:var(--text-muted);margin:var(--space-3) 0 var(--space-5);text-align:center;">
-          💡 <em>Ketuk kata yang digarisbawahi (putus-putus) untuk melihat artinya.</em>
-        </p>
-
-        <button class="btn btn-primary btn-block" onclick="App._markReadingDone()">
-          Saya Sudah Paham →
-        </button>
-      `;
-    },
-
-    showGlossary(en, id){
-      const toast = document.getElementById('gl-toast');
-      document.getElementById('gl-en').textContent = en;
-      document.getElementById('gl-id').textContent = id;
-      toast.classList.add('show');
-      
-      clearTimeout(this.glTimeout);
-      this.glTimeout = setTimeout(() => {
-        toast.classList.remove('show');
-      }, 3000);
-    },
-
-    readAloud(){
-      if(!('speechSynthesis' in window)) return;
-      window.speechSynthesis.cancel();
-      
-      const s = READING_DATA[this.sess];
-      const btn = document.getElementById('btn-read-aloud');
-      
-      const play = () => {
-        const voices = window.speechSynthesis.getVoices();
-        let auVoices = voices.filter(v => v.lang === 'en-AU' || v.lang === 'en_AU');
-        if (auVoices.length === 0) auVoices = voices.filter(v => v.lang.startsWith('en'));
-        
-        const utterance = new SpeechSynthesisUtterance(s.plainText);
-        utterance.lang = 'en-US'; // Fallback aman
-        utterance.rate = 0.85; // slightly slower for learners
-        
-        if (auVoices.length > 0) {
-          utterance.voice = auVoices[Math.floor(Math.random() * auVoices.length)];
-          utterance.lang = utterance.voice.lang;
-        }
-
-        // Mencegah Garbage Collection bug pada Chrome/Safari
-        window._synth_utterance = utterance;
-
-        utterance.onstart = () => {
-          btn.classList.add('playing');
-          btn.innerHTML = '⏸️ Sedang Membaca...';
-        };
-        utterance.onend = () => {
-          btn.classList.remove('playing');
-          btn.innerHTML = '🔊 Bacakan Teks';
-          this._removeHighlights();
-        };
-        utterance.onerror = () => {
-          btn.classList.remove('playing');
-          btn.innerHTML = '🔊 Bacakan Teks';
-        };
-
-        // Very simple word boundary highlighting approximation (browser support varies widely)
-        let wordIndex = 0;
-        utterance.onboundary = (event) => {
-          if(event.name === 'word') {
-            this._removeHighlights();
-            const el = document.getElementById(`w${wordIndex}`);
-            if(el){
-              el.classList.add('word-highlight');
-              wordIndex++;
-            }
-          }
-        };
-
-        window.speechSynthesis.speak(utterance);
-      };
-
-      if (window.speechSynthesis.getVoices().length === 0) {
-        window.speechSynthesis.onvoiceschanged = () => {
-          play();
-          window.speechSynthesis.onvoiceschanged = null;
-        };
-        window.speechSynthesis.getVoices();
-      } else {
-        play();
-      }
-    },
-
-    _removeHighlights(){
-      document.querySelectorAll('.word-highlight').forEach(el => {
-        el.classList.remove('word-highlight');
-      });
-    },
-
-    _markReadingDone(){
-      if('speechSynthesis' in window) window.speechSynthesis.cancel();
-      this._addXP(15);
-      this.nextPhase();
-    },
-
-    /* ═══════════════════════════════════════════════════════
-       PHASE 1: COMPREHENSION QUIZ (Pemahaman)
-       ═══════════════════════════════════════════════════════ */
-    _renderQuiz(){
-      const s = READING_DATA[this.sess];
-      this.cs = {
-        qi: 0, 
-        qs: s.quiz,
-        quizSess: QuizStore.startSession(`read_unit3_s${this.sess}`)
-      };
-      this._renderQuizQ();
-    },
-
-    _renderQuizQ(){
-      const cs = this.cs;
-      if(cs.qi >= cs.qs.length){
-        this._renderQuizResult();
+    _updateHero(){ 
+      if(this.sess===4){
+        document.getElementById('sess-hero').style.background='linear-gradient(135deg,#DC2626,#7F1D1D)';
+        document.getElementById('hero-deco').textContent='🎯';
+        document.getElementById('hero-title').textContent='Quiz';
+        document.getElementById('hero-desc').textContent='Test your knowledge from all reading units.';
+        const bar=document.getElementById('hero-bar');
+        if(bar) bar.style.width='0%';
         return;
       }
-      const q = cs.qs[cs.qi];
-      const keys = ['A','B','C','D'];
-      const pct = Math.round((cs.qi / cs.qs.length) * 100);
-      const s = READING_DATA[this.sess];
+      const s=UNITS[this.sess];
+      document.getElementById('sess-hero').style.background=s.bg;
+      document.getElementById('hero-deco').textContent=s.emoji;
+      document.getElementById('hero-title').textContent=s.title;
+      document.getElementById('hero-desc').textContent=s.desc;
+      const pct=Math.round((this.phase/2)*100);
+      const bar=document.getElementById('hero-bar');
+      if(bar){ bar.style.width='0%'; setTimeout(()=>{ bar.style.width=pct+'%'; },100); }
+    },
+    _updateTabs(){ for(let i=0;i<5;i++){ const el=document.getElementById('tab-'+i); if(!el) continue;
+      el.className='sess-tab'; if(i===this.sess) el.classList.add('active'); else if(i<4 && this.done[i]) el.classList.add('done'); el.setAttribute('aria-selected', i===this.sess?'true':'false'); } },
+    _updatePhaseStrip(){ const strip=document.getElementById('phase-strip'); const lbl=document.getElementById('phase-label-text'); const pp=document.getElementById('phase-panel'); if(this.sess===4){ if(pp) pp.style.display='none'; return; } if(pp) pp.style.display=''; if(!strip) return;
+      let html=''; this.PHASE_NAMES.forEach((name,i)=>{ const isDone=i<this.phase; const isAct=i===this.phase;
+        const cls=isDone?'done':isAct?'active':'upcoming'; const icon=isDone?'\u2713':this.PHASE_ICONS[i];
+        const lblCls=isAct?'phase-label active-label':'phase-label';
+        html+='<div class="phase-node"><div class="phase-dot '+cls+'" title="'+name+'">'+icon+'</div><span class="'+lblCls+'">'+name+'</span></div>';
+        if(i<2) html+='<div class="phase-line '+(isDone?'done':'')+'"></div>';
+      }); strip.innerHTML=html; },
 
-      document.getElementById('activity-area').innerHTML=`
-        <span class="act-tag act-quiz">
-          ✍️ Kuis Pemahaman &middot; Soal ${cs.qi+1} / ${cs.qs.length}
-        </span>
-        
-        <div class="progress-bar-track progress-bar-track--thin" style="margin-bottom:var(--space-4);">
-          <div class="progress-bar-fill" style="width:${pct}%;transition:width .4s ease;"></div>
-        </div>
+    /* PHASE 0: SIGNS - one sign per screen + tips on first sign */
+    _renderSigns(){ const s=UNITS[this.sess]; const total=s.signs.length; const sign=s.signs[this.si];
+      const isLast=this.si>=total-1;
 
-        <!-- Teks Referensi -->
-        <div style="margin-bottom: var(--space-4);">
-          <p style="font-size: var(--font-size-sm); color: var(--text-muted); margin-bottom: var(--space-2); font-weight: bold;">Teks Referensi:</p>
-          <div class="reading-box ${s.textType}" style="padding: var(--space-4); opacity: 0.9;">
-            ${s.textHtml}
-          </div>
-        </div>
+      document.getElementById('activity-area').innerHTML=
+        '<span class="act-tag act-read">🪧 Sign '+(this.si+1)+' of '+total+'</span>'+
+        '<div class="progress-bar-track progress-bar-track--thin" style="margin-bottom:var(--space-4);"><div class="progress-bar-fill" style="width:'+Math.round(((this.si+1)/total)*100)+'%;transition:width .4s ease;"></div></div>'+
+        '<div class="sign-board" style="border-color:'+s.color+';color:'+s.color+';"><div class="sign-ico">'+sign.icon+'</div><div class="sign-text">'+sign.text+'</div></div>'+
+        '<div style="text-align:center;margin:var(--space-3) 0;"><button class="btn-tts-large" onclick="App.speak(&quot;'+sign.text+'&quot;,this)">🔊 Read the sign</button></div>'+
+        '<div class="card sign-explain"><p class="sign-explain-title">💡 What it means</p><p class="sign-explain-meaning">'+sign.meaning+'</p><p class="sign-explain-where"><strong>Where you see it:</strong> '+sign.where+'</p></div>'+
+        '<div style="display:flex;gap:var(--space-2);margin-top:var(--space-4);">'+
+          (this.si>0?'<button class="btn" style="flex:1;background:var(--surface-2);color:var(--text-main);" onclick="App.prevSign()">← Previous</button>':'')+
+          (isLast?'<button class="btn btn-primary" style="flex:2;" onclick="App._finishSigns()">I understand → Exercise</button>':'<button class="btn btn-primary" style="flex:2;" onclick="App.nextSign()">Next sign →</button>')+
+        '</div>';
+    },
+    nextSign(){ const s=UNITS[this.sess]; if(this.si<s.signs.length-1){ this.si++; this._addXP(3); this._renderSigns(); window.scrollTo({top:0,behavior:'smooth'}); } },
+    prevSign(){ if(this.si>0){ this.si--; this._renderSigns(); } },
+    _finishSigns(){ if('speechSynthesis' in window) window.speechSynthesis.cancel(); this._addXP(10); this.nextPhase(); },
 
-        <div class="card" style="padding:var(--space-5);">
-          <p style="font-size:var(--font-size-lg);font-weight:700;color:var(--text-main);margin-bottom:var(--space-4);text-align:center;">
-            ${q.text}
-          </p>
-
-          <div style="display:flex;flex-direction:column;gap:var(--space-2);" id="quiz-opts">
-            ${q.options.map((opt, i) => `
-              <button class="quiz-option" onclick="App._handleQuizAns(${i})" aria-label="Pilihan ${keys[i]}: ${opt}">
-                <span class="quiz-option-key">${keys[i]}</span>
-                <span class="quiz-option-text">${opt}</span>
-              </button>
-            `).join('')}
-          </div>
-        </div>`;
+    speak(text,btn){ if(!('speechSynthesis' in window)) return; window.speechSynthesis.cancel();
+      const u=new SpeechSynthesisUtterance(text); u.lang='en-US'; u.rate=0.95;
+      const voices=window.speechSynthesis.getVoices().filter(v=>v.lang && v.lang.toLowerCase().startsWith('en'));
+      if(voices.length) u.voice=voices[0];
+      window._synth_u=u;
+      if(btn){ u.onstart=()=>btn.classList.add('playing'); u.onend=()=>btn.classList.remove('playing'); u.onerror=()=>btn.classList.remove('playing'); }
+      window.speechSynthesis.speak(u);
     },
 
-    _handleQuizAns(sel){
-      const cs = this.cs;
-      const q = cs.qs[cs.qi];
-      const ok = sel === q.correct;
+    /* PHASE 1: QUIZ */
+    _renderQuiz(){ const s=UNITS[this.sess];
+      this.cs={ qi:0, qs:s.quiz, quizSess:QuizStore.startSession('read_unit3_s'+this.sess) };
+      this._renderQuizQ();
+    },
+    _renderQuizQ(){ const cs=this.cs; if(cs.qi>=cs.qs.length){ this._renderQuizResult(); return; }
+      const q=cs.qs[cs.qi]; const keys=['A','B','C','D']; const pct=Math.round((cs.qi/cs.qs.length)*100);
+      document.getElementById('activity-area').innerHTML=
+        '<span class="act-tag act-quiz">\u270D\uFE0F Comprehension Quiz \u00B7 Question '+(cs.qi+1)+' / '+cs.qs.length+'</span>'+
+        '<div class="progress-bar-track progress-bar-track--thin" style="margin-bottom:var(--space-4);"><div class="progress-bar-fill" style="width:'+pct+'%;transition:width .4s ease;"></div></div>'+
+        '<div class="card" style="padding:var(--space-5);"><p style="font-size:var(--font-size-lg);font-weight:700;color:var(--text-main);margin-bottom:var(--space-4);text-align:center;">'+q.text+'</p>'+
+        '<div style="display:flex;flex-direction:column;gap:var(--space-2);" id="quiz-opts">'+
+        q.options.map((opt,i)=>'<button class="quiz-option" onclick="App._handleQuizAns('+i+')" aria-label="Option '+keys[i]+': '+opt+'"><span class="quiz-option-key">'+keys[i]+'</span><span class="quiz-option-text">'+opt+'</span></button>').join('')+
+        '</div></div>';
+    },
+    _handleQuizAns(sel){ const cs=this.cs; const q=cs.qs[cs.qi]; const ok=sel===q.correct;
+      document.querySelectorAll('#quiz-opts .quiz-option').forEach((btn,i)=>{ btn.classList.add('quiz-option--disabled');
+        if(i===q.correct) btn.classList.add('quiz-option--correct'); else if(i===sel && !ok) btn.classList.add('quiz-option--wrong'); });
+      QuizStore.recordAnswer(cs.quizSess,q.id,ok,0,sel);
+      if(ok){ this._addXP(20); FeedbackEngine.showCorrect(q,sel); } else { FeedbackEngine.showWrong(q,sel); }
+    },
+    _quizNext(){ this.cs.qi++; this._renderQuizQ(); },
+    _quizRetry(){ document.querySelectorAll('#quiz-opts .quiz-option').forEach((btn,i)=>{ btn.classList.remove('quiz-option--disabled','quiz-option--wrong','quiz-option--correct'); btn.onclick=()=>this._handleQuizAns(i); }); },
+    _renderQuizResult(){ const cs=this.cs; const res=QuizStore.finishSession(cs.quizSess,cs.qs.length); const pct=res.score; this._addXP(20);
+      document.getElementById('activity-area').innerHTML=
+        '<div class="card" style="padding:var(--space-6);text-align:center;">'+
+        '<div class="score-ring" style="background:conic-gradient(var(--accent) '+(pct*3.6)+'deg, var(--surface-2) '+(pct*3.6)+'deg);"><div class="score-ring-inner"><span style="font-size:1.65rem;font-weight:800;color:var(--accent-700);">'+pct+'%</span></div></div>'+
+        '<h2 style="font-size:var(--font-size-xl);font-weight:800;margin-bottom:var(--space-2);">Quiz complete! \u{1F389}</h2>'+
+        '<p style="color:var(--text-muted);margin-bottom:var(--space-4);">Now play a game to review the signs.</p>'+
+        '<button class="btn btn-accent btn-block" onclick="App.nextPhase()">Play a Game \u{1F3AE}</button></div>';
+    },
 
-      document.querySelectorAll('#quiz-opts .quiz-option').forEach((btn, i) => {
-        btn.classList.add('quiz-option--disabled');
-        if(i === q.correct) btn.classList.add('quiz-option--correct');
-        else if(i === sel && !ok) btn.classList.add('quiz-option--wrong');
+    /* PHASE 2: MATCHING GAME */
+    _renderGame(){ const s=UNITS[this.sess];
+      const pool = this._shufArr([...s.signs]).slice(0, 5);
+      const pairs=pool.map((x,idx)=>({idx:idx, sign:x.text, icon:x.icon, short:x.short}));
+      const rights=pairs.map(p=>({idx:p.idx, short:p.short})).sort(()=>Math.random()-0.5);
+      this.mg={ sel:null, matched:0, total:pairs.length };
+      const leftHtml=pairs.map(p=>'<button class="match-item match-left" id="ml-'+p.idx+'" onclick="App._pickLeft('+p.idx+')"><span class="match-ico">'+p.icon+'</span><span>'+p.sign+'</span></button>').join('');
+      const rightHtml=rights.map(r=>'<button class="match-item match-right" id="mr-'+r.idx+'" onclick="App._pickRight('+r.idx+')">'+r.short+'</button>').join('');
+      document.getElementById('activity-area').innerHTML=
+        '<span class="act-tag act-game">\u{1F3AE} Matching Game</span>'+
+        '<p style="font-size:var(--font-size-sm);color:var(--text-muted);margin-bottom:var(--space-4);text-align:center;">Tap a sign, then tap its meaning. Match all '+pairs.length+' pairs!</p>'+
+        '<div class="match-grid"><div class="match-col">'+leftHtml+'</div><div class="match-col">'+rightHtml+'</div></div>'+
+        '<p id="match-status" style="text-align:center;margin-top:var(--space-4);font-weight:700;color:var(--text-muted);">0 / '+pairs.length+' matched</p>';
+    },
+    _pickLeft(idx){ const el=document.getElementById('ml-'+idx); if(el.classList.contains('matched')) return;
+      document.querySelectorAll('.match-left').forEach(b=>b.classList.remove('selected'));
+      this.mg.sel=idx; el.classList.add('selected'); },
+    _pickRight(idx){ const r=document.getElementById('mr-'+idx); if(r.classList.contains('matched')) return;
+      if(this.mg.sel===null){ r.classList.add('shake'); setTimeout(()=>r.classList.remove('shake'),400); return; }
+      const l=document.getElementById('ml-'+this.mg.sel);
+      if(this.mg.sel===idx){ l.classList.remove('selected'); l.classList.add('matched'); r.classList.add('matched');
+        this.mg.matched++; this._addXP(10); this.mg.sel=null;
+        document.getElementById('match-status').textContent=this.mg.matched+' / '+this.mg.total+' matched';
+        if(this.mg.matched===this.mg.total) this._gameComplete();
+      } else { r.classList.add('wrong'); l.classList.add('wrong'); const sel=this.mg.sel; this.mg.sel=null;
+        setTimeout(()=>{ r.classList.remove('wrong'); const lo=document.getElementById('ml-'+sel); if(lo){ lo.classList.remove('wrong','selected'); } },600); }
+    },
+    _gameComplete(){ this._addXP(20);
+      document.getElementById('activity-area').innerHTML=
+        '<div class="card" style="padding:var(--space-6);text-align:center;"><div style="font-size:3rem;margin-bottom:var(--space-3);">\u{1F3AF}</div>'+
+        '<h2 style="font-size:var(--font-size-xl);font-weight:800;margin-bottom:var(--space-2);">Great matching!</h2>'+
+        '<p style="color:var(--text-muted);margin-bottom:var(--space-4);">You matched every sign with its meaning.</p>'+
+        '<button class="btn btn-primary btn-block" onclick="App._backFromMatch()">\u2190 Back to Games</button></div>';
+      if(typeof Utils!=='undefined') Utils.showConfetti && Utils.showConfetti();
+    },
+
+    /* SESSION COMPLETE */
+
+    /* ═══ GAME HUB + EXTRA INTERACTIVE GAMES (Unit 3) ═══ */
+    _gsess:-1,
+    _renderGameHub(){
+      if(this._gsess!==this.sess){ this.gamesDone={}; this._gsess=this.sess; }
+      if(!this.gamesDone) this.gamesDone={};
+      const games=[
+        {key:'match', icon:'🎮', name:'Matching Game',      desc:'Match each sign with its meaning.',             fn:'_renderGame'},
+        {key:'tf',    icon:'⚖️', name:'True or False',       desc:'Decide if the meaning of the sign is correct.', fn:'_renderTF'},
+        {key:'tap',   icon:'👆', name:'Tap the Right Sign',  desc:'Read a meaning, then tap the matching sign.',   fn:'_renderTap'},
+        {key:'memory',icon:'🧠', name:'Memory Match',        desc:'Flip cards and match sign to meaning.',         fn:'_renderMemoryGame'}
+      ];
+      const cards=games.map(g=>{
+        const done=this.gamesDone[g.key];
+        const check=done?' <span style="color:var(--accent);">✓</span>':'';
+        const bcol=done?'var(--accent)':'var(--border)';
+        return `<button class="card" onclick="App.${g.fn}()" style="text-align:left;padding:var(--space-4);display:flex;align-items:center;gap:var(--space-4);border:1.5px solid ${bcol};cursor:pointer;width:100%;background:var(--card);"><div style="font-size:2rem;flex-shrink:0;">${g.icon}</div><div style="flex:1;"><p style="font-weight:800;color:var(--text-main);">${g.name}${check}</p><p style="font-size:var(--font-size-xs);color:var(--text-muted);">${g.desc}</p></div><span style="color:var(--text-faint);font-size:1.2rem;">▶</span></button>`;
+      }).join('');
+      const played=Object.keys(this.gamesDone).length;
+      document.getElementById('activity-area').innerHTML=`<span style="display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:999px;background:#EDE9FE;color:#6D28D9;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;margin-bottom:12px;">🎮 Game · choose one</span><p style="font-size:var(--font-size-sm);color:var(--text-muted);margin:var(--space-3) 0 var(--space-4);">Choose any game to review the signs. Play as many as you like, then finish.</p><div style="display:flex;flex-direction:column;gap:var(--space-3);margin-bottom:var(--space-5);">${cards}</div><button class="btn ${played>0?'btn-accent':'btn-outline'} btn-block" onclick="App._completeSess()">${played>0?'Finish this session 🏆':'Play at least one game to finish'}</button>`;
+    },
+    _backToGames(key){
+      if(!this.gamesDone) this.gamesDone={};
+      if(key) this.gamesDone[key]=true;
+      this._renderGameHub();
+      try{ window.scrollTo({top:120,behavior:'smooth'}); }catch(e){}
+    },
+    _backFromMatch(){ this._backToGames('match'); },
+    _shufArr(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); const t=a[i]; a[i]=a[j]; a[j]=t; } return a; },
+    _tf:null,
+    _renderTF(){
+      const signs=UNITS[this.sess].signs;
+      const qs=this._shufArr(signs).slice(0, 5).map(s=>{
+        const useTrue=Math.random()<0.5;
+        let shown=s.meaning;
+        if(!useTrue){ const others=signs.filter(x=>x.meaning!==s.meaning); shown=this._shufArr(others)[0].meaning; }
+        return {sign:s, shown:shown, answer:(shown===s.meaning)};
       });
+      this._tf={qs:qs,i:0,score:0};
+      this._renderTFQ();
+    },
+    _renderTFQ(){
+      const st=this._tf;
+      if(st.i>=st.qs.length){ this._tfResult(); return; }
+      const q=st.qs[st.i];
+      document.getElementById('activity-area').innerHTML=`<span style="display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:999px;background:#EDE9FE;color:#6D28D9;font-size:11px;font-weight:800;text-transform:uppercase;margin-bottom:12px;">⚖️ True or False · ${st.i+1} / ${st.qs.length}</span><div class="card" style="padding:var(--space-6);text-align:center;"><div style="font-size:2.6rem;margin-bottom:var(--space-2);">${q.sign.icon}</div><p style="font-size:var(--font-size-lg);font-weight:800;color:var(--text-main);margin-bottom:var(--space-3);">${q.sign.text}</p><p style="color:var(--text-muted);margin-bottom:var(--space-5);">Meaning shown: <strong>${q.shown}</strong></p><div style="display:flex;gap:var(--space-3);"><button class="btn btn-accent btn-block" onclick="App._tfAns(true,this)">✔ True</button><button class="btn btn-outline btn-block" onclick="App._tfAns(false,this)">✘ False</button></div><div id="tf-fb" style="margin-top:var(--space-4);font-weight:700;"></div></div>`;
+    },
+    _tfAns(choice, btn){
+      const st=this._tf; const q=st.qs[st.i]; const ok=(choice===q.answer);
+      document.querySelectorAll('#activity-area .btn-block').forEach(b=>b.onclick=null);
+      const fb=document.getElementById('tf-fb');
+      if(ok){ st.score++; this._addXP(8); fb.style.color='var(--accent-700)'; fb.textContent='✅ Correct!'; }
+      else { fb.style.color='var(--danger-600)'; fb.innerHTML='❌ Not quite. Correct meaning: <strong>'+q.sign.meaning+'</strong>'; }
+      setTimeout(()=>{ st.i++; this._renderTFQ(); }, 1100);
+    },
+    _tfResult(){
+      const st=this._tf; const pct=Math.round((st.score/st.qs.length)*100); this._addXP(12);
+      document.getElementById('activity-area').innerHTML=`<div class="card" style="padding:var(--space-6);text-align:center;"><div style="font-size:3rem;margin-bottom:var(--space-2);">⚖️</div><div style="font-size:1.6rem;font-weight:800;color:var(--accent-700);margin-bottom:var(--space-1);">${pct}%</div><p style="color:var(--text-muted);margin-bottom:var(--space-5);">You got ${st.score} of ${st.qs.length} right.</p><button class="btn btn-primary btn-block" onclick="App._backToGames('tf')">← Back to Games</button></div>`;
+    },
+    _tp:null,
+    _renderTap(){
+      this._tp={qs:this._shufArr(UNITS[this.sess].signs).slice(0, 5),i:0,score:0};
+      this._renderTapQ();
+    },
+    _renderTapQ(){
+      const st=this._tp;
+      if(st.i>=st.qs.length){ this._tapResult(); return; }
+      const cur=st.qs[st.i];
+      const all=UNITS[this.sess].signs;
+      const distract=this._shufArr(all.filter(s=>s.text!==cur.text)).slice(0,3);
+      const opts=this._shufArr([cur].concat(distract));
+      document.getElementById('activity-area').innerHTML=`<span style="display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:999px;background:#EDE9FE;color:#6D28D9;font-size:11px;font-weight:800;text-transform:uppercase;margin-bottom:12px;">👆 Tap the Right Sign · ${st.i+1} / ${st.qs.length}</span><div class="card" style="padding:var(--space-5);"><p style="text-align:center;color:var(--text-muted);margin-bottom:var(--space-2);">Which sign means:</p><p style="text-align:center;font-size:var(--font-size-lg);font-weight:800;color:var(--text-main);margin-bottom:var(--space-4);">“${cur.meaning}”</p><div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-3);">${opts.map(o=>`<button class="btn btn-outline" style="flex-direction:column;padding:var(--space-4);height:auto;gap:6px;" onclick="App._tapAns(this,${o.text===cur.text})"><span style="font-size:2rem;">${o.icon}</span><span style="font-weight:800;font-size:var(--font-size-sm);">${o.text}</span></button>`).join('')}</div><div id="tap-fb" style="margin-top:var(--space-4);text-align:center;font-weight:700;"></div></div>`;
+    },
+    _tapAns(btn, ok){
+      const st=this._tp;
+      document.querySelectorAll('#activity-area .btn-outline').forEach(b=>b.onclick=null);
+      const fb=document.getElementById('tap-fb');
+      if(ok){ st.score++; this._addXP(8); btn.style.borderColor='var(--accent)'; fb.style.color='var(--accent-700)'; fb.textContent='✅ Correct!'; }
+      else { btn.style.borderColor='var(--danger-600)'; fb.style.color='var(--danger-600)'; fb.textContent='❌ Try to remember this sign.'; }
+      setTimeout(()=>{ st.i++; this._renderTapQ(); }, 1000);
+    },
+    _tapResult(){
+      const st=this._tp; const pct=Math.round((st.score/st.qs.length)*100); this._addXP(12);
+      document.getElementById('activity-area').innerHTML=`<div class="card" style="padding:var(--space-6);text-align:center;"><div style="font-size:3rem;margin-bottom:var(--space-2);">👆</div><div style="font-size:1.6rem;font-weight:800;color:var(--accent-700);margin-bottom:var(--space-1);">${pct}%</div><p style="color:var(--text-muted);margin-bottom:var(--space-5);">You matched ${st.score} of ${st.qs.length} signs.</p><button class="btn btn-primary btn-block" onclick="App._backToGames('tap')">← Back to Games</button></div>`;
+    },
 
-      QuizStore.recordAnswer(cs.quizSess, q.id, ok, 0, sel);
-      if(ok){ 
-        this._addXP(20);
-        FeedbackEngine.showCorrect(q, sel); 
-      } else { 
+    /* ── Memory Match (Unit 3) ── */
+    _renderMemoryGame(){
+      const pool = this._shufArr([...UNITS[this.sess].signs]).slice(0, 5);
+      let cards = [];
+      pool.forEach(s => {
+        cards.push({ id: s.text, label: `<div style="font-size:1.5rem;">${s.icon}</div><div>${s.text}</div>` });
+        cards.push({ id: s.text, label: `<div style="font-size:0.9rem;">${s.short || s.meaning}</div>` });
+      });
+      this.mem = { cards: this._shufArr(cards), flipped: [], matched: [], moves: 0, pairs: pool.length };
+      this._renderMemBoard();
+    },
+    _renderMemBoard(){
+      const m = this.mem;
+      const cells = m.cards.map((c, i) => {
+        const up = m.flipped.includes(i) || m.matched.includes(c.id);
+        const done = m.matched.includes(c.id);
+        const bg = done ? 'var(--accent-50)' : up ? 'white' : 'var(--surface-2,#F3F4F6)';
+        const border = done ? 'var(--accent)' : 'var(--border)';
+        return `<button onclick="App._memFlip(${i})" ${up?'disabled':''} style="min-height:90px;border-radius:var(--radius-lg);border:2px solid ${border};background:${bg};font-weight:700;color:var(--text-main);font-size:var(--font-size-sm);padding:var(--space-2);cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;">${up?c.label:'❓'}</button>`;
+      }).join('');
+      document.getElementById('activity-area').innerHTML=`<div class="anim-fade-in-up"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--space-3);"><span style="font-weight:800;color:var(--text-main);">🧠 Memory Match</span><span style="font-size:var(--font-size-sm);color:var(--text-muted);">Moves: ${m.moves} · ${m.matched.length}/${m.pairs}</span></div><div style="display:grid;grid-template-columns:repeat(2,1fr);gap:var(--space-3);">${cells}</div><button class="btn btn-outline btn-block" style="margin-top:var(--space-4);" onclick="App._backToGames('memory')">← Back to Games</button></div>`;
+    },
+    _memFlip(i){
+      const m = this.mem;
+      if(m.flipped.length >= 2 || m.flipped.includes(i) || m.matched.includes(m.cards[i].id)) return;
+      m.flipped.push(i);
+      this._renderMemBoard();
+      if(m.flipped.length === 2){
+        m.moves++;
+        const a = m.flipped[0], b = m.flipped[1];
+        if(m.cards[a].id === m.cards[b].id){
+          m.matched.push(m.cards[a].id); m.flipped = []; this._addXP(10);
+          setTimeout(() => { if(m.matched.length === m.pairs) this._renderMemDone(); else this._renderMemBoard(); }, 550);
+        } else {
+          setTimeout(() => { m.flipped = []; this._renderMemBoard(); }, 850);
+        }
+      }
+    },
+    _renderMemDone(){
+      this._addXP(20);
+      document.getElementById('activity-area').innerHTML=`<div class="card" style="padding:var(--space-6);text-align:center;"><div style="font-size:3rem;margin-bottom:var(--space-2);">🧠</div><div style="font-size:1.5rem;font-weight:800;color:var(--accent-700);margin-bottom:var(--space-1);">All matched!</div><p style="color:var(--text-muted);margin-bottom:var(--space-5);">You matched every sign in ${this.mem.moves} moves.</p><button class="btn btn-primary btn-block" onclick="App._backToGames('memory')">← Back to Games</button></div>`;
+    },
+
+    _completeSess(){ this.done[this.sess]=true; this._saveProgress(); this._updateTabs(); this._updateHero();
+      const next=UNITS[this.sess+1]; const allDone=this.done.every(Boolean);
+      try{ const raw=localStorage.getItem('emodul_state'); if(raw){ const state=JSON.parse(raw); const u=(state.units||[]).find(u=>u.id===3);
+        if(u){ const doneCount=this.done.filter(Boolean).length; u.progress=Math.max(u.progress||0, Math.round((doneCount/4)*100)); if(allDone) u.status='done'; localStorage.setItem('emodul_state', JSON.stringify(state)); } } }catch(e){}
+      document.getElementById('activity-area').innerHTML=
+        '<div class="card" style="padding:var(--space-6);text-align:center;border:2px solid var(--accent);">'+
+        '<div style="font-size:3.5rem;animation:badgeBounce .6s ease both;margin-bottom:var(--space-3);" aria-hidden="true">\u{1F3C6}</div>'+
+        '<h2 style="font-size:var(--font-size-2xl);font-weight:800;color:var(--accent-700);margin-bottom:var(--space-2);">Session '+(this.sess+1)+' complete!</h2>'+
+        '<div style="display:flex;flex-direction:column;gap:var(--space-3);margin-top:var(--space-5);">'+
+        (next?'<button class="btn btn-accent btn-block" onclick="App.goTo('+(this.sess+1)+')">Next: '+next.title+' \u2192</button>':'')+
+        (allDone?'<button class="btn btn-primary btn-block" onclick="App.goTo(4)">Start Quiz 🎯</button>':'')+
+        '<a href="index.html" class="btn btn-outline btn-block">← Back to Home</a>'+
+        '</div></div>';
+      if(typeof Utils!=='undefined') Utils.showConfetti && Utils.showConfetti();
+    },
+
+    /* CLOSING QUIZ */
+    _renderClosingQuiz(){
+      const allQs=UNITS.flatMap(s=>s.quiz||[]);
+      const pool=this._shufArr([...allQs]).slice(0, 10);
+      this.cq={ qi:0, score:0, qs:pool, quizSess:QuizStore.startSession('read_unit3_close') };
+      this._renderClosingQ();
+    },
+    _renderClosingQ(){
+      const cq=this.cq; if(cq.qi>=cq.qs.length){ this._renderClosingResult(); return; }
+      const q=cq.qs[cq.qi]; const keys=['A','B','C','D']; const pct=Math.round((cq.qi/cq.qs.length)*100);
+      document.getElementById('activity-area').innerHTML=
+        '<span class="act-tag act-quiz" style="margin-bottom:var(--space-3);display:inline-flex;">🎯 Quiz &middot; '+(cq.qi+1)+' / '+cq.qs.length+'</span>'+
+        '<div class="progress-bar-track progress-bar-track--thin" style="margin-bottom:var(--space-4);"><div class="progress-bar-fill" style="width:'+pct+'%;transition:width .4s ease;"></div></div>'+
+        '<div class="card" style="padding:var(--space-5);" id="quiz-question-card">'+
+        '<div style="text-align:center;margin-bottom:var(--space-5);"><p style="font-size:var(--font-size-lg);font-weight:800;color:var(--text-main);">'+q.text+'</p></div>'+
+        '<div style="display:flex;flex-direction:column;gap:var(--space-2);" id="quiz-options">'+
+        q.options.map((opt,i)=>'<button class="quiz-option" id="option-'+i+'" data-index="'+i+'" onclick="App._handleCloseAns('+i+')" aria-label="Option '+keys[i]+': '+opt+'"><span class="quiz-option-key">'+keys[i]+'</span><span class="quiz-option-text">'+opt+'</span></button>').join('')+
+        '</div></div>';
+    },
+    _handleCloseAns(sel){
+      const cq=this.cq; const q=cq.qs[cq.qi]; const ok=sel===q.correct;
+      document.querySelectorAll('#quiz-options .quiz-option').forEach((btn,i)=>{
+        btn.classList.add('quiz-option--disabled');
+        if(i===q.correct) btn.classList.add('quiz-option--correct');
+        else if(i===sel && !ok) btn.classList.add('quiz-option--wrong');
+      });
+      QuizStore.recordAnswer(cq.quizSess, q.id, ok, 0, sel);
+      if(ok){ cq.score++; this._addXP(20); FeedbackEngine.showCorrect(q, sel); }
+      else { 
+        this.wrongAnswers = this.wrongAnswers || [];
+        this.wrongAnswers.push({q, sel});
         FeedbackEngine.showWrong(q, sel); 
       }
     },
-
-    _quizNext(){ this.cs.qi++; this._renderQuizQ(); },
-    _quizRetry(){
-      document.querySelectorAll('#quiz-opts .quiz-option').forEach((btn, i) => {
+    _closingQuizNext(){ this.cq.qi++; this._renderClosingQ(); },
+    _closingQuizRetry(){
+      this.wrongAnswers = [];
+      document.querySelectorAll('#quiz-options .quiz-option').forEach((btn,i)=>{
         btn.classList.remove('quiz-option--disabled','quiz-option--wrong','quiz-option--correct');
-        btn.onclick = () => this._handleQuizAns(i);
+        btn.onclick=()=>this._handleCloseAns(i);
       });
     },
+    _renderClosingResult(){
+      const cq=this.cq; const total=cq.qs.length; const pct=Math.round((cq.score/total)*100); this._addXP(60);
+      const res=QuizStore.finishSession(cq.quizSess, total);
+      try{ const raw=localStorage.getItem('emodul_state'); if(raw){ const state=JSON.parse(raw); const u=(state.units||[]).find(u=>u.id===3); if(u){ u.progress=Math.max(u.progress||0, pct); if(pct>=60) u.status='done'; localStorage.setItem('emodul_state', JSON.stringify(state)); } } }catch(e){}
+      const allDone=this.done.every(Boolean);
 
-    _renderQuizResult(){
-      const cs = this.cs;
-      const res = QuizStore.finishSession(cs.quizSess, cs.qs.length);
-      const pct = res.score;
-      this._addXP(30);
-
-      document.getElementById('activity-area').innerHTML=`
-        <div class="card" style="padding:var(--space-6);text-align:center;">
-          <div class="score-ring" style="background:conic-gradient(var(--accent) ${pct*3.6}deg, var(--surface-2) ${pct*3.6}deg);">
-            <div class="score-ring-inner">
-              <span style="font-size:1.65rem;font-weight:800;color:var(--accent-700);">${pct}%</span>
+      let wrongAnsHtml = '';
+      if(this.wrongAnswers && this.wrongAnswers.length > 0) {
+        wrongAnsHtml = `
+          <div style="background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--danger);
+            border-radius:var(--radius-lg);padding:var(--space-4);margin-bottom:var(--space-4);text-align:left;">
+            <p style="font-size:var(--font-size-xs);font-weight:800;color:var(--text-faint);
+              text-transform:uppercase;letter-spacing:.06em;margin-bottom:var(--space-3);">
+              📝 Review My Mistakes (${this.wrongAnswers.length})</p>
+            <div style="display:flex;flex-direction:column;gap:var(--space-3);">
+              ${this.wrongAnswers.map((item, idx) => {
+                const keys = ['A','B','C','D'];
+                return `
+                  <div style="border-bottom:1px solid var(--border);padding-bottom:var(--space-2);">
+                    <p style="font-size:var(--font-size-sm);font-weight:700;color:var(--text-main);margin-bottom:4px;">Q${idx+1}: ${item.q.text}</p>
+                    <div style="font-size:12px;display:flex;flex-direction:column;gap:2px;">
+                      <span style="color:var(--danger);"><strong style="background:var(--danger-100);padding:0 4px;border-radius:4px;">Your Answer:</strong> ${item.q.options[item.sel]}</span>
+                      <span style="color:var(--accent);"><strong style="background:var(--accent-100);padding:0 4px;border-radius:4px;">Correct:</strong> ${item.q.options[item.q.correct]}</span>
+                      <span style="color:var(--text-body);margin-top:2px;">💡 ${item.q.whyCorrect || 'No explanation'}</span>
+                    </div>
+                  </div>
+                `;
+              }).join('')}
             </div>
-          </div>
-
-          <h2 style="font-size:var(--font-size-xl);font-weight:800;margin-bottom:var(--space-2);">
-            Pemahaman Selesai! 🎉</h2>
-          <p style="color:var(--text-muted);margin-bottom:var(--space-4);">
-            Anda membaca dan mengerti teks dengan baik.</p>
-
-          <button class="btn btn-accent btn-block" onclick="App.nextPhase()">
-            Selesaikan Sesi Ini 🏆
-          </button>
-        </div>`;
-    },
-
-    /* ═══════════════════════════════════════════════════════
-       SESSION COMPLETE
-       ═══════════════════════════════════════════════════════ */
-    _completeSess(){
-      this.done[this.sess] = true;
-      this._saveProgress();
-      this._updateTabs();
-      this._updateHero();
-
-      const next = READING_DATA[this.sess+1];
-      const allDone = this.done.every(Boolean);
-
-      // Sync ke index
-      try {
-        const raw = localStorage.getItem('emodul_state');
-        if(raw){
-          const state = JSON.parse(raw);
-          const u = (state.units||[]).find(u=>u.id===3);
-          if(u){
-            const doneCount = this.done.filter(Boolean).length;
-            u.progress = Math.max(u.progress||0, Math.round((doneCount/4)*100));
-            if(allDone) u.status = 'done';
-            localStorage.setItem('emodul_state', JSON.stringify(state));
-          }
-        }
-      } catch{}
-
-      document.getElementById('activity-area').innerHTML=`
-        <div class="card" style="padding:var(--space-6);text-align:center;border:2px solid var(--accent);">
-          <div style="font-size:3.5rem;animation:badgeBounce .6s ease both;margin-bottom:var(--space-3);" aria-hidden="true">🏆</div>
-          <h2 style="font-size:var(--font-size-2xl);font-weight:800;color:var(--accent-700);margin-bottom:var(--space-2);">
-            Sesi ${this.sess+1} Selesai!</h2>
-          
-          <div style="display:flex;flex-direction:column;gap:var(--space-3);margin-top:var(--space-5);">
-            ${next ? `<button class="btn btn-accent btn-block" onclick="App.goTo(${this.sess+1})">Lanjut Sesi ${this.sess+2}: ${next.title} →</button>` : ''}
-            ${allDone ? `<a href="index.html" class="btn btn-primary btn-block">Semua Unit Selesai! Kembali ke Beranda 🏠</a>` : ''}
-          </div>
-        </div>`;
-
-      if(typeof Utils !== 'undefined') Utils.showConfetti?.();
-    },
-
-    /* ═══════════════════════════════════════════════════════
-       UTILS (XP)
-       ═══════════════════════════════════════════════════════ */
-    _addXP(n){
-      this.xp += n;
-      try{ localStorage.setItem('emodul_read_xp', this.xp); }catch{}
-      const el = document.getElementById('nav-xp');
-      if(el){
-        el.textContent = `${this.xp} XP`;
-        el.style.animation = 'none';
-        el.offsetHeight;
-        el.style.animation = 'heartbeat .4s ease both';
+          </div>`;
       }
+
+      document.getElementById('activity-area').innerHTML=
+        '<div class="card" style="padding:var(--space-6);text-align:center;overflow:hidden;">'+
+        '<div class="score-ring" style="background:conic-gradient(var(--accent) '+(pct*3.6)+'deg, var(--surface-2) '+(pct*3.6)+'deg);"><div class="score-ring-inner"><span style="font-size:1.65rem;font-weight:800;color:var(--accent-700);">'+pct+'%</span><span style="font-size:9px;color:var(--text-faint);font-weight:700;">SCORE</span></div></div>'+
+        '<h2 style="font-size:var(--font-size-2xl);font-weight:800;margin-bottom:var(--space-2);">'+(pct>=80?'🏆 Outstanding!':pct>=60?'💪 Good job!':'🔄 Keep Practicing!')+'</h2>'+
+        '<p style="color:var(--text-muted);margin-bottom:var(--space-4);">Correct: <strong>'+cq.score+' of '+total+' questions</strong></p>'+
+        (res.isNewBest?'<div style="background:var(--warm-50);border:1px solid var(--warm-200);border-radius:var(--radius-lg);padding:var(--space-3);margin-bottom:var(--space-4);"><p style="font-size:var(--font-size-sm);font-weight:700;color:var(--warm-700);">🎉 New record! Best score: '+pct+'%</p></div>':'')+
+        wrongAnsHtml +
+        '<div style="background:var(--warm-50);border:1px solid var(--warm-200);border-radius:var(--radius-lg);padding:var(--space-3);margin-bottom:var(--space-5);display:flex;align-items:center;justify-content:center;gap:var(--space-2);"><span style="font-size:1.2rem;" aria-hidden="true">⭐</span><span style="font-size:var(--font-size-base);font-weight:800;color:var(--warm-700);">'+this.xp+' XP earned this session!</span></div>'+
+        '<div style="display:flex;flex-direction:column;gap:var(--space-3);">'+
+        '<button class="btn btn-primary btn-block" onclick="App._renderClosingQuiz()">↺ Retry Quiz</button>'+
+        (allDone?'<a href="final-test.html" class="btn btn-accent btn-block">Continue to Final Test 🏆</a>':'')+
+        '<a href="index.html" class="btn btn-outline btn-block">← Back to Home</a>'+
+        '</div></div>';
+      if(pct>=80 && typeof Utils!=='undefined') Utils.showConfetti?.();
     },
-    _loadXP(){
-      try{ this.xp = parseInt(localStorage.getItem('emodul_read_xp')||'0',10)||0; }catch{}
-    },
-    _saveProgress(){
-      try{ localStorage.setItem('emodul_read_prog', JSON.stringify(this.done)); }catch{}
-    },
-    _loadProgress(){
-      try{ 
-        const d = JSON.parse(localStorage.getItem('emodul_read_prog'));
-        if(d && d.length===4) { this.done = d; return; }
-      }catch{}
-      this.done = [false,false,false,false];
-    }
+
+    _addXP(n){ this.xp+=n; try{ localStorage.setItem('emodul_read_xp', this.xp); }catch(e){}
+      const el=document.getElementById('nav-xp'); if(el){ el.textContent=this.xp+' XP'; el.style.animation='none'; el.offsetHeight; el.style.animation='heartbeat .4s ease both'; } },
+    _loadXP(){ try{ this.xp=parseInt(localStorage.getItem('emodul_read_xp')||'0',10)||0; }catch(e){} },
+    _saveProgress(){ try{ localStorage.setItem('emodul_read_prog', JSON.stringify(this.done)); }catch(e){} },
+    _loadProgress(){ try{ const d=JSON.parse(localStorage.getItem('emodul_read_prog')); if(d && d.length===4){ this.done=d; return; } }catch(e){} this.done=[false,false,false,false]; }
   };
 
-  if(document.readyState==='loading'){
+    if(document.readyState==='loading'){
     document.addEventListener('DOMContentLoaded', ()=>App.init());
   } else {
     App.init();

@@ -1,9 +1,14 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
+<script>/*MANTUL_THEME_BOOT*/
+(function(){try{var t=localStorage.getItem('mantul_theme');if(!t){t=(window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches)?'dark':'light';}document.documentElement.setAttribute('data-theme',t);}catch(e){}})();
+window.toggleTheme=function(){try{var cur=document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',cur);localStorage.setItem('mantul_theme',cur);var ic=document.getElementById('theme-icon');if(ic)ic.textContent=cur==='dark'?'☀️':'🌙';var fic=document.getElementById('mantul-float-icon');if(fic)fic.textContent=cur==='dark'?'☀️':'🌙';}catch(e){}};
+document.addEventListener('DOMContentLoaded',function(){try{var cur=document.documentElement.getAttribute('data-theme');var ic=document.getElementById('theme-icon');if(ic){ic.textContent=cur==='dark'?'☀️':'🌙';return;}var b=document.createElement('button');b.type='button';b.title='Toggle Light/Dark Mode';b.setAttribute('aria-label','Toggle light and dark mode');b.onclick=window.toggleTheme;b.style.cssText='position:fixed;top:14px;right:14px;z-index:99999;width:40px;height:40px;border-radius:9999px;border:none;background:rgba(120,120,120,.18);color:inherit;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.18);';var s=document.createElement('span');s.id='mantul-float-icon';s.textContent=cur==='dark'?'☀️':'🌙';b.appendChild(s);document.body.appendChild(b);}catch(e){}});
+</script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Preview Sertifikat MANTUL</title>
+  <title>MANTUL Certificate Preview</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Poppins:wght@300;400;500;600;700&display=swap');
 

@@ -1,10 +1,15 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
+<script>/*MANTUL_THEME_BOOT*/
+(function(){try{var t=localStorage.getItem('mantul_theme');if(!t){t=(window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches)?'dark':'light';}document.documentElement.setAttribute('data-theme',t);}catch(e){}})();
+window.toggleTheme=function(){try{var cur=document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',cur);localStorage.setItem('mantul_theme',cur);var ic=document.getElementById('theme-icon');if(ic)ic.textContent=cur==='dark'?'☀️':'🌙';var fic=document.getElementById('mantul-float-icon');if(fic)fic.textContent=cur==='dark'?'☀️':'🌙';}catch(e){}};
+document.addEventListener('DOMContentLoaded',function(){try{var cur=document.documentElement.getAttribute('data-theme');var ic=document.getElementById('theme-icon');if(ic){ic.textContent=cur==='dark'?'☀️':'🌙';return;}var b=document.createElement('button');b.type='button';b.title='Toggle Light/Dark Mode';b.setAttribute('aria-label','Toggle light and dark mode');b.onclick=window.toggleTheme;b.style.cssText='position:fixed;top:14px;right:14px;z-index:99999;width:40px;height:40px;border-radius:9999px;border:none;background:rgba(120,120,120,.18);color:inherit;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.18);';var s=document.createElement('span');s.id='mantul-float-icon';s.textContent=cur==='dark'?'☀️':'🌙';b.appendChild(s);document.body.appendChild(b);}catch(e){}});
+</script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="MANTUL (Mandiri Tunas English Learning) — MANTUL interaktif untuk Paket C: pelajari Vocabulary, Speaking, dan Reading secara terstruktur, fleksibel, dan menyenangkan." />
-  <title>MANTUL | Beranda</title>
+  <meta name="description" content="MANTUL (Mandiri Tunas English Learning) — an interactive app for Package C learners: study Vocabulary, Speaking, and Reading in a structured, flexible, and enjoyable way." />
+  <title>MANTUL | Home</title>
 
   <link rel="stylesheet" href="design-system.css" />
   <link rel="stylesheet" href="components.css" />
@@ -495,6 +500,12 @@
 
     .unlock-modal-btns {
       display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+    }
+
+    .unlock-modal-btns-row {
+      display: flex;
       gap: var(--space-3);
     }
 
@@ -528,6 +539,56 @@
       transform: translateY(-1px);
       box-shadow: 0 6px 16px rgba(245,158,11,0.4);
     }
+
+    /* Demo Mode button */
+    .btn-unlock-demo {
+      width: 100%;
+      padding: var(--space-3) var(--space-4);
+      border-radius: var(--radius-lg);
+      border: 2px dashed rgba(124,58,237,0.4);
+      background: linear-gradient(135deg, rgba(109,40,217,0.08), rgba(139,92,246,0.12));
+      color: #7C3AED;
+      font-size: var(--font-size-xs);
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      letter-spacing: 0.03em;
+    }
+
+    .btn-unlock-demo:hover {
+      background: linear-gradient(135deg, rgba(109,40,217,0.15), rgba(139,92,246,0.2));
+      border-color: rgba(124,58,237,0.7);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(124,58,237,0.2);
+    }
+
+    .demo-mode-divider {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      margin: var(--space-1) 0;
+    }
+
+    .demo-mode-divider::before,
+    .demo-mode-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .demo-mode-divider span {
+      font-size: 10px;
+      color: var(--text-faint);
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
   </style>
 </head>
 <body>
@@ -548,15 +609,15 @@
       
       <!-- Right side: Form -->
       <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 10%; background: var(--surface);" class="onboarding-right">
-        <h1 style="font-size: 2.5rem; color: var(--text-main); font-weight: 800; margin-bottom: var(--space-2); line-height: 1.2;">Mari Mulai Belajar! 🚀</h1>
-        <p style="font-size: var(--font-size-base); color: var(--text-muted); margin-bottom: var(--space-5); line-height: 1.5;">Masukkan nama lengkapmu. Nama ini akan digunakan untuk mencetak <strong>sertifikat MANTUL</strong> di akhir pembelajaran.</p>
+        <h1 style="font-size: 2.5rem; color: var(--text-main); font-weight: 800; margin-bottom: var(--space-2); line-height: 1.2;">Let’s Start Learning! 🚀</h1>
+        <p style="font-size: var(--font-size-base); color: var(--text-muted); margin-bottom: var(--space-5); line-height: 1.5;">Enter your full name. This name will be used to print your <strong>MANTUL certificate</strong> at the end of the course.</p>
         
         <form id="onboarding-form" onsubmit="saveStudentName(event)">
           <div style="margin-bottom: var(--space-4);">
-            <label for="student-name-input" style="display: block; font-size: var(--font-size-sm); font-weight: 700; color: var(--text-body); margin-bottom: var(--space-2);">Nama Lengkap</label>
-            <input type="text" id="student-name-input" required placeholder="Contoh: Budi Santoso" style="width: 100%; padding: var(--space-3) var(--space-4); border: 2px solid var(--border-2); border-radius: var(--radius-lg); font-size: var(--font-size-base); color: var(--text-main); background: var(--surface); outline: none; transition: border-color var(--transition-base);" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border-2)'" />
+            <label for="student-name-input" style="display: block; font-size: var(--font-size-sm); font-weight: 700; color: var(--text-body); margin-bottom: var(--space-2);">Full Name</label>
+            <input type="text" id="student-name-input" required placeholder="Example: Budi Santoso" style="width: 100%; padding: var(--space-3) var(--space-4); border: 2px solid var(--border-2); border-radius: var(--radius-lg); font-size: var(--font-size-base); color: var(--text-main); background: var(--surface); outline: none; transition: border-color var(--transition-base);" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border-2)'" />
           </div>
-          <button type="submit" class="btn btn-block" style="background: var(--accent); color: white; border-radius: var(--radius-lg); padding: var(--space-3) var(--space-4); font-size: var(--font-size-lg); font-weight: 700; border: none; cursor: pointer;">Lanjutkan ➔</button>
+          <button type="submit" class="btn btn-block" style="background: var(--accent); color: white; border-radius: var(--radius-lg); padding: var(--space-3) var(--space-4); font-size: var(--font-size-lg); font-weight: 700; border: none; cursor: pointer;">Continue ➔</button>
         </form>
       </div>
     </div>
@@ -617,7 +678,7 @@
 
       <!-- Brand & Quick Tools -->
       <div style="display: flex; align-items: center; gap: var(--space-4);">
-        <a href="index.html" class="navbar-brand" aria-label="MANTUL – Beranda">
+        <a href="index.html" class="navbar-brand" aria-label="MANTUL – Home">
           <div class="brand-icon" aria-hidden="true">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
               stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -631,18 +692,17 @@
         <!-- Quick Tools -->
         <div style="display: flex; gap: var(--space-2); align-items: center;">
           <!-- Theme Toggle -->
-          <button onclick="toggleTheme()" class="btn" style="background: var(--surface-2); border-radius: var(--radius-full); width: 32px; height: 32px; padding: 0; display: flex; align-items: center; justify-content: center; color: var(--text-main); font-size: 14px; transition: transform 0.2s ease;" title="Ganti Mode (Siang/Malam)" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+          <button onclick="toggleTheme()" class="btn" style="background: var(--surface-2); border-radius: var(--radius-full); width: 32px; height: 32px; padding: 0; display: flex; align-items: center; justify-content: center; color: var(--text-main); font-size: 14px; transition: transform 0.2s ease;" title="Toggle Light/Dark Mode" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
             <span id="theme-icon">🌙</span>
           </button>
           <!-- Unlock All -->
-          <button onclick="unlockAllSteps()" class="btn" style="background: var(--surface-2); border-radius: var(--radius-full); height: 32px; padding: 0 10px; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; color: var(--text-main); transition: transform 0.2s ease, color 0.2s ease;" title="Unlock Semua Step" onmouseover="this.style.transform='scale(1.05)'; this.style.color='var(--accent)'" onmouseout="this.style.transform='scale(1)'; this.style.color='var(--text-main)'">
+          <button onclick="unlockAllSteps()" class="btn" style="background: var(--surface-2); border-radius: var(--radius-full); height: 32px; padding: 0 10px; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; color: var(--text-main); transition: transform 0.2s ease, color 0.2s ease;" title="Unlock All Steps" onmouseover="this.style.transform='scale(1.05)'; this.style.color='var(--accent)'" onmouseout="this.style.transform='scale(1)'; this.style.color='var(--text-main)'">
             🔓 Unlock
-          </button>
-        </div>
+          </button>        </div>
       </div>
 
       <!-- Progress global -->
-      <div class="navbar-progress" aria-label="Progress keseluruhan">
+      <div class="navbar-progress" aria-label="Overall progress">
         <div class="navbar-progress-label">
           <span id="nav-progress-text"
             style="font-size:0.7rem;color:var(--text-muted);font-weight:600;">0%</span>
@@ -672,7 +732,7 @@
            ══════════════════════════════════════════════════════ -->
       <section class="hero-gradient hero-section"
         style="border-radius:var(--radius-2xl);margin-bottom:var(--space-5);"
-        aria-label="Selamat datang">
+        aria-label="Welcome">
 
         <div class="hero-blob hero-blob--1" aria-hidden="true"></div>
         <div class="hero-blob hero-blob--2" aria-hidden="true"></div>
@@ -681,17 +741,18 @@
           <div class="hero-content">
             <!-- Sapaan dinamis -->
             <p class="greeting-line" id="hero-greeting" style="margin-bottom:var(--space-1);">
-              Selamat pagi
+              Good morning
             </p>
 
             <h1 class="hero-title" style="margin-bottom:var(--space-2); display: flex; align-items: center; flex-wrap: wrap; gap: 8px;">
-            Halo, <span id="hero-username">Pelajar</span>! 👋
-            <button onclick="resetName()" style="background: rgba(255,255,255,0.2); border: none; border-radius: var(--radius-full); width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background 0.2s;" title="Ganti Nama" onmouseover="this.style.background='rgba(255,255,255,0.4)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">✏️</button>
+            Hello, <span id="hero-username">Learner</span>! 👋
+            <button onclick="resetName()" style="background: rgba(255,255,255,0.2); border: none; border-radius: var(--radius-full); width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background 0.2s;" title="Change name" onmouseover="this.style.background='rgba(255,255,255,0.4)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">✏️</button>
             <br>
-            <span style="font-size:var(--font-size-2xl); width: 100%;">Siap belajar Bahasa Inggris hari ini?</span>
+            <span style="font-size:var(--font-size-2xl); width: 100%;">Ready to learn English today?<br><span style="font-size:var(--font-size-lg);color:var(--text-muted);">(Siap belajar bahasa Inggris hari ini?)</span></span>
           </h1>
             <p style="font-size:var(--font-size-lg); color:rgba(255,255,255,.9); font-weight:600; margin-bottom:var(--space-4); font-style:italic;">
-              "Learn anytime and anywhere"
+              "Learn anytime and anywhere"<br>
+              <span style="font-size:var(--font-size-sm);font-weight:400;">(Belajar kapan saja dan di mana saja)</span>
             </p>
 
             <!-- Tip motivasi berganti -->
@@ -712,7 +773,7 @@
             <!-- Progress keseluruhan -->
             <div class="hero-overall-progress">
               <div class="progress-bar-label">
-                <span class="progress-bar-label-text">Progress keseluruhan</span>
+                <span class="progress-bar-label-text">Overall progress (Perkembangan keseluruhan)</span>
                 <span class="progress-bar-label-value" id="hero-progress-text">0%</span>
               </div>
               <div class="progress-bar-track" style="height:10px;">
@@ -720,7 +781,7 @@
               </div>
               <div style="display:flex;justify-content:space-between;margin-top:var(--space-2);">
                 <span style="font-size:var(--font-size-xs);color:rgba(255,255,255,.82);"
-                  id="hero-units-done">0 dari 3 unit selesai</span>
+                  id="hero-units-done">0 of 3 units done (selesai)</span>
                 <span style="font-size:var(--font-size-xs);color:rgba(255,255,255,.82);"
                   id="hero-xp">0 XP</span>
               </div>
@@ -746,7 +807,7 @@
             stroke-width="2.5" aria-hidden="true">
             <polygon points="5 3 19 12 5 21 5 3"/>
           </svg>
-          <span id="resume-label">Lanjutkan: Unit 1 — Vocabulary</span>
+          <span id="resume-label">Continue: Unit 1 — Things Around Me</span>
           <svg class="btn-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none"
             stroke="currentColor" stroke-width="2.5" aria-hidden="true">
             <polyline points="9 18 15 12 9 6"/>
@@ -761,7 +822,7 @@
 
         <div class="section-header" style="margin-bottom:var(--space-4);">
           <div>
-            <h2 class="section-title" id="flow-heading">Alur Pembelajaran</h2>
+            <h2 class="section-title" id="flow-heading">Learning Path</h2>
             <p class="section-subtitle" id="flow-subtitle">3 unit utama + 1 tes akhir</p>
           </div>
           <div class="chip chip--primary" id="units-done-chip">
@@ -769,9 +830,30 @@
               stroke="currentColor" stroke-width="3" aria-hidden="true">
               <polyline points="20 6 9 17 4 12"/>
             </svg>
-            0 selesai
+            0 done
           </div>
         </div>
+
+        <!-- Onboarding Tip -->
+        <div id="onboarding-tip" style="background:var(--primary-50);border:1px solid var(--primary-200);border-radius:var(--radius-lg);padding:var(--space-4);margin-bottom:var(--space-4);text-align:left;display:none;">
+          <p style="font-size:var(--font-size-sm);color:var(--primary-700);margin:0;line-height:1.5;">
+            👋 <strong>Welcome to MANTUL! (Selamat datang di MANTUL!)</strong><br>
+            Complete the units in order to unlock the final test. <em>(Selesaikan unit secara berurutan untuk membuka ujian akhir.)</em><br>
+            Start by learning vocabulary, followed by speaking and reading exercises! <em>(Mulailah dari belajar kosakata, lalu berlatih berbicara dan membaca!)</em>
+          </p>
+        </div>
+
+        <script>
+          document.addEventListener('DOMContentLoaded', () => {
+            try {
+              const state = JSON.parse(localStorage.getItem('emodul_state'));
+              const noProgress = !state || !state.units || state.units.every(u => !u.progress);
+              if (noProgress) {
+                document.getElementById('onboarding-tip').style.display = 'block';
+              }
+            } catch(e){}
+          });
+        </script>
 
         <!-- ─── UNIT 1: VOCABULARY ─── -->
         <article class="card-stagger" style="margin-bottom:0;">
@@ -802,23 +884,15 @@
 
               <!-- Teks -->
               <div style="flex:1;min-width:0;">
-                <p style="font-size:var(--font-size-xs);font-weight:700;color:var(--primary);
-                  text-transform:uppercase;letter-spacing:.07em;margin-bottom:2px;">Unit 1</p>
                 <h3 style="font-size:var(--font-size-lg);font-weight:700;color:var(--text-main);
-                  margin-bottom:var(--space-2);line-height:1.25;">Vocabulary</h3>
+                  margin-bottom:var(--space-2);line-height:1.25;">Things Around Me</h3>
                 <p style="font-size:var(--font-size-sm);color:var(--text-muted);
                   line-height:1.55;margin-bottom:var(--space-3);">
-                  Perkaya kosakata Bahasa Inggris dalam konteks sehari-hari dan profesional.
+                  Enrich your English vocabulary in everyday and professional contexts.<br>
+                  <em>(Perkaya kosakata bahasa Inggris Anda di lingkungan sehari-hari.)</em>
                 </p>
                 <div class="unit-meta-row">
-                  <span class="meta-chip">
-                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none"
-                      stroke="currentColor" stroke-width="2" aria-hidden="true">
-                      <circle cx="12" cy="12" r="10"/>
-                      <polyline points="12 6 12 12 16 14"/>
-                    </svg>
-                    45 mnt
-                  </span>
+                  <div style="display:flex;gap:var(--space-2);flex-wrap:wrap;">
                   <span class="meta-chip">
                     <svg width="10" height="10" viewBox="0 0 24 24" fill="none"
                       stroke="currentColor" stroke-width="2" aria-hidden="true">
@@ -832,8 +906,9 @@
                       stroke="currentColor" stroke-width="2" aria-hidden="true">
                       <circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="8"/>
                     </svg>
-                    20 soal kuis
+                    10 quiz questions
                   </span>
+                </div>
                 </div>
               </div>
             </div>
@@ -869,14 +944,14 @@
             id="card-unit-2"
             style="--stripe-color:var(--border-2);"
             data-unit="2"
-            aria-label="Unit 2 Speaking – Terkunci"
+            aria-label="Unit 2 Speaking – Locked"
             aria-disabled="true"
             role="article">
 
             <div class="step-badge step-badge--locked" id="step-badge-2" aria-hidden="true">2</div>
 
             <!-- Lock Ornament (Gembok) Unit 2 -->
-            <div class="lock-ornament" id="lock-ornament-2" onclick="event.preventDefault(); event.stopPropagation(); showUnlockModal(2)" title="Klik untuk unlock Unit 2">
+            <div class="lock-ornament" id="lock-ornament-2" style="display:none" onclick="event.preventDefault(); event.stopPropagation(); showUnlockModal(2)" title="Klik untuk unlock Unit 2">
               <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
             </div>
 
@@ -894,46 +969,40 @@
               </div>
 
               <div style="flex:1;min-width:0;">
-                <p style="font-size:var(--font-size-xs);font-weight:700;color:var(--primary);
-                  text-transform:uppercase;letter-spacing:.07em;margin-bottom:2px;">Unit 2</p>
                 <h3 style="font-size:var(--font-size-lg);font-weight:700;color:var(--text-main);
-                  margin-bottom:var(--space-2);line-height:1.25;">Speaking</h3>
+                  margin-bottom:var(--space-2);line-height:1.25;">Speak Up!</h3>
                 <p style="font-size:var(--font-size-sm);color:var(--text-muted);
                   line-height:1.55;margin-bottom:var(--space-3);">
-                  Latih kemampuan berbicara, pelafalan, dan percakapan dalam berbagai situasi nyata.
+                  Practice speaking, pronunciation, and conversation in various real situations.<br>
+                  <em>(Berlatih berbicara, pelafalan, dan percakapan di berbagai situasi nyata.)</em>
                 </p>
                 <div class="unit-meta-row">
-                  <span class="meta-chip">
-                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none"
-                      stroke="currentColor" stroke-width="2" aria-hidden="true">
-                      <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
-                    </svg>
-                    50 mnt
-                  </span>
+                  <div style="display:flex;gap:var(--space-2);flex-wrap:wrap;">
                   <span class="meta-chip">
                     <svg width="10" height="10" viewBox="0 0 24 24" fill="none"
                       stroke="currentColor" stroke-width="2" aria-hidden="true">
                       <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
                       <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
                     </svg>
-                    5 topik
+                    4 topics
                   </span>
                   <span class="meta-chip">
                     <svg width="10" height="10" viewBox="0 0 24 24" fill="none"
                       stroke="currentColor" stroke-width="2" aria-hidden="true">
                       <circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="8"/>
                     </svg>
-                    15 soal kuis
+                    10 quiz questions
                   </span>
+                </div>
                 </div>
               </div>
             </div>
 
             <div class="card-progress-strip">
               <div class="progress-bar-label" style="margin-bottom:var(--space-1);">
-                <span class="progress-bar-label-text" id="label-unit-2" style="color:var(--text-faint);">Terkunci</span>
+                <span class="progress-bar-label-text" id="label-unit-2" style="color:var(--text-faint);">Locked (Terkunci)</span>
                 <div style="display:flex;align-items:center;gap:var(--space-2);">
-                  <span id="lockmsg-unit-2" style="font-size:var(--font-size-xs);color:var(--text-faint);">Selesaikan Unit 1 dulu</span>
+                  <span id="lockmsg-unit-2" style="font-size:var(--font-size-xs);color:var(--text-faint);">Finish Unit 1 first (Selesaikan Unit 1 dulu)</span>
                   <span class="progress-bar-label-value" style="color:var(--primary);display:none;" id="pct-unit-2">0%</span>
                 </div>
               </div>
@@ -954,7 +1023,7 @@
             id="card-unit-3"
             style="--stripe-color:var(--border-2);"
             data-unit="3"
-            aria-label="Unit 3 Reading – Terkunci"
+            aria-label="Unit 3 Reading – Locked"
             aria-disabled="true"
             tabindex="0"
             role="article">
@@ -962,7 +1031,7 @@
             <div class="step-badge step-badge--locked" id="step-badge-3" aria-hidden="true">3</div>
 
             <!-- Lock Ornament (Gembok) Unit 3 -->
-            <div class="lock-ornament" id="lock-ornament-3" onclick="event.preventDefault(); event.stopPropagation(); showUnlockModal(3)" title="Klik untuk unlock Unit 3">
+            <div class="lock-ornament" id="lock-ornament-3" style="display:none" onclick="event.preventDefault(); event.stopPropagation(); showUnlockModal(3)" title="Klik untuk unlock Unit 3">
               <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
             </div>
 
@@ -982,35 +1051,45 @@
               </div>
 
               <div style="flex:1;min-width:0;">
-                <p style="font-size:var(--font-size-xs);font-weight:700;color:var(--text-faint);
-                  text-transform:uppercase;letter-spacing:.07em;margin-bottom:2px;">Unit 3</p>
                 <h3 style="font-size:var(--font-size-lg);font-weight:700;color:var(--text-muted);
-                  margin-bottom:var(--space-2);line-height:1.25;">Reading</h3>
+                  margin-bottom:var(--space-2);line-height:1.25;">Read the Signs</h3>
                 <p style="font-size:var(--font-size-sm);color:var(--text-faint);
                   line-height:1.55;margin-bottom:var(--space-3);">
-                  Tingkatkan pemahaman bacaan teks autentik, artikel, dan dokumen profesional.
+                  Improve your ability to read authentic public signs, labels, and notices in English.<br>
+                  <em>(Tingkatkan kemampuan Anda membaca rambu, label, dan pengumuman umum dalam bahasa Inggris.)</em>
                 </p>
                 <div class="unit-meta-row">
-                  <span class="meta-chip">
-                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none"
-                      stroke="currentColor" stroke-width="2" aria-hidden="true">
-                      <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
-                    </svg>
-                    40 mnt
-                  </span>
-                  <span class="meta-chip">7 topik</span>
-                  <span class="meta-chip">18 soal kuis</span>
+                  <div style="display:flex;gap:var(--space-2);flex-wrap:wrap;">
+                    <span class="meta-chip">
+                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                      </svg>
+                      4 topics
+                    </span>
+                    <span class="meta-chip">
+                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="8"/>
+                      </svg>
+                      10 quiz questions
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
 
             <div class="card-progress-strip">
               <div class="progress-bar-label" style="margin-bottom:var(--space-1);">
-                <span class="progress-bar-label-text" style="color:var(--text-faint);">Terkunci</span>
-                <span style="font-size:var(--font-size-xs);color:var(--text-faint);">Selesaikan Unit 2 dulu</span>
+                <span class="progress-bar-label-text" id="label-unit-3" style="color:var(--text-faint);">Locked (Terkunci)</span>
+                <div style="display:flex;align-items:center;gap:var(--space-2);">
+                  <span id="lockmsg-unit-3" style="font-size:var(--font-size-xs);color:var(--text-faint);">Finish Unit 2 first (Selesaikan Unit 2 dulu)</span>
+                  <span class="progress-bar-label-value" style="color:var(--primary);display:none;" id="pct-unit-3">0%</span>
+                </div>
               </div>
               <div class="progress-bar-track progress-bar-track--thin">
-                <div style="width:0%;height:100%;background:var(--border-2);border-radius:var(--radius-full);"></div>
+                <div class="progress-bar-fill progress-bar-fill--primary" id="bar-unit-3" style="width:0%"></div>
               </div>
             </div>
           </div>
@@ -1028,7 +1107,7 @@
         <a href="final-test.html"
           class="final-card is-locked anim-fade-in-up delay-400"
           id="card-final"
-          aria-label="Final Test – Selesaikan semua unit terlebih dahulu">
+          aria-label="Final Test – Finish all units first">
 
           <div style="position:relative;z-index:1;display:flex;align-items:flex-start;gap:var(--space-4);">
 
@@ -1052,35 +1131,26 @@
             <div style="flex:1;">
               <p style="font-size:var(--font-size-xs);color:rgba(255,255,255,.82);
                 font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px;">
-                Ujian Akhir
+                Final Test
               </p>
               <h3 style="font-size:var(--font-size-xl);font-weight:700;color:white;
-                margin-bottom:var(--space-2);line-height:1.2;">Final Test</h3>
+                margin-bottom:var(--space-2);line-height:1.2;">FINAL TEST <span style="font-size:var(--font-size-lg);font-weight:400;">(Ujian Akhir)</span></h3>
               <p style="font-size:var(--font-size-sm);color:rgba(255,255,255,.75);
                 line-height:1.55;margin-bottom:var(--space-3);">
-                Uji seluruh kemampuan Anda setelah menyelesaikan semua unit pembelajaran.
+                Test all your skills after finishing every learning unit.<br>
+                <em>(Uji semua kemampuan Anda setelah menyelesaikan setiap unit pembelajaran.)</em>
               </p>
 
               <div style="display:flex;align-items:center;gap:var(--space-3);flex-wrap:wrap;">
                 <span style="
                   background:rgba(255,255,255,.15);border-radius:var(--radius-full);
-                  padding:3px 12px;font-size:var(--font-size-xs);color:rgba(255,255,255,.9);
-                  display:flex;align-items:center;gap:6px;">
-                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" aria-hidden="true">
-                    <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
-                  </svg>
-                  90 mnt
+                  padding:3px 12px;font-size:var(--font-size-xs);color:rgba(255,255,255,.9);">
+                  50 questions
                 </span>
                 <span style="
                   background:rgba(255,255,255,.15);border-radius:var(--radius-full);
                   padding:3px 12px;font-size:var(--font-size-xs);color:rgba(255,255,255,.9);">
-                  50 soal
-                </span>
-                <span style="
-                  background:rgba(255,255,255,.15);border-radius:var(--radius-full);
-                  padding:3px 12px;font-size:var(--font-size-xs);color:rgba(255,255,255,.9);">
-                  Sertifikat 🎓
+                  Certificate 🎓
                 </span>
               </div>
             </div>
@@ -1088,7 +1158,7 @@
 
           <!-- Status terkunci -->
           <!-- Lock Ornament (Gembok) Final Test -->
-          <div class="lock-ornament" id="lock-ornament-final" onclick="event.preventDefault(); event.stopPropagation(); showUnlockModal('final')" title="Klik untuk unlock Final Test" style="top:50%;right:var(--space-5);">
+          <div class="lock-ornament" id="lock-ornament-final" style="display:none" onclick="event.preventDefault(); event.stopPropagation(); showUnlockModal('final')" title="Klik untuk unlock Final Test" style="top:50%;right:var(--space-5);">
             <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
           </div>
 
@@ -1105,7 +1175,7 @@
               <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
             </svg>
             <span style="font-size:var(--font-size-xs);color:rgba(255,255,255,.7);">
-              Selesaikan semua unit terlebih dahulu untuk membuka Final Test
+              Finish all units to unlock the Final Test
             </span>
           </div>
         </a>
@@ -1118,7 +1188,7 @@
       <section aria-labelledby="stats-heading" style="margin-bottom:var(--space-8);"
         class="anim-fade-in-up delay-400">
 
-        <h2 class="sr-only" id="stats-heading">Statistik Belajar</h2>
+        <h2 class="sr-only" id="stats-heading">Learning Statistics</h2>
 
         <!-- Streak card -->
         <div class="streak-card" style="margin-bottom:var(--space-4);">
@@ -1126,10 +1196,10 @@
           <div style="flex:1;">
             <p style="font-size:var(--font-size-base);font-weight:700;color:var(--warm-700);
               margin-bottom:2px;">
-              <span id="streak-count">0</span> hari berturut-turut belajar
+              <span id="streak-count">0</span> days learning streak
             </p>
             <p style="font-size:var(--font-size-sm);color:var(--warm-600);">
-              Pertahankan konsistensi Anda — kunci utama menguasai bahasa baru!
+              Keep up your consistency — the key to mastering a new language!
             </p>
           </div>
           <div style="text-align:right;flex-shrink:0;">
@@ -1141,14 +1211,14 @@
         </div>
 
         <!-- Stat mini cards -->
-        <div class="grid grid-cols-2 gap-3" role="list" aria-label="Statistik belajar Anda">
+        <div class="grid grid-cols-2 gap-3" role="list" aria-label="Your learning statistics">
           <div class="stat-card" role="listitem">
             <div class="stat-card-value" style="color:var(--primary);" id="stat-xp">0</div>
             <div class="stat-card-label">Total XP</div>
           </div>
           <div class="stat-card" role="listitem">
             <div class="stat-card-value" style="color:var(--accent);" id="stat-correct">0%</div>
-            <div class="stat-card-label">Rata-rata Kuis</div>
+            <div class="stat-card-label">Quiz Average</div>
           </div>
         </div>
       </section>
@@ -1161,7 +1231,7 @@
         <div class="section-header" style="margin-bottom:var(--space-4);">
           <div>
             <h2 class="section-title" id="badge-heading">Lencana Saya</h2>
-            <p class="section-subtitle">Kumpulkan semua — selesaikan setiap unit</p>
+            <p class="section-subtitle">Collect them all — finish every unit</p>
           </div>
         </div>
 
@@ -1180,7 +1250,7 @@
                 </div>
               </div>
               <span class="badge-label">Vocab Master</span>
-              <span class="badge-sublabel">Unit 1 selesai</span>
+              <span class="badge-sublabel">Unit 1 done</span>
             </div>
 
             <!-- Badge 2: terkunci -->
@@ -1194,7 +1264,7 @@
                 </div>
               </div>
               <span class="badge-label" style="color:var(--text-faint);">Speaker Pro</span>
-              <span class="badge-sublabel">Unit 2 – terkunci</span>
+              <span class="badge-sublabel">Unit 2 – locked</span>
             </div>
 
             <!-- Badge 3: terkunci -->
@@ -1208,7 +1278,7 @@
                 </div>
               </div>
               <span class="badge-label" style="color:var(--text-faint);">Reader Elite</span>
-              <span class="badge-sublabel">Unit 3 – terkunci</span>
+              <span class="badge-sublabel">Unit 3 – locked</span>
             </div>
 
             <!-- Badge Final -->
@@ -1222,7 +1292,7 @@
                 </div>
               </div>
               <span class="badge-label" style="color:var(--text-faint);">Graduate</span>
-              <span class="badge-sublabel">Final Test lulus</span>
+              <span class="badge-sublabel">Final Test passed</span>
             </div>
 
           </div>
@@ -1235,9 +1305,9 @@
   <!-- FLOATING PROGRESS PILL -->
   <div class="progress-pill" id="progress-pill"
     style="opacity:0;transition:opacity 0.3s ease;"
-    role="status" aria-live="polite" aria-label="Progress belajar Anda">
+    role="status" aria-live="polite" aria-label="Your learning progress">
     <div class="progress-pill-dot" aria-hidden="true"></div>
-    <span id="pill-text">0% selesai</span>
+    <span id="pill-text">0% done</span>
   </div>
 
   <!-- ── UNLOCK CONFIRMATION MODAL ── -->
@@ -1245,10 +1315,20 @@
     <div class="unlock-modal">
       <div class="unlock-modal-icon" id="unlock-modal-icon">🔓</div>
       <h3 id="unlock-modal-title">Unlock Unit?</h3>
-      <p id="unlock-modal-desc">Apakah Anda yakin ingin membuka unit ini? Anda bisa langsung mengakses materinya.</p>
+      <p id="unlock-modal-desc">Are you sure you want to unlock this unit? You can access its material right away.</p>
       <div class="unlock-modal-btns">
-        <button class="btn-unlock-cancel" onclick="hideUnlockModal()">Batal</button>
-        <button class="btn-unlock-confirm" id="unlock-modal-btn" onclick="confirmUnlock()">🔓 Unlock!</button>
+        <div class="unlock-modal-btns-row">
+          <button class="btn-unlock-cancel" onclick="hideUnlockModal()">Batal</button>
+          <button class="btn-unlock-confirm" id="unlock-modal-btn" onclick="confirmUnlock()">🔓 Unlock!</button>
+        </div>
+        <div class="demo-mode-divider"><span>atau</span></div>
+        <button class="btn-unlock-demo" onclick="unlockAllDemo()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+          </svg>
+          🎮 Demo Mode — Unlock Semua Step
+        </button>
       </div>
     </div>
   </div>
@@ -1265,9 +1345,9 @@
        UNIT / FINAL INFO MAP
        ============================================================ */
     const UNIT_INFO = {
-      1: { name: 'Unit 1 – Vocabulary', emoji: '📚', href: 'unit1-vocabulary.html', color: 'var(--primary)' },
-      2: { name: 'Unit 2 – Speaking', emoji: '🎙️', href: 'unit2-speaking.html', color: 'var(--warm-600)' },
-      3: { name: 'Unit 3 – Reading', emoji: '📖', href: 'unit3-reading.html', color: '#7C3AED' },
+      1: { name: 'Unit 1 – Things Around Me', emoji: '📚', href: 'unit1-vocabulary.html', color: 'var(--primary)' },
+      2: { name: 'Unit 2 – Speak Up!', emoji: '🎙️', href: 'unit2-speaking.html', color: 'var(--warm-600)' },
+      3: { name: 'Unit 3 – Read the Signs', emoji: '📖', href: 'unit3-reading.html', color: '#7C3AED' },
       'final': { name: 'Final Test', emoji: '🎓', href: 'final-test.html', color: 'var(--primary)' }
     };
 
@@ -1285,8 +1365,8 @@
       document.getElementById('unlock-modal-title').textContent = 'Unlock ' + info.name + '?';
       document.getElementById('unlock-modal-desc').textContent =
         target === 'final'
-          ? 'Apakah Anda yakin ingin membuka Final Test? Anda bisa langsung mengerjakan soal ujian akhir.'
-          : 'Apakah Anda yakin ingin membuka ' + info.name + '? Anda bisa langsung mengakses materinya.';
+          ? 'Are you sure you want to unlock the Final Test? You can start the final exam right away.'
+          : 'Are you sure you want to unlock ' + info.name + '? You can access its material right away.';
       document.getElementById('unlock-modal-btn').textContent = '🔓 Unlock ' + info.name;
 
       const overlay = document.getElementById('unlock-modal-overlay');
@@ -1317,6 +1397,133 @@
       } else {
         unlockUnit(Number(target));
       }
+    }
+
+    /* ============================================================
+       DEMO MODE – Unlock ALL steps with cascading animations
+       ============================================================ */
+    function unlockAllDemo() {
+      hideUnlockModal();
+
+      // 1. Simpan semua unit sebagai 'available' + buka final test
+      var raw = localStorage.getItem('emodul_state');
+      var state = raw ? JSON.parse(raw) : {
+        units: [
+          { id: 1, progress: 0, status: 'available' },
+          { id: 2, progress: 0, status: 'locked' },
+          { id: 3, progress: 0, status: 'locked' }
+        ]
+      };
+      state.units.forEach(function(u) {
+        if (u.status === 'locked') u.status = 'available';
+      });
+      localStorage.setItem('emodul_state', JSON.stringify(state));
+      localStorage.setItem('emodul_final_unlocked', 'true');
+      localStorage.setItem('demo_mode_active', 'true');
+
+      // 2. Cascade animasi gembok unit 2 & 3
+      var lockedUnits = [2, 3];
+      lockedUnits.forEach(function(unitId, idx) {
+        var ornament = document.getElementById('lock-ornament-' + unitId);
+        var isVisible = ornament && getComputedStyle(ornament).display !== 'none';
+        if (isVisible) {
+          setTimeout(function() { ornament.classList.add('unlocking'); }, idx * 250);
+          setTimeout(function() { _applyUnitUnlock(unitId); }, idx * 250 + 800);
+        } else {
+          _applyUnitUnlock(unitId);
+        }
+      });
+
+      // 3. Animasi gembok final test
+      var finalDelay = lockedUnits.length * 250;
+      var finalOrnament = document.getElementById('lock-ornament-final');
+      var finalVisible = finalOrnament && getComputedStyle(finalOrnament).display !== 'none';
+      if (finalVisible) {
+        setTimeout(function() { finalOrnament.classList.add('unlocking'); }, finalDelay);
+        setTimeout(function() { _applyFinalUnlock(); }, finalDelay + 800);
+      } else {
+        _applyFinalUnlock();
+      }
+
+      // 4. Confetti + toast setelah semua selesai
+      var totalDelay = finalDelay + 1200;
+      setTimeout(function() {
+        if (typeof Utils !== 'undefined') {
+          Utils.showToast('🎮 Demo Mode aktif! Semua step telah di-unlock.');
+        }
+        if (typeof confetti === 'function') {
+          confetti({ particleCount: 150, spread: 90, origin: { y: 0.5 } });
+          setTimeout(function() { confetti({ particleCount: 80, spread: 60, origin: { y: 0.3, x: 0.2 } }); }, 300);
+          setTimeout(function() { confetti({ particleCount: 80, spread: 60, origin: { y: 0.3, x: 0.8 } }); }, 600);
+        }
+        setTimeout(initDashboard, 300);
+      }, totalDelay);
+    }
+
+    /* ─ Helper: tampilkan unit card sebagai unlocked ─ */
+    function _applyUnitUnlock(unitId) {
+      var card = document.getElementById('card-unit-' + unitId);
+      var ornament = document.getElementById('lock-ornament-' + unitId);
+      var info = UNIT_INFO[unitId];
+      if (!card) return;
+
+      card.classList.remove('is-locked');
+      card.classList.add('unlocking-card', 'is-progress');
+      card.setAttribute('aria-disabled', 'false');
+      card.style.opacity = '1';
+      card.style.pointerEvents = 'auto';
+      card.style.setProperty('--stripe-color', info ? info.color : 'var(--primary)');
+
+      if (info) {
+        if (card.tagName === 'A') { card.setAttribute('href', info.href); }
+        else { card.style.cursor = 'pointer'; card.onclick = function() { window.location.href = info.href; }; }
+      }
+
+      var badge = document.getElementById('step-badge-' + unitId);
+      if (badge) { badge.classList.remove('step-badge--locked'); badge.style.background = 'var(--primary-100)'; badge.style.color = 'var(--primary-700)'; }
+
+      var label = document.getElementById('label-unit-' + unitId);
+      if (label) { label.textContent = 'Progress'; label.style.color = ''; }
+      var lockMsg = document.getElementById('lockmsg-unit-' + unitId);
+      if (lockMsg) lockMsg.style.display = 'none';
+      var pct = document.getElementById('pct-unit-' + unitId);
+      if (pct) { pct.style.display = ''; pct.textContent = '0%'; }
+
+      var iconBox = card.querySelector('.unit-icon-box');
+      if (iconBox) {
+        iconBox.classList.remove('unit-icon-box--gray');
+        if (unitId === 2) iconBox.classList.add('unit-icon-box--amber');
+        if (unitId === 3) { iconBox.classList.add('unit-icon-box--purple'); iconBox.style.background = '#EDE9FE'; iconBox.style.color = '#7C3AED'; }
+      }
+
+      var unitLabel = card.querySelector('[style*="text-transform:uppercase"]');
+      if (unitLabel) unitLabel.style.color = 'var(--primary)';
+      var unitTitle = card.querySelector('h3');
+      if (unitTitle) unitTitle.style.color = 'var(--text-main)';
+      var unitDesc = card.querySelector('p[style*="line-height:1.55"]');
+      if (unitDesc) unitDesc.style.color = 'var(--text-muted)';
+
+      if (ornament) ornament.style.display = 'none';
+    }
+
+    /* ─ Helper: tampilkan final test card sebagai unlocked ─ */
+    function _applyFinalUnlock() {
+      var card = document.getElementById('card-final');
+      var ornament = document.getElementById('lock-ornament-final');
+      var lockMsg = document.getElementById('final-lock-msg');
+
+      if (card) {
+        card.classList.remove('is-locked');
+        card.classList.add('unlocking-card');
+        card.setAttribute('href', 'final-test.html');
+        card.style.opacity = '1';
+        card.style.pointerEvents = 'auto';
+        card.style.cursor = 'pointer';
+      }
+      if (lockMsg) {
+        lockMsg.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.9)" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span style="font-size:var(--font-size-xs);color:rgba(255,255,255,.9);font-weight:600;">Final Test unlocked! Click to start the exam.</span>';
+      }
+      if (ornament) ornament.style.display = 'none';
     }
 
     /* ── Unlock a specific unit ── */
@@ -1452,7 +1659,7 @@
               <polyline points="20 6 9 17 4 12"/>
             </svg>
             <span style="font-size:var(--font-size-xs);color:rgba(255,255,255,.9);font-weight:600;">
-              Final Test terbuka! Klik untuk mulai ujian.
+              Final Test unlocked! Click to start the exam.
             </span>
           `;
         }
@@ -1584,16 +1791,16 @@
       if (gt) gt.textContent = overAll + '%';
       if (heroBar) heroBar.style.width = overAll + '%';
       if (heroText) heroText.textContent = overAll + '%';
-      if (heroUnits) heroUnits.textContent = unitsDone + ' dari 3 unit selesai';
+      if (heroUnits) heroUnits.textContent = unitsDone + ' of 3 units done';
       if (chipDone) chipDone.innerHTML = `
         <svg width="11" height="11" viewBox="0 0 24 24" fill="none"
           stroke="currentColor" stroke-width="3" aria-hidden="true">
           <polyline points="20 6 9 17 4 12"/>
         </svg>
-        ${unitsDone} selesai`;
+        ${unitsDone} done`;
 
       if (pill && pillT && overAll > 0) {
-        pillT.textContent = overAll + '% selesai';
+        pillT.textContent = overAll + '% done';
         pill.style.opacity = '1';
         pill.style.bottom = '24px';
       }
@@ -1612,12 +1819,12 @@
         }
         if (resumeUnit) {
           const info = UNIT_INFO[resumeUnit.id];
-          const unitNames = { 1: 'Unit 1 — Vocabulary', 2: 'Unit 2 — Speaking', 3: 'Unit 3 — Reading' };
-          resumeLabel.textContent = 'Lanjutkan: ' + (unitNames[resumeUnit.id] || info?.name || 'Unit');
+          const unitNames = { 1: 'Unit 1 — Things Around Me', 2: 'Unit 2 — Speak Up!', 3: 'Unit 3 — Read the Signs' };
+          resumeLabel.textContent = 'Continue: ' + (unitNames[resumeUnit.id] || info?.name || 'Unit');
           resumeBtn.setAttribute('href', info ? info.href : ('unit' + resumeUnit.id + '-vocabulary.html'));
           resumeSection.style.display = 'block';
         } else if (overAll >= 100 || localStorage.getItem('emodul_final_unlocked') === 'true') {
-          resumeLabel.textContent = 'Mulai Final Test';
+          resumeLabel.textContent = 'Start Final Test';
           resumeBtn.setAttribute('href', 'final-test.html');
           resumeSection.style.display = 'block';
         }
@@ -1628,6 +1835,7 @@
       const finalOrnament = document.getElementById('lock-ornament-final');
       const finalLockMsg = document.getElementById('final-lock-msg');
       const allUnitsDone = state.units.every(u => u.status === 'done' || (u.progress || 0) >= 100);
+
       const finalUnlocked = localStorage.getItem('emodul_final_unlocked') === 'true';
 
       if (finalCard) {
@@ -1644,7 +1852,7 @@
                 <polyline points="20 6 9 17 4 12"/>
               </svg>
               <span style="font-size:var(--font-size-xs);color:rgba(255,255,255,.9);font-weight:600;">
-                Final Test terbuka! Klik untuk mulai ujian.
+                Final Test unlocked! Click to start the exam.
               </span>
             `;
           }
@@ -1667,7 +1875,7 @@
             const lbl = badgeEl.querySelector('.badge-label');
             if (lbl) lbl.style.color = '';
             const sub = badgeEl.querySelector('.badge-sublabel');
-            if (sub) sub.textContent = 'Unit ' + u.id + ' selesai';
+            if (sub) sub.textContent = 'Unit ' + u.id + ' done';
             const badgeDiv = badgeEl.querySelector('.badge');
             if (badgeDiv) badgeDiv.classList.add('anim-float');
           }
@@ -1689,7 +1897,7 @@
             const lbl = badgeFinal.querySelector('.badge-label');
             if (lbl) lbl.style.color = '';
             const sub = badgeFinal.querySelector('.badge-sublabel');
-            if (sub) sub.textContent = 'Final Test lulus';
+            if (sub) sub.textContent = 'Final Test passed';
             const badgeDiv = badgeFinal.querySelector('.badge');
             if (badgeDiv) badgeDiv.classList.add('anim-float');
           }
@@ -1755,21 +1963,21 @@
       const greetEl = document.getElementById('hero-greeting');
       if (greetEl) {
         const h = new Date().getHours();
-        if (h < 10) greetEl.textContent = 'Selamat pagi ☀️';
-        else if (h < 15) greetEl.textContent = 'Selamat siang 🌤️';
-        else if (h < 18) greetEl.textContent = 'Selamat sore 🌅';
-        else greetEl.textContent = 'Selamat malam 🌙';
+        if (h < 10) greetEl.textContent = 'Good morning ☀️';
+        else if (h < 15) greetEl.textContent = 'Good afternoon 🌤️';
+        else if (h < 18) greetEl.textContent = 'Good evening 🌅';
+        else greetEl.textContent = 'Good night 🌙';
       }
 
       // 11. Tip of the day
       const tips = [
-        'Konsistensi mengalahkan intensitas. Belajar 15 menit setiap hari lebih efektif dari 2 jam sekali seminggu!',
-        'Ucapkan kata-kata baru dengan lantang — telinga dan mulut ikut belajar, bukan hanya mata.',
-        'Jangan takut salah! Setiap kesalahan adalah langkah menuju penguasaan.',
-        'Coba gunakan kosakata baru dalam kalimat sehari-hari, misalnya ketika berbelanja.',
-        'Dengarkan lagu atau tonton film berbahasa Inggris — hiburan bisa jadi alat belajar!',
-        'Tulis catatan kecil berisi 3 kata baru setiap hari. Dalam sebulan Anda punya 90 kata baru!',
-        'Baca label makanan dalam bahasa Inggris saat belanja — latihan gratis setiap hari!',
+        'Consistency beats intensity. Studying 15 minutes every day is more effective than 2 hours once a week!',
+        'Say new words out loud — your ears and mouth learn too, not just your eyes.',
+        'Do not be afraid of mistakes! Every mistake is a step toward mastery.',
+        'Try using new vocabulary in everyday sentences, for example when shopping.',
+        'Listen to songs or watch English films — entertainment can be a learning tool!',
+        'Write a small note with 3 new words each day. In a month you will have 90 new words!',
+        'Read food labels in English while shopping — free practice every day!',
       ];
       const tipEl = document.getElementById('hero-tip');
       if (tipEl) {

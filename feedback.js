@@ -50,21 +50,21 @@ const FeedbackEngine = (() => {
 
   const SPARKLE_EMOJIS = ['✨','⭐','💫','🌟','✨','⭐'];
   const CORRECT_PHRASES = [
-    'Tepat sekali!',
-    'Luar biasa!',
-    'Benar! Kerja bagus.',
-    'Hebat! Anda memahaminya.',
-    'Tepat! Terus pertahankan.',
+    'Exactly right!',
+    'Amazing!',
+    'Correct! Good job.',
+    'Great! You understood it.',
+    'Correct! Keep it up.',
   ];
   const WRONG_PHRASES = [
-    'Belum tepat, yuk coba lagi!',
-    'Hampir! Mari pelajari lebih lanjut.',
-    'Tidak apa-apa, ini kesempatan belajar! 💙',
-    'Tetap semangat! Lihat penjelasannya.',
+    'Not quite, let us try again!',
+    'Almost! Let us learn more.',
+    'That is okay, this is a chance to learn! 💙',
+    'Stay motivated! Check the explanation.',
   ];
   const TIMEOUT_PHRASES = [
-    'Waktu habis – tidak apa-apa!',
-    'Waktu habis! Yuk pelajari jawabannya.',
+    'Time is up – that is okay!',
+    'Time is up! Let us study the answer.',
   ];
 
   /* ────────────────────────────────────────────────────────
@@ -192,12 +192,12 @@ const FeedbackEngine = (() => {
     panel.querySelector('#fb-icon').textContent = '✅';
     panel.querySelector('#fb-heading').textContent = _rand(CORRECT_PHRASES);
     panel.querySelector('#fb-heading').className = 'fb-heading fb-heading--correct';
-    panel.querySelector('#fb-subheading').textContent = 'Jawaban Anda benar!';
+    panel.querySelector('#fb-subheading').textContent = 'Your answer is correct!';
 
     // Skor pill
     const scorePill = panel.querySelector('#fb-score-pill');
     scorePill.innerHTML = `<span class="fb-score-pill">
-      <span class="fb-score-dot"></span>+1 poin
+      <span class="fb-score-dot"></span>+1 point
     </span>`;
 
     // Body
@@ -210,7 +210,7 @@ const FeedbackEngine = (() => {
             stroke="currentColor" stroke-width="3" aria-hidden="true">
             <polyline points="20 6 9 17 4 12"/>
           </svg>
-          Mengapa ini jawaban yang tepat?
+          Why is this the correct answer?
         </div>
         <p class="fb-why-text">${_escape(question.whyCorrect || question.explanation || '')}</p>
       </div>
@@ -220,7 +220,7 @@ const FeedbackEngine = (() => {
       <div class="fb-example-block">
         <span class="fb-example-icon" aria-hidden="true">💼</span>
         <div class="fb-example-content">
-          <div class="fb-example-label">Contoh Nyata</div>
+          <div class="fb-example-label">Real Example</div>
           <p class="fb-example-text">${_escape(question.example)}</p>
         </div>
       </div>` : ''}
@@ -230,8 +230,8 @@ const FeedbackEngine = (() => {
     const actions = panel.querySelector('#fb-actions');
     actions.innerHTML = `
       <button class="fb-btn-primary fb-btn-primary--next" id="fb-btn-next"
-        aria-label="Lanjut ke soal berikutnya">
-        Lanjut
+        aria-label="Continue to the next question">
+        Continue
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
           stroke="currentColor" stroke-width="2.5" aria-hidden="true">
           <polyline points="9 18 15 12 9 6"/>
@@ -250,7 +250,7 @@ const FeedbackEngine = (() => {
    */
   function _renderWrong(question, selectedIdx) {
     const panel = _state.panelEl;
-    const selectedText = selectedIdx >= 0 ? question.options[selectedIdx] : '(tidak memilih)';
+    const selectedText = selectedIdx >= 0 ? question.options[selectedIdx] : '(no answer)';
     const correctText  = question.options[question.correct];
 
     // Penjelasan mengapa pilihan ini keliru (per-pilihan atau generik)
@@ -271,8 +271,8 @@ const FeedbackEngine = (() => {
     panel.querySelector('#fb-heading').className = 'fb-heading fb-heading--wrong';
     panel.querySelector('#fb-subheading').textContent =
       _state.retryCount > 0
-        ? `Percobaan ke-${_state.retryCount + 1} — Anda pasti bisa!`
-        : 'Pelajari penjelasannya, lalu coba lagi.';
+        ? `Attempt ${_state.retryCount + 1} — you can do it!`
+        : 'Study the explanation, then try again.';
 
     // Skor pill – tidak ada poin, tidak ada penalti
     const scorePill = panel.querySelector('#fb-score-pill');
@@ -284,18 +284,18 @@ const FeedbackEngine = (() => {
     const body = panel.querySelector('#fb-body');
     body.innerHTML = `
       <!-- Perbandingan jawaban -->
-      <div class="fb-answer-compare" aria-label="Perbandingan jawaban">
+      <div class="fb-answer-compare" aria-label="Answer comparison">
         <div class="fb-answer-row fb-answer-row--selected">
           <span class="fb-answer-icon" aria-hidden="true">🔸</span>
           <div>
-            <span class="fb-answer-label">Jawaban Anda</span>
+            <span class="fb-answer-label">Your Answer</span>
             <span class="fb-answer-text">${_escape(selectedText)}</span>
           </div>
         </div>
         <div class="fb-answer-row fb-answer-row--correct">
           <span class="fb-answer-icon" aria-hidden="true">✅</span>
           <div>
-            <span class="fb-answer-label">Jawaban yang Benar</span>
+            <span class="fb-answer-label">Correct Answer</span>
             <span class="fb-answer-text">${_escape(correctText)}</span>
           </div>
         </div>
@@ -311,7 +311,7 @@ const FeedbackEngine = (() => {
             <line x1="12" y1="8" x2="12" y2="12"/>
             <line x1="12" y1="16" x2="12.01" y2="16"/>
           </svg>
-          Mengapa pilihan itu kurang tepat?
+          Why is that choice not quite right?
         </div>
         <p class="fb-why-text">${_escape(whyWrongText)}</p>
       </div>` : ''}
@@ -323,7 +323,7 @@ const FeedbackEngine = (() => {
             stroke="currentColor" stroke-width="3" aria-hidden="true">
             <polyline points="20 6 9 17 4 12"/>
           </svg>
-          Penjelasan jawaban yang benar
+          Why the correct answer is right
         </div>
         <p class="fb-why-text">${_escape(question.whyCorrect || question.explanation || '')}</p>
       </div>
@@ -333,7 +333,7 @@ const FeedbackEngine = (() => {
       <div class="fb-example-block">
         <span class="fb-example-icon" aria-hidden="true">💼</span>
         <div class="fb-example-content">
-          <div class="fb-example-label">Contoh Nyata</div>
+          <div class="fb-example-label">Real Example</div>
           <p class="fb-example-text">${_escape(question.example)}</p>
         </div>
       </div>` : ''}
@@ -343,17 +343,17 @@ const FeedbackEngine = (() => {
     const actions = panel.querySelector('#fb-actions');
     actions.innerHTML = `
       <button class="fb-btn-primary fb-btn-primary--retry" id="fb-btn-retry"
-        aria-label="Coba lagi soal ini tanpa penalti skor">
+        aria-label="Try this question again with no score penalty">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
           stroke="currentColor" stroke-width="2.5" aria-hidden="true">
           <polyline points="1 4 1 10 7 10"/>
           <path d="M3.51 15a9 9 0 1 0 .49-4.11"/>
         </svg>
-        Coba Lagi
+        Try Again
       </button>
       <button class="fb-btn-skip" id="fb-btn-skip"
-        aria-label="Lewati soal ini dan lanjut ke soal berikutnya">
-        Lewati soal ini
+        aria-label="Skip this question and go to the next">
+        Skip this question
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
           stroke="currentColor" stroke-width="2" aria-hidden="true">
           <polyline points="9 18 15 12 9 6"/>
@@ -389,7 +389,7 @@ const FeedbackEngine = (() => {
     panel.querySelector('#fb-icon').textContent = '⏱';
     panel.querySelector('#fb-heading').textContent = _rand(TIMEOUT_PHRASES);
     panel.querySelector('#fb-heading').className = 'fb-heading fb-heading--timeout';
-    panel.querySelector('#fb-subheading').textContent = 'Waktu habis. Simak jawabannya ya!';
+    panel.querySelector('#fb-subheading').textContent = 'Time is up. Take a look at the answer!';
 
     panel.querySelector('#fb-score-pill').innerHTML = '';
 
@@ -398,7 +398,7 @@ const FeedbackEngine = (() => {
       <div class="fb-answer-row fb-answer-row--correct" style="margin-bottom:var(--space-3);">
         <span class="fb-answer-icon" aria-hidden="true">✅</span>
         <div>
-          <span class="fb-answer-label">Jawaban yang Benar</span>
+          <span class="fb-answer-label">Correct Answer</span>
           <span class="fb-answer-text">${_escape(correctText)}</span>
         </div>
       </div>
@@ -409,7 +409,7 @@ const FeedbackEngine = (() => {
             stroke="currentColor" stroke-width="3" aria-hidden="true">
             <polyline points="20 6 9 17 4 12"/>
           </svg>
-          Penjelasan singkat
+          Brief explanation
         </div>
         <p class="fb-why-text">${_escape(question.whyCorrect || question.explanation || '')}</p>
       </div>
@@ -418,7 +418,7 @@ const FeedbackEngine = (() => {
       <div class="fb-example-block">
         <span class="fb-example-icon" aria-hidden="true">💼</span>
         <div class="fb-example-content">
-          <div class="fb-example-label">Contoh</div>
+          <div class="fb-example-label">Example</div>
           <p class="fb-example-text">${_escape(question.example)}</p>
         </div>
       </div>` : ''}
@@ -427,8 +427,8 @@ const FeedbackEngine = (() => {
     const actions = panel.querySelector('#fb-actions');
     actions.innerHTML = `
       <button class="fb-btn-primary fb-btn-primary--timeout" id="fb-btn-timeout-next"
-        aria-label="Lanjut ke soal berikutnya">
-        Lanjutkan
+        aria-label="Continue to the next question">
+        Continue
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
           stroke="currentColor" stroke-width="2.5" aria-hidden="true">
           <polyline points="9 18 15 12 9 6"/>
@@ -583,7 +583,7 @@ const FeedbackEngine = (() => {
     _show();
     _triggerConfetti();
     _triggerSparkles();
-    _showToast('✅ Tepat sekali! +1 poin', 'correct');
+    _showToast('✅ Tepat sekali! +1 point', 'correct');
 
     // Heartbeat pada skor pill
     setTimeout(() => {

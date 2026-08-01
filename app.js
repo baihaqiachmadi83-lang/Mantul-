@@ -1,184 +1,136 @@
-'use strict';
-
-/* ──────────────────────────────────────────────────────
-   THEME & QUICK TOOLS PANEL
-   ────────────────────────────────────────────────────── */
-function updateThemeIcon(theme) {
-  const icon = document.getElementById('theme-icon');
-  if (icon) {
-    icon.textContent = theme === 'dark' ? '☀️' : '🌙';
-  }
-}
-
-function toggleTheme() {
-  const currentTheme = document.documentElement.getAttribute('data-theme');
-  let newTheme;
-  if (currentTheme === 'dark') {
-    newTheme = 'light';
-  } else if (currentTheme === 'light') {
-    newTheme = 'dark';
-  } else {
-    const isSystemDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-    newTheme = isSystemDark ? 'light' : 'dark';
-  }
-  document.documentElement.setAttribute('data-theme', newTheme);
-  localStorage.setItem('mantul_theme', newTheme);
-  updateThemeIcon(newTheme);
-}
-
-function unlockAllSteps() {
-  if (typeof QuizStore !== 'undefined') {
-    const raw = localStorage.getItem('emodul_quiz_store');
-    const store = raw ? JSON.parse(raw) : {};
-    [1, 2, 3].forEach(unitId => {
-      store[`unit_${unitId}`] = store[`unit_${unitId}`] || { bestScore: null, lastScore: null, totalAttempts: 0, sessions: [] };
-      store[`unit_${unitId}`].bestScore = 100;
-      store[`unit_${unitId}`].lastScore = 100;
-    });
-    localStorage.setItem('emodul_quiz_store', JSON.stringify(store));
-  }
-  
-  const data = {
-    units: [
-      { id: 1, progress: 100, status: 'done' },
-      { id: 2, progress: 100, status: 'done' },
-      { id: 3, progress: 100, status: 'done' }
-    ]
-  };
-  localStorage.setItem('emodul_state', JSON.stringify(data));
-  localStorage.setItem('emodul_final_unlocked', 'true');
-  localStorage.removeItem('emodul_vocab_prog');
-  localStorage.removeItem('emodul_speak_prog');
-  localStorage.removeItem('emodul_read_prog');
-  alert('Semua step telah di-unlock! Halaman akan dimuat ulang.');
-  window.location.reload();
-}
-
-(function initThemePanel() {
-  const saved = localStorage.getItem('mantul_theme');
-  const isSystemDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-  const effectiveTheme = saved || (isSystemDark ? 'dark' : 'light');
-  document.documentElement.setAttribute('data-theme', effectiveTheme);
-  
-  // Update icon if it exists (DOM might not be fully ready here for injected elements, but we try)
-  document.addEventListener('DOMContentLoaded', () => {
-    updateThemeIcon(effectiveTheme);
-  });
-})();
-
-/* ============================================================
-   Shared UI utilities for the E-Modul (confetti + toast).
-   Referenced by all pages via <script src="app.js">.
-   ============================================================ */
-window.Utils = (function () {
-  function showConfetti(count) {
-    var container = document.getElementById('confetti-container') || document.body;
-    var colors = ['#2563EB', '#F59E0B', '#10B981', '#EF4444', '#8B5CF6'];
-    var n = count || 60;
-    for (var i = 0; i < n; i++) {
-      var piece = document.createElement('span');
-      piece.style.position = 'fixed';
-      piece.style.left = (Math.random() * 100) + 'vw';
-      piece.style.top = '-12px';
-      piece.style.width = '8px';
-      piece.style.height = '12px';
-      piece.style.background = colors[Math.floor(Math.random() * colors.length)];
-      piece.style.opacity = '0.9';
-      piece.style.borderRadius = '2px';
-      piece.style.zIndex = '9999';
-      piece.style.pointerEvents = 'none';
-      var dur = 2 + Math.random() * 2;
-      piece.style.transition = 'transform ' + dur + 's linear, opacity ' + dur + 's linear';
-      container.appendChild(piece);
-      (function (p, d) {
-        requestAnimationFrame(function () {
-          p.style.transform = 'translateY(110vh) rotate(' + (Math.random() * 720) + 'deg)';
-          p.style.opacity = '0';
-        });
-        setTimeout(function () { if (p && p.remove) p.remove(); }, d * 1000 + 300);
-      })(piece, dur);
+const Utils = (function() {
+  function showConfetti() {
+    if (typeof confetti === 'function') {
+      confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
     }
   }
 
-  function showToast(message, type) {
-    var t = document.createElement('div');
-    t.textContent = message;
-    t.setAttribute('role', 'status');
-    t.style.position = 'fixed';
-    t.style.left = '50%';
-    t.style.bottom = '90px';
-    t.style.transform = 'translateX(-50%)';
-    t.style.background = (type === 'error') ? '#DC2626' : '#111827';
-    t.style.color = '#fff';
-    t.style.padding = '10px 18px';
-    t.style.borderRadius = '999px';
-    t.style.fontSize = '14px';
-    t.style.fontWeight = '700';
-    t.style.zIndex = '10000';
-    t.style.maxWidth = '80vw';
-    t.style.textAlign = 'center';
-    t.style.boxShadow = '0 4px 16px rgba(0,0,0,.2)';
-    t.style.opacity = '0';
-    t.style.transition = 'opacity .25s ease';
+  function showToast(msg, type='info') {
+    const t = document.createElement('div');
+    t.className = 'toast ' + type;
+    t.innerHTML = msg;
     document.body.appendChild(t);
-    requestAnimationFrame(function () { t.style.opacity = '1'; });
-    setTimeout(function () {
-      t.style.opacity = '0';
-      setTimeout(function () { if (t && t.remove) t.remove(); }, 300);
-    }, 2600);
+    setTimeout(() => t.classList.add('show'), 10);
+    setTimeout(() => {
+      t.classList.remove('show');
+      setTimeout(() => t.remove(), 300);
+    }, 3000);
   }
+
   return { showConfetti: showConfetti, showToast: showToast };
 })();
 
-window.playTTS = function(text, btnElement) {
-  if (!('speechSynthesis' in window)) {
-    alert('Browser Anda tidak mendukung fitur suara.');
-    return;
-  }
-  
-  if (window.speechSynthesis.speaking || window.speechSynthesis.pending) {
-    window.speechSynthesis.cancel();
-  }
-  
-  const utterance = new SpeechSynthesisUtterance(text);
-  utterance.rate = 0.9;
-  
-  const setVoiceAndPlay = () => {
-    const voices = window.speechSynthesis.getVoices();
-    let selectedVoice = voices.find(v => (v.lang === 'en-GB' || v.lang === 'en_GB') && (v.name.includes('Google') || v.name.includes('Natural'))) 
-                        || voices.find(v => v.lang === 'en-US' && v.name.includes('Google'))
-                        || voices.find(v => v.lang.startsWith('en'));
-                        
-    if (selectedVoice) {
-      utterance.voice = selectedVoice;
-      utterance.lang = selectedVoice.lang;
-    } else {
-      utterance.lang = 'en-US';
+window.playTTS = function(text, btnElement, gender, role = 'A') {
+  return new Promise((resolve) => {
+    if (!('speechSynthesis' in window)) {
+      alert('Your browser does not support voice features.');
+      return resolve();
     }
+    
+    if (window.speechSynthesis.speaking || window.speechSynthesis.pending) {
+      window.speechSynthesis.cancel();
+    }
+    
+    let spokenText = text.replace(/\bSiti\b/g, "See tea").replace(/\bBudi\b/g, "Boo dee");
+    // Pecah teks berdasarkan tanda baca akhir kalimat untuk menghindari bug pemotongan di Android Chrome
+    const chunks = spokenText.match(/[^.!?]+[.!?]*/g) || [spokenText];
     
     if (btnElement && btnElement.classList) {
       document.querySelectorAll('.playing').forEach(el => el.classList.remove('playing'));
       btnElement.classList.add('playing');
-      utterance.onend = () => btnElement.classList.remove('playing');
-      utterance.onerror = () => btnElement.classList.remove('playing');
     }
-    
-    window._synth_utterance = utterance; 
-    window.speechSynthesis.speak(utterance);
-    
-    if (window.speechSynthesis.pause && window.speechSynthesis.resume) {
-        window.speechSynthesis.pause();
-        window.speechSynthesis.resume();
-    }
-  };
 
-  if (window.speechSynthesis.getVoices().length === 0) {
-    window.speechSynthesis.onvoiceschanged = () => {
-      setVoiceAndPlay();
-      window.speechSynthesis.onvoiceschanged = null;
+    const runTTS = async () => {
+      let voices = window.speechSynthesis.getVoices();
+      let engVoices = voices.filter(v => v.lang === 'en-AU' || v.lang === 'en_AU' || v.lang === 'en-US' || v.lang === 'en_US');
+      if (engVoices.length === 0) engVoices = voices.filter(v => v.lang.startsWith('en'));
+      
+      let selectedVoice = null;
+      if (engVoices.length === 0) {
+        if (typeof window.showToast === 'function') window.showToast('Aktifkan suara Bahasa Inggris di setelan Text-to-Speech HP', 'warning');
+      }
+
+      if (gender === 'female') {
+        let candidates = engVoices.filter(v => v.name.includes('Female') || v.name.includes('Zira') || v.name.includes('Samantha') || (v.name.includes('Google') && !v.name.includes('Male')));
+        if (candidates.length === 0) candidates = engVoices;
+        selectedVoice = (role === 'B' && candidates.length > 1) ? candidates[candidates.length - 1] : candidates[0];
+      } else if (gender === 'male') {
+        let candidates = engVoices.filter(v => v.name.includes('Male') || v.name.includes('David') || v.name.includes('Daniel') || (v.name.includes('Google') && v.name.includes('Male')));
+        if (candidates.length === 0) candidates = engVoices;
+        selectedVoice = (role === 'B' && candidates.length > 1) ? candidates[candidates.length - 1] : candidates[0];
+      } else {
+        selectedVoice = engVoices[0];
+      }
+
+      for (let chunk of chunks) {
+        if (!chunk.trim()) continue;
+        await new Promise((res) => {
+          const utterance = new SpeechSynthesisUtterance(chunk.trim());
+          // Rate & pitch 1.0 (default) agar TTS stabil
+          utterance.rate = 1.0;
+          utterance.pitch = 1.0;
+          if (selectedVoice) {
+            utterance.voice = selectedVoice;
+            utterance.lang = selectedVoice.lang;
+          } else {
+            utterance.lang = 'en-US';
+          }
+          utterance.onend = res;
+          utterance.onerror = res;
+          window._synth_utterance = utterance; // Anti garbage collection
+          window.speechSynthesis.speak(utterance);
+        });
+      }
+      
+      if (btnElement && btnElement.classList) btnElement.classList.remove('playing');
+      resolve();
     };
-    window.speechSynthesis.getVoices();
-  } else {
-    setVoiceAndPlay();
-  }
+
+    if (window.speechSynthesis.getVoices().length === 0) {
+      window.speechSynthesis.onvoiceschanged = () => {
+        runTTS();
+        window.speechSynthesis.onvoiceschanged = null;
+      };
+      window.speechSynthesis.getVoices();
+    } else {
+      runTTS();
+    }
+  });
 };
+document.addEventListener('DOMContentLoaded', function() {
+  if (localStorage.getItem('demo_mode_active') === 'true' || localStorage.getItem('emodul_final_unlocked') === 'true') {
+    // Only show on unit pages (where App and nextPhase exist)
+    if (window.location.href.includes('unit') || document.querySelector('.sess-tabs')) {
+      const skipPanel = document.createElement('div');
+      skipPanel.style.cssText = 'position:fixed;bottom:20px;right:20px;z-index:99999;background:white;border:2px solid var(--danger);padding:10px;border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);display:flex;flex-direction:column;gap:8px;font-size:12px;color:black;';
+      
+      skipPanel.innerHTML = `
+        <div style="font-weight:bold;color:var(--danger);text-align:center;margin-bottom:4px;">🚀 Demo Jump</div>
+        <button id="demo-btn-mat" style="padding:6px;border-radius:4px;background:#f3f4f6;border:1px solid #ddd;cursor:pointer;">📖 1. Material</button>
+        <button id="demo-btn-exc" style="padding:6px;border-radius:4px;background:#f3f4f6;border:1px solid #ddd;cursor:pointer;">✍️ 2. Exercise</button>
+        <button id="demo-btn-gam" style="padding:6px;border-radius:4px;background:#f3f4f6;border:1px solid #ddd;cursor:pointer;">🎮 3. Game</button>
+      `;
+      
+      document.body.appendChild(skipPanel);
+      
+      const jumpTo = function(n) {
+        if (typeof App !== 'undefined') {
+          if (typeof App.goPhase === 'function') {
+             App.goPhase(n);
+          } else {
+             // For units without goPhase helper
+             if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+             if (typeof FeedbackEngine !== 'undefined' && FeedbackEngine.dismiss) FeedbackEngine.dismiss();
+             App.phase = n;
+             App.render();
+             window.scrollTo({top:100,behavior:'smooth'});
+          }
+        }
+      };
+      
+      document.getElementById('demo-btn-mat').onclick = () => jumpTo(0);
+      document.getElementById('demo-btn-exc').onclick = () => jumpTo(1);
+      document.getElementById('demo-btn-gam').onclick = () => jumpTo(2);
+    }
+  }
+});

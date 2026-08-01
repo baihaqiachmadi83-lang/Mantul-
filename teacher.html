@@ -1,9 +1,14 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
+<script>/*MANTUL_THEME_BOOT*/
+(function(){try{var t=localStorage.getItem('mantul_theme');if(!t){t=(window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches)?'dark':'light';}document.documentElement.setAttribute('data-theme',t);}catch(e){}})();
+window.toggleTheme=function(){try{var cur=document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',cur);localStorage.setItem('mantul_theme',cur);var ic=document.getElementById('theme-icon');if(ic)ic.textContent=cur==='dark'?'☀️':'🌙';var fic=document.getElementById('mantul-float-icon');if(fic)fic.textContent=cur==='dark'?'☀️':'🌙';}catch(e){}};
+document.addEventListener('DOMContentLoaded',function(){try{var cur=document.documentElement.getAttribute('data-theme');var ic=document.getElementById('theme-icon');if(ic){ic.textContent=cur==='dark'?'☀️':'🌙';return;}var b=document.createElement('button');b.type='button';b.title='Toggle Light/Dark Mode';b.setAttribute('aria-label','Toggle light and dark mode');b.onclick=window.toggleTheme;b.style.cssText='position:fixed;top:14px;right:14px;z-index:99999;width:40px;height:40px;border-radius:9999px;border:none;background:rgba(120,120,120,.18);color:inherit;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.18);';var s=document.createElement('span');s.id='mantul-float-icon';s.textContent=cur==='dark'?'☀️':'🌙';b.appendChild(s);document.body.appendChild(b);}catch(e){}});
+</script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Dashboard Tutor PKBM – Analisis kelas dan pantau progres siswa." />
+  <meta name="description" content="Tutor Dashboard – Class analysis and student progress monitoring." />
   <title>Dashboard Tutor | MANTUL – PKBM Tunas Mandiri</title>
 
   <link rel="stylesheet" href="design-system.css" />
@@ -84,7 +89,7 @@
     <div class="container" style="justify-content:flex-start;">
       <a href="index.html" class="btn-back" style="color:white;background:rgba(0,0,0,.15);border:none;">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
-        Beranda
+        Home
       </a>
     </div>
   </nav>
@@ -93,7 +98,7 @@
   <div class="admin-header anim-fade-in-up">
     <div style="margin-top:var(--space-5);">
       <h1 class="admin-title">Dashboard Tutor</h1>
-      <p class="admin-subtitle">Kelas Bahasa Inggris (Paket C)</p>
+      <p class="admin-subtitle">English Class (Package C)</p>
     </div>
   </div>
 
@@ -103,18 +108,18 @@
     <div class="stats-grid anim-fade-in-up delay-100">
       <div class="stat-card">
         <span class="stat-card-val">24</span>
-        <span class="stat-card-lbl">Siswa Aktif</span>
+        <span class="stat-card-lbl">Active Students</span>
       </div>
       <div class="stat-card">
         <span class="stat-card-val" style="color:var(--accent-600);">78%</span>
-        <span class="stat-card-lbl">Rata-rata Nilai</span>
+        <span class="stat-card-lbl">Average Score</span>
       </div>
       <div class="stat-card" style="grid-column:span 2;flex-direction:row;justify-content:space-between;align-items:center;">
         <div>
           <span class="stat-card-val" style="font-size:1.4rem;">4</span>
           <span class="stat-card-lbl">Perlu Bantuan</span>
         </div>
-        <button class="btn btn-sm btn-outline">Lihat Detail</button>
+        <button class="btn btn-sm btn-outline">View Details</button>
       </div>
     </div>
 
@@ -122,7 +127,7 @@
     <h2 class="sec-title anim-fade-in-up delay-200">🔍 Analisis Kesulitan</h2>
     <div class="chart-card anim-fade-in-up delay-200">
       <p style="font-size:var(--font-size-xs);color:var(--text-muted);margin-bottom:var(--space-4);">
-        Top 4 kata/konsep yang paling sering dijawab salah minggu ini (Spaced Repetition Data):
+        Top 4 words/concepts most often answered incorrectly this week (Spaced Repetition Data):
       </p>
       
       <div class="bar-row">
@@ -148,14 +153,14 @@
     </div>
 
     <!-- STUDENT LIST -->
-    <h2 class="sec-title anim-fade-in-up delay-300">👨‍🎓 Data Siswa</h2>
+    <h2 class="sec-title anim-fade-in-up delay-300">👨‍🎓 Student Data</h2>
     <div class="student-list anim-fade-in-up delay-300">
       
       <div class="student-card">
         <div class="student-avatar">B</div>
         <div class="student-info">
           <div class="student-name">Budi Santoso</div>
-          <div class="student-meta"><span>Unit 3 Selesai</span> &bull; <span>Skor: 85</span></div>
+          <div class="student-meta"><span>Unit 3 Done</span> &bull; <span>Skor: 85</span></div>
         </div>
         <span class="status-badge status-ok">Aman</span>
       </div>
@@ -173,7 +178,7 @@
         <div class="student-avatar">J</div>
         <div class="student-info">
           <div class="student-name">Joko Susilo</div>
-          <div class="student-meta"><span>Unit 2 Selesai</span> &bull; <span>Skor: 72</span></div>
+          <div class="student-meta"><span>Unit 2 Done</span> &bull; <span>Skor: 72</span></div>
         </div>
         <span class="status-badge status-ok">Aman</span>
       </div>
@@ -181,7 +186,7 @@
     </div>
 
     <div style="text-align:center;margin-top:var(--space-4);" class="anim-fade-in-up delay-400">
-      <button class="btn btn-outline btn-block">Muat Semua Siswa ↓</button>
+      <button class="btn btn-outline btn-block">Load All Students ↓</button>
     </div>
 
   </div>
