@@ -1,4 +1,4 @@
-const CACHE_NAME = 'emodul-v3';
+const CACHE_NAME = 'emodul-v4';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
@@ -6,6 +6,7 @@ const ASSETS_TO_CACHE = [
   './unit2-speaking.html',
   './unit3-reading.html',
   './final-test.html',
+  './certificate-preview.html',
   './material.html',
   './student.html',
   './teacher.html',
@@ -18,7 +19,11 @@ const ASSETS_TO_CACHE = [
   './quiz-store.js',
   './feedback.js',
   './manifest.json',
-  './icon.svg'
+  './icon.svg',
+  './hero-img.png',
+  './onboarding-bg.png',
+  './vegetables.png',
+  './no-smoking.png'
 ];
 
 self.addEventListener('install', (e) => {

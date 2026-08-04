@@ -836,6 +836,7 @@ document.addEventListener('DOMContentLoaded',function(){try{var cur=document.doc
     _renderResultPage(){
       // Calculate total average
       const avgScore = Math.round(this.scores.reduce((a,b)=>a+b, 0) / 3);
+      try { localStorage.setItem('mantul_final_score', avgScore); } catch(e){}
       
       // Update global state
       try {

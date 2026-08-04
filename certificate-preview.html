@@ -288,7 +288,8 @@ document.addEventListener('DOMContentLoaded',function(){try{var cur=document.doc
 
           <div class="cert-reason">
             For successfully completing all modules and the final examination of the<br>
-            <strong>MANTUL Interactive English Learning Course (Paket C)</strong>.<br>
+            <strong>MANTUL Interactive English Learning Course (Paket C)</strong><br>
+            with a Final Score of <strong style="font-size:1.1rem;color:#1e3a8a;" id="cert-score-display">100%</strong>.<br>
             Demonstrating outstanding proficiency in Vocabulary, Speaking, and Reading.
           </div>
 
@@ -329,6 +330,14 @@ document.addEventListener('DOMContentLoaded',function(){try{var cur=document.doc
     const savedName = localStorage.getItem('mantul_student_name');
     if (savedName) {
       document.getElementById('cert-name-display').textContent = savedName;
+    }
+    
+    // Grab score from local storage
+    const savedScore = localStorage.getItem('mantul_final_score');
+    if (savedScore) {
+      document.getElementById('cert-score-display').textContent = savedScore + '%';
+    } else {
+      document.getElementById('cert-score-display').textContent = 'Completed';
     }
     
     // Set current date

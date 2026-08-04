@@ -293,12 +293,12 @@ document.addEventListener('DOMContentLoaded',function(){try{var cur=document.doc
         { icon:'⚠️', title:'Penalty notice', body:'Some signs also add a warning like <b>"Fine: Rp 500,000"</b>. This tells you there is a penalty (denda) if you break the rule.' }
       ],
       signs:[
-        { text:'NO SMOKING', icon:'\u{1F6AD}', meaning:'You must not smoke in this area.', where:'Hospitals, petrol stations, restaurants.', short:'Do not smoke here' },
-        { text:'NO PARKING', icon:'\u26D4', meaning:'You must not park your vehicle here.', where:'In front of gates, hospital entrances, and fire lanes.', short:'Do not park here' },
-        { text:'NO LITTERING', icon:'\u{1F5D1}\uFE0F', meaning:'Do not throw rubbish here. Always use the bin.', where:'Parks, streets, markets, and public places.', short:'Do not throw rubbish' },
-        { text:'KEEP OFF THE GRASS', icon:'\u{1F331}', meaning:'Do not walk or step on the grass.', where:'Parks, gardens, and school grounds.', short:'Stay off the grass' },
-        { text:'NO ENTRY', icon:'\u26D4', meaning:'You are not allowed to enter this area.', where:'Restricted rooms, staff-only areas, one-way streets.', short:'Do not enter here' },
-        { text:'DO NOT DISTURB', icon:'\u{1F6AA}', meaning:'Please do not knock or make noise. Someone is busy or resting.', where:'Hotel rooms, offices, hospitals.', short:'Do not make noise here' }
+        { text:'NO SMOKING', icon:'\u{1F6AD}', meaning:'You must not smoke in this area.', id_:'Anda dilarang merokok di area ini.', where:'Hospitals, petrol stations, restaurants.', short:'Do not smoke here' },
+        { text:'NO PARKING', icon:'\u26D4', meaning:'You must not park your vehicle here.', id_:'Anda dilarang memarkir kendaraan di sini.', where:'In front of gates, hospital entrances, and fire lanes.', short:'Do not park here' },
+        { text:'NO LITTERING', icon:'\u{1F5D1}\uFE0F', meaning:'Do not throw rubbish here. Always use the bin.', id_:'Jangan membuang sampah sembarangan. Gunakan tempat sampah.', where:'Parks, streets, markets, and public places.', short:'Do not throw rubbish' },
+        { text:'KEEP OFF THE GRASS', icon:'\u{1F331}', meaning:'Do not walk or step on the grass.', id_:'Jangan berjalan atau menginjak rumput.', where:'Parks, gardens, and school grounds.', short:'Stay off the grass' },
+        { text:'NO ENTRY', icon:'\u26D4', meaning:'You are not allowed to enter this area.', id_:'Anda tidak diizinkan masuk ke area ini.', where:'Restricted rooms, staff-only areas, one-way streets.', short:'Do not enter here' },
+        { text:'DO NOT DISTURB', icon:'\u{1F6AA}', meaning:'Please do not knock or make noise. Someone is busy or resting.', id_:'Tolong jangan mengetuk atau berisik. Seseorang sedang sibuk atau istirahat.', where:'Hotel rooms, offices, hospitals.', short:'Do not make noise here' }
       ],
       quiz:[
         { id:'r0_1', text:"You see a 'NO SMOKING' sign. What should you do?",
@@ -340,12 +340,12 @@ document.addEventListener('DOMContentLoaded',function(){try{var cur=document.doc
         { icon:'🛡️', title:'What to do', body:'When you see a warning sign: <b>slow down</b>, <b>be careful</b>, and <b>follow any instructions</b>. Warning signs are placed to protect you from getting hurt.' }
       ],
       signs:[
-        { text:'CAUTION: WET FLOOR', icon:'\u26A0\uFE0F', meaning:'Be careful. The floor is wet and may be slippery.', where:'Malls, toilets, and corridors after cleaning.', short:'The floor is wet and slippery' },
-        { text:'HIGH VOLTAGE', icon:'\u26A1', meaning:'Danger! Strong electricity here. Do not touch anything.', where:'Electrical boxes, power stations, generators.', short:'Danger: strong electricity' },
-        { text:'MIND THE STEP', icon:'\u{1F6B6}', meaning:'Watch your step. The floor level changes here.', where:'Doorways, stairs, and train platforms.', short:'Watch your step' },
-        { text:'SLIPPERY WHEN WET', icon:'\u{1F4A7}', meaning:'This surface becomes very slippery when it rains or gets wet.', where:'Parking lots, ramps, and bathrooms.', short:'Floor is slippery when wet' },
-        { text:'BEWARE OF DOG', icon:'\u{1F415}', meaning:'There is a dog here that may bite. Be careful.', where:'Houses, factories, and private property.', short:'Dog may bite, be careful' },
-        { text:'FRAGILE: HANDLE WITH CARE', icon:'\u{1F4E6}', meaning:'This item breaks easily. Carry it gently.', where:'Delivery packages and storage rooms.', short:'Handle gently, easily broken' }
+        { text:'CAUTION: WET FLOOR', icon:'\u26A0\uFE0F', meaning:'Be careful. The floor is wet and may be slippery.', id_:'Hati-hati. Lantai basah dan mungkin licin.', where:'Malls, toilets, and corridors after cleaning.', short:'The floor is wet and slippery' },
+        { text:'HIGH VOLTAGE', icon:'\u26A1', meaning:'Danger! Strong electricity here. Do not touch anything.', id_:'Bahaya! Listrik tegangan tinggi. Jangan sentuh apa pun.', where:'Electrical boxes, power stations, generators.', short:'Danger: strong electricity' },
+        { text:'MIND THE STEP', icon:'\u{1F6B6}', meaning:'Watch your step. The floor level changes here.', id_:'Perhatikan langkah Anda. Ada perbedaan tinggi lantai di sini.', where:'Doorways, stairs, and train platforms.', short:'Watch your step' },
+        { text:'SLIPPERY WHEN WET', icon:'\u{1F4A7}', meaning:'This surface becomes very slippery when it rains or gets wet.', id_:'Permukaan ini menjadi sangat licin saat hujan atau basah.', where:'Parking lots, ramps, and bathrooms.', short:'Floor is slippery when wet' },
+        { text:'BEWARE OF DOG', icon:'\u{1F415}', meaning:'There is a dog here that may bite. Be careful.', id_:'Ada anjing yang mungkin menggigit. Berhati-hatilah.', where:'Houses, factories, and private property.', short:'Dog may bite, be careful' },
+        { text:'FRAGILE: HANDLE WITH CARE', icon:'\u{1F4E6}', meaning:'This item breaks easily. Carry it gently.', id_:'Barang ini mudah pecah. Bawa dengan hati-hati.', where:'Delivery packages and storage rooms.', short:'Handle gently, easily broken' }
       ],
       quiz:[
         { id:'r1_1', text:"You see 'CAUTION: WET FLOOR'. What should you do?",
@@ -387,12 +387,12 @@ document.addEventListener('DOMContentLoaded',function(){try{var cur=document.doc
         { icon:'🗺️', title:'Reading directions', body:'Signs like <b>PUSH</b> and <b>PULL</b> tell you <b>how to open a door</b>. <b>PUSH</b> = dorong, <b>PULL</b> = tarik. Always look for the arrow direction too!' }
       ],
       signs:[
-        { text:'EXIT', icon:'\u{1F6AA}', meaning:'This is the way out of the building.', where:'Buildings, cinemas, malls, schools.', short:'The way out' },
-        { text:'ENTRANCE', icon:'\u{1F6B6}', meaning:'This is the way into the building.', where:'Shops, offices, hospitals, malls.', short:'The way in' },
-        { text:'RESTROOM / TOILET', icon:'\u{1F6BB}', meaning:'This is where the toilets or bathrooms are.', where:'Public places, offices, restaurants.', short:'Toilets are here' },
-        { text:'PUSH / PULL', icon:'\u{1F6AA}', meaning:'PUSH the door to open it away from you. PULL to open it towards you.', where:'Shop and office doors everywhere.', short:'How to open the door' },
-        { text:'KEEP THE DOOR CLOSED', icon:'\u{1F512}', meaning:'Always close the door after entering or leaving.', where:'Cold storage rooms, offices, air-conditioned rooms.', short:'Always close this door' },
-        { text:'EMERGENCY EXIT', icon:'\u{1F6A8}', meaning:'Use this door only in an emergency like a fire. Do not use normally.', where:'Buildings, cinemas, factories.', short:'Emergency door only' }
+        { text:'EXIT', icon:'\u{1F6AA}', meaning:'This is the way out of the building.', id_:'Ini adalah jalan keluar dari gedung.', where:'Buildings, cinemas, malls, schools.', short:'The way out' },
+        { text:'ENTRANCE', icon:'\u{1F6B6}', meaning:'This is the way into the building.', id_:'Ini adalah jalan masuk ke dalam gedung.', where:'Shops, offices, hospitals, malls.', short:'The way in' },
+        { text:'RESTROOM / TOILET', icon:'\u{1F6BB}', meaning:'This is where the toilets or bathrooms are.', id_:'Ini adalah tempat toilet atau kamar mandi.', where:'Public places, offices, restaurants.', short:'Toilets are here' },
+        { text:'PUSH / PULL', icon:'\u{1F6AA}', meaning:'PUSH the door to open it away from you. PULL to open it towards you.', id_:'DORONG pintu menjauh dari Anda. TARIK pintu mendekati Anda.', where:'Shop and office doors everywhere.', short:'How to open the door' },
+        { text:'KEEP THE DOOR CLOSED', icon:'\u{1F512}', meaning:'Always close the door after entering or leaving.', id_:'Selalu tutup pintu setelah masuk atau keluar.', where:'Cold storage rooms, offices, air-conditioned rooms.', short:'Always close this door' },
+        { text:'EMERGENCY EXIT', icon:'\u{1F6A8}', meaning:'Use this door only in an emergency like a fire. Do not use normally.', id_:'Gunakan pintu ini hanya saat darurat seperti kebakaran. Jangan gunakan sehari-hari.', where:'Buildings, cinemas, factories.', short:'Emergency door only' }
       ],
       quiz:[
         { id:'r2_1', text:'You want to leave the building. Which sign do you follow?',
@@ -434,12 +434,12 @@ document.addEventListener('DOMContentLoaded',function(){try{var cur=document.doc
         { icon:'🤝', title:'Polite vs direct language', body:'Notices that say <b>PLEASE</b> are polite requests. Notices like <b>DO NOT</b> are direct orders. Both must be followed. Example: "Please queue here" = Tolong antri di sini.' }
       ],
       signs:[
-        { text:'OPEN / CLOSED', icon:'\u{1FAA7}', meaning:'"Open" means you can enter and the shop is serving. "Closed" means it is not open for business.', where:'Shops, cafes, clinics, and service counters.', short:'Shows if a shop is open or shut' },
-        { text:'PLEASE QUEUE HERE', icon:'\u{1F9CD}', meaning:'Wait in line here. Do not skip the queue. Wait for your turn.', where:'Banks, hospitals, post offices, and counters.', short:'Form a line and wait your turn' },
-        { text:'OUT OF ORDER', icon:'\u{1F6E0}\uFE0F', meaning:'This machine or service is not working. Do not use it now.', where:'Lifts, ATMs, vending machines, toilets.', short:'Machine is broken, do not use' },
-        { text:'FIRST AID', icon:'\u26D1\uFE0F', meaning:'You can get basic medical help here. Go here if you are injured.', where:'Schools, offices, factories, public events.', short:'Get medical help here' },
-        { text:'RESERVED', icon:'\u{1F4CB}', meaning:'This seat or space is kept for a specific person. Do not sit or use it.', where:'Restaurants, meeting rooms, parking spaces.', short:'This seat is saved for someone' },
-        { text:'WET PAINT', icon:'\u{1F58C}\uFE0F', meaning:'The paint here is still wet. Do not touch or lean against this surface.', where:'Freshly painted walls, benches, and fences.', short:'Fresh paint, do not touch' }
+        { text:'OPEN / CLOSED', icon:'\u{1FAA7}', meaning:'"Open" means you can enter and the shop is serving. "Closed" means it is not open for business.', id_:'"Open" berarti toko sedang buka. "Closed" berarti toko sedang tutup.', where:'Shops, cafes, clinics, and service counters.', short:'Shows if a shop is open or shut' },
+        { text:'PLEASE QUEUE HERE', icon:'\u{1F9CD}', meaning:'Wait in line here. Do not skip the queue. Wait for your turn.', id_:'Antri di sini. Jangan menyerobot antrian. Tunggu giliran Anda.', where:'Banks, hospitals, post offices, and counters.', short:'Form a line and wait your turn' },
+        { text:'OUT OF ORDER', icon:'\u{1F6E0}\uFE0F', meaning:'This machine or service is not working. Do not use it now.', id_:'Mesin atau layanan ini sedang rusak. Jangan digunakan sekarang.', where:'Lifts, ATMs, vending machines, toilets.', short:'Machine is broken, do not use' },
+        { text:'FIRST AID', icon:'\u26D1\uFE0F', meaning:'You can get basic medical help here. Go here if you are injured.', id_:'Anda bisa mendapatkan pertolongan pertama di sini. Pergi ke sini jika Anda terluka.', where:'Schools, offices, factories, public events.', short:'Get medical help here' },
+        { text:'RESERVED', icon:'\u{1F4CB}', meaning:'This seat or space is kept for a specific person. Do not sit or use it.', id_:'Kursi atau tempat ini sudah dipesan untuk orang tertentu. Jangan digunakan.', where:'Restaurants, meeting rooms, parking spaces.', short:'This seat is saved for someone' },
+        { text:'WET PAINT', icon:'\u{1F58C}\uFE0F', meaning:'The paint here is still wet. Do not touch or lean against this surface.', id_:'Cat di sini masih basah. Jangan disentuh atau bersandar di permukaan ini.', where:'Freshly painted walls, benches, and fences.', short:'Fresh paint, do not touch' }
       ],
       quiz:[
         { id:'r3_1', text:"An ATM shows an 'OUT OF ORDER' sign. What does this mean?",
@@ -538,7 +538,7 @@ document.addEventListener('DOMContentLoaded',function(){try{var cur=document.doc
         '<div class="progress-bar-track progress-bar-track--thin" style="margin-bottom:var(--space-4);"><div class="progress-bar-fill" style="width:'+Math.round(((this.si+1)/total)*100)+'%;transition:width .4s ease;"></div></div>'+
         '<div class="sign-board" style="border-color:'+s.color+';color:'+s.color+';"><div class="sign-ico">'+sign.icon+'</div><div class="sign-text">'+sign.text+'</div></div>'+
         '<div style="text-align:center;margin:var(--space-3) 0;"><button class="btn-tts-large" onclick="App.speak(&quot;'+sign.text+'&quot;,this)">🔊 Read the sign</button></div>'+
-        '<div class="card sign-explain"><p class="sign-explain-title">💡 What it means</p><p class="sign-explain-meaning">'+sign.meaning+'</p><p class="sign-explain-where"><strong>Where you see it:</strong> '+sign.where+'</p></div>'+
+        '<div class="card sign-explain"><p class="sign-explain-title">💡 What it means</p><p class="sign-explain-meaning">'+sign.meaning+'</p><p style="font-size:var(--font-size-sm);color:var(--text-muted);font-style:italic;margin-bottom:var(--space-3);">'+(sign.id_||'')+'</p><p class="sign-explain-where"><strong>Where you see it:</strong> '+sign.where+'</p></div>'+
         '<div style="display:flex;gap:var(--space-2);margin-top:var(--space-4);">'+
           (this.si>0?'<button class="btn" style="flex:1;background:var(--surface-2);color:var(--text-main);" onclick="App.prevSign()">← Previous</button>':'')+
           (isLast?'<button class="btn btn-primary" style="flex:2;" onclick="App._finishSigns()">I understand → Exercise</button>':'<button class="btn btn-primary" style="flex:2;" onclick="App.nextSign()">Next sign →</button>')+

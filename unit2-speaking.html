@@ -956,7 +956,23 @@ document.addEventListener('DOMContentLoaded',function(){try{var cur=document.doc
        - "I am fine thank you"   → skor tinggi (>0.9)
     */
     _similarity(target, spoken){
-      const norm = (t) => (t||'').toLowerCase().replace(/[^a-z0-9\s']/g,'').replace(/\s+/g,' ').trim();
+      const norm = (t) => {
+        let s = (t||'').toLowerCase().replace(/[^a-z0-9\s']/g,'').replace(/\s+/g,' ').trim();
+        s = s.replace(/\b10000\b/g, 'ten thousand')
+             .replace(/\b15000\b/g, 'fifteen thousand')
+             .replace(/\b20000\b/g, 'twenty thousand')
+             .replace(/\b1\b/g, 'one')
+             .replace(/\b2\b/g, 'two')
+             .replace(/\b3\b/g, 'three')
+             .replace(/\b4\b/g, 'four')
+             .replace(/\b5\b/g, 'five')
+             .replace(/\b6\b/g, 'six')
+             .replace(/\b7\b/g, 'seven')
+             .replace(/\b8\b/g, 'eight')
+             .replace(/\b9\b/g, 'nine')
+             .replace(/\b10\b/g, 'ten');
+        return s;
+      };
       const a = norm(target);
       const b = norm(spoken);
       if(!a && !b) return 1;
@@ -975,7 +991,7 @@ document.addEventListener('DOMContentLoaded',function(){try{var cur=document.doc
       const dist = dp[la][lb];
       const charSim = 1 - dist / Math.max(la, lb);
 
-      // Word overlap sebagai sinyal tambahan (tapi bukan satu-satunya)
+      // Word overlap sebagai sinyal tambahan
       const wa = a.split(' ').filter(Boolean);
       const wb = b.split(' ').filter(Boolean);
       const wbCount = {};
@@ -985,11 +1001,28 @@ document.addEventListener('DOMContentLoaded',function(){try{var cur=document.doc
       const wordSim = wa.length ? matched/wa.length : 0;
 
       // Gabungkan: 70% char similarity + 30% word overlap
-      // Ini memastikan kata yang hampir mirip tapi beda (morning/evening) tetap gagal
-      return charSim * 0.7 + wordSim * 0.3;
+      let score = charSim * 0.7 + wordSim * 0.3;
+
+      // STRICT PENALTY: Untuk kalimat panjang, satu kata penting (seperti angka/arah) 
+      // yang salah bisa tetap menghasilkan skor > 0.7. Kita wajibkan kata kunci ini cocok.
+      const critical = ['one','two','three','four','five','six','seven','eight','nine','ten','fifteen','twenty','thousand','left','right'];
+      for(let w of critical){
+        const inA = wa.some(x => x === w || x === w+'s');
+        const inB = wb.some(x => x === w || x === w+'s');
+        if(inA !== inB){
+          score = Math.min(score, 0.4); // Pastikan tidak lolos
+        }
+      }
+
+      // STRICT PENALTY 2: Jika kata yang diucapkan kurang dari kalimat target (tidak lengkap)
+      if (wb.length < wa.length) {
+        const missingWords = wa.length - wb.length;
+        score -= (missingWords * 0.15); // Kurangi 15% untuk setiap kata yang hilang
+      }
+
+      return Math.max(0, score);
     },
 
-    /* Corrective feedback JUJUR: benar=benar, salah=salah */
     _judgeSpeech(target, spoken, score, btn, hint){
       const PASS = 0.7;
       if(score >= PASS){
@@ -1006,9 +1039,10 @@ document.addEventListener('DOMContentLoaded',function(){try{var cur=document.doc
         const pct = Math.round(score*100);
         hint.innerHTML = 'Not quite ('+pct+'% match). Try again!'
           + '<br><span style="color:var(--text-faint);font-weight:400;">Heard: “'+ (spoken||'(nothing)') +'”</span>'
-          + '<br><span style="color:var(--text-faint);font-weight:400;">Target: “'+ target +'”</span>';
+          + '<br><span style="color:var(--text-faint);font-weight:400;">Target: “'+ target +'”</span>'
+          + '<br><span style="color:var(--danger);font-size:0.85em;margin-top:4px;display:block;">(Tap mic to retry)</span>';
         hint.style.color = 'var(--danger)';
-        setTimeout(() => { btn.innerHTML='🎤'; btn.style.background=''; hint.textContent='Tap to try again'; hint.style.color='var(--text-faint)'; }, 3800);
+        setTimeout(() => { btn.innerHTML='🎤'; btn.style.background=''; }, 1500);
       }
     },
 
@@ -1235,9 +1269,9 @@ document.addEventListener('DOMContentLoaded',function(){try{var cur=document.doc
           btn.innerHTML = '↻';
           btn.style.background = 'var(--danger)';
           const pct = Math.round(bestScore*100);
-          hint.innerHTML = 'Try again! ('+pct+'% match)<br><span style="color:var(--text-faint);font-weight:400;">Heard: “'+ (best||'(nothing)') +'”</span>';
+          hint.innerHTML = 'Try again! ('+pct+'% match)<br><span style="color:var(--text-faint);font-weight:400;">Heard: “'+ (best||'(nothing)') +'”</span><br><span style="color:var(--danger);font-size:0.85em;margin-top:4px;display:block;">(Tap mic to retry)</span>';
           hint.style.color = 'var(--danger)';
-          setTimeout(() => { btn.innerHTML='🎤'; btn.style.background=''; hint.textContent='Tap to try again'; hint.style.color='var(--text-faint)'; }, 3500);
+          setTimeout(() => { btn.innerHTML='🎤'; btn.style.background=''; }, 1500);
         }
       };
       rec.onerror = (e) => { finish(); btn.innerHTML = '🎤'; hint.innerHTML = 'Error listening. Tap to try again.'; hint.style.color = 'var(--warm-600)'; };
@@ -1401,12 +1435,13 @@ document.addEventListener('DOMContentLoaded',function(){try{var cur=document.doc
         
         if(bestScore >= 0.55){
           btn.innerHTML = '✓'; btn.style.background = 'var(--accent)';
-          hint.innerHTML = 'Good job! 🌟'; hint.style.color = 'var(--accent-700)';
+          hint.innerHTML = 'Good job! 🌟<br><span style="color:var(--text-faint);font-weight:400;">Heard: “'+ (best||'') +'”</span>'; hint.style.color = 'var(--accent-700)';
           setTimeout(() => App._rpNext(), 1500);
         } else {
           btn.innerHTML = '↻'; btn.style.background = 'var(--danger)';
-          hint.innerHTML = 'Try again! (' + Math.round(bestScore*100) + '%)'; hint.style.color = 'var(--danger)';
-          setTimeout(() => { btn.innerHTML='🎤'; btn.style.background=''; hint.textContent='Tap to try again'; hint.style.color='var(--text-faint)'; }, 2500);
+          hint.innerHTML = 'Try again! (' + Math.round(bestScore*100) + '%)<br><span style="color:var(--text-faint);font-weight:400;">Heard: “'+ (best||'(nothing)') +'”</span><br><span style="color:var(--text-faint);font-weight:400;">Target: “'+ target +'”</span><br><span style="color:var(--danger);font-size:0.85em;margin-top:4px;display:block;">(Tap mic to retry)</span>';
+          hint.style.color = 'var(--danger)';
+          setTimeout(() => { btn.innerHTML='🎤'; btn.style.background=''; }, 1500);
         }
       };
       rec.onerror = () => { finish(); btn.innerHTML = '🎤'; hint.innerHTML = 'Error listening.'; hint.style.color = 'var(--warm-600)'; };

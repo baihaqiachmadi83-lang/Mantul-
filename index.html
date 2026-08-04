@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded',function(){try{var cur=document.doc
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="MANTUL (Mandiri Tunas English Learning) — an interactive app for Package C learners: study Vocabulary, Speaking, and Reading in a structured, flexible, and enjoyable way." />
   <title>MANTUL | Home</title>
+  <link rel="manifest" href="manifest.json" />
 
   <link rel="stylesheet" href="design-system.css" />
   <link rel="stylesheet" href="components.css" />
@@ -696,7 +697,7 @@ document.addEventListener('DOMContentLoaded',function(){try{var cur=document.doc
             <span id="theme-icon">🌙</span>
           </button>
           <!-- Unlock All -->
-          <button onclick="unlockAllSteps()" class="btn" style="background: var(--surface-2); border-radius: var(--radius-full); height: 32px; padding: 0 10px; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; color: var(--text-main); transition: transform 0.2s ease, color 0.2s ease;" title="Unlock All Steps" onmouseover="this.style.transform='scale(1.05)'; this.style.color='var(--accent)'" onmouseout="this.style.transform='scale(1)'; this.style.color='var(--text-main)'">
+          <button onclick="unlockAllDemo()" class="btn" style="background: var(--surface-2); border-radius: var(--radius-full); height: 32px; padding: 0 10px; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; color: var(--text-main); transition: transform 0.2s ease, color 0.2s ease;" title="Unlock All Steps" onmouseover="this.style.transform='scale(1.05)'; this.style.color='var(--accent)'" onmouseout="this.style.transform='scale(1)'; this.style.color='var(--text-main)'">
             🔓 Unlock
           </button>        </div>
       </div>
@@ -1996,6 +1997,12 @@ document.addEventListener('DOMContentLoaded',function(){try{var cur=document.doc
       document.addEventListener('DOMContentLoaded', initDashboard);
     } else {
       initDashboard();
+    }
+  </script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./service-worker.js')
+        .catch(function(err) { console.log('SW registration failed:', err); });
     }
   </script>
 </body>
