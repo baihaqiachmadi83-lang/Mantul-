@@ -12,9 +12,9 @@ document.addEventListener('DOMContentLoaded',function(){try{var cur=document.doc
   <title>MANTUL | Home</title>
   <link rel="manifest" href="manifest.json" />
 
-  <link rel="stylesheet" href="design-system.css" />
-  <link rel="stylesheet" href="components.css" />
-  <link rel="stylesheet" href="animations.css" />
+  <link rel="stylesheet" href="css/design-system.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/animations.css" />
 
   <style>
     /* ── Halaman beranda: layout khusus ── */
@@ -604,7 +604,7 @@ document.addEventListener('DOMContentLoaded',function(){try{var cur=document.doc
     <div class="onboarding-container" style="display: flex; flex: 1; overflow: hidden; flex-direction: row;">
       <!-- Left side: Illustration -->
       <div style="flex: 1; background: var(--surface-2); display: flex; align-items: center; justify-content: center; position: relative;" class="onboarding-left">
-        <img src="onboarding-bg.png" alt="" style="width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0;" />
+        <img src="assets/onboarding-bg.png" alt="" style="width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0;" />
         <div class="onboarding-gradient" style="position: absolute; inset: 0; background: linear-gradient(to right, transparent, var(--surface));"></div>
       </div>
       
@@ -680,14 +680,7 @@ document.addEventListener('DOMContentLoaded',function(){try{var cur=document.doc
       <!-- Brand & Quick Tools -->
       <div style="display: flex; align-items: center; gap: var(--space-4);">
         <a href="index.html" class="navbar-brand" aria-label="MANTUL – Home">
-          <div class="brand-icon" aria-hidden="true">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-              stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
-              <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
-            </svg>
-          </div>
-          MANTUL
+          <img src="assets/mantul-logo.jpg" alt="MANTUL Logo" style="height: 64px; width: auto; border-radius: 4px;" />
         </a>
 
         <!-- Quick Tools -->
@@ -791,7 +784,7 @@ document.addEventListener('DOMContentLoaded',function(){try{var cur=document.doc
 
           <!-- Ilustrasi Hero -->
           <div class="hero-illustration" aria-hidden="true">
-            <img src="hero-img.png" alt="Hero Illustration" />
+            <img src="assets/hero-img.png" alt="Hero Illustration" />
           </div>
         </div>
       </section>
@@ -1337,8 +1330,8 @@ document.addEventListener('DOMContentLoaded',function(){try{var cur=document.doc
   <!-- ============================================================
        SCRIPTS
        ============================================================ -->
-  <script src="app.js"></script>
-  <script src="quiz-store.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/quiz-store.js"></script>
   <script>
     'use strict';
 
