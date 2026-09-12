@@ -208,6 +208,9 @@ document.addEventListener('DOMContentLoaded',function(){try{var cur=document.doc
           <button onclick="toggleTheme()" class="btn" style="background: var(--surface-2); border-radius: var(--radius-full); width: 32px; height: 32px; padding: 0; display: flex; align-items: center; justify-content: center; color: var(--text-main); font-size: 14px; transition: transform 0.2s ease;" title="Toggle Light/Dark Mode" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
             <span id="theme-icon">🌙</span>
           </button>
+          <button onclick="unlockAllSteps()" class="btn" style="background: var(--surface-2); border-radius: var(--radius-full); height: 32px; padding: 0 10px; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; color: var(--text-main); transition: transform 0.2s ease, color 0.2s ease;" title="Unlock All Steps" onmouseover="this.style.transform='scale(1.05)'; this.style.color='var(--accent)'" onmouseout="this.style.transform='scale(1)'; this.style.color='var(--text-main)'">
+            🔓 Unlock
+          </button>
         </div>
       </div>
       <div style="display:flex;align-items:center;gap:var(--space-2);">
@@ -872,6 +875,53 @@ document.addEventListener('DOMContentLoaded',function(){try{var cur=document.doc
     document.addEventListener('DOMContentLoaded', ()=>App.init());
   } else {
     App.init();
+  }
+
+  /* ════════════════════════════════════════════════════════
+     UNLOCK ALL STEPS (tombol 🔓 Unlock di navbar)
+     ════════════════════════════════════════════════════════ */
+  function unlockAllSteps() {
+    // 1. Set semua sesi sebagai selesai
+    App.done = [true, true, true, true];
+    App._saveProgress();
+
+    // 2. Sync ke global state
+    try {
+      let raw = localStorage.getItem('emodul_state');
+      let state = raw ? JSON.parse(raw) : { units: [
+        { id:1, progress:0, status:'available' },
+        { id:2, progress:0, status:'locked' },
+        { id:3, progress:0, status:'locked' }
+      ]};
+      state.units.forEach(u => {
+        if (u.status === 'locked') u.status = 'available';
+        u.progress = Math.max(u.progress || 0, 100);
+      });
+      const u3 = state.units.find(u => u.id === 3);
+      if (u3) u3.status = 'done';
+      localStorage.setItem('emodul_state', JSON.stringify(state));
+      localStorage.setItem('emodul_final_unlocked', 'true');
+    } catch(e) {}
+
+    // 3. Update semua tab (hapus class locked)
+    for (let i = 0; i < 5; i++) {
+      const tab = document.getElementById('tab-' + i);
+      if (tab) {
+        tab.classList.remove('locked');
+        tab.style.opacity = '';
+        tab.style.pointerEvents = '';
+      }
+    }
+
+    // 4. Toast notifikasi
+    const t = document.createElement('div');
+    t.textContent = '🔓 Semua sesi telah di-unlock!';
+    t.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#10B981;color:white;padding:12px 24px;border-radius:999px;font-weight:700;font-size:14px;z-index:99999;box-shadow:0 4px 16px rgba(0,0,0,.2);';
+    document.body.appendChild(t);
+    setTimeout(() => t.remove(), 3000);
+
+    // 5. Re-render tabs
+    App._updateTabs();
   }
   </script>
 </body>
