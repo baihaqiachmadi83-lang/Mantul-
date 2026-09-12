@@ -1,0 +1,537 @@
+/* ============================================================
+   FEEDBACK.CSS – Sistem umpan balik reusable E-Modul
+   Panel feedback benar/salah/timeout + micro-animations
+   Mengikuti token dari design-system.css
+   ============================================================ */
+
+/* ============================================================
+   1. FEEDBACK PANEL – Container utama
+   ============================================================ */
+.fb-panel {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%) translateY(110%);
+  width: 100%;
+  max-width: var(--container-max);
+  z-index: var(--z-modal);
+  background: var(--card);
+  border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
+  box-shadow: 0 -8px 40px rgba(0,0,0,.12), 0 -2px 8px rgba(0,0,0,.06);
+  border-top: 1px solid var(--border);
+  padding: var(--space-5) var(--space-5) calc(var(--space-5) + env(safe-area-inset-bottom, 0px));
+  transition: transform 0.38s cubic-bezier(0.34, 1.2, 0.64, 1);
+  will-change: transform;
+}
+
+/* Saat tampil */
+.fb-panel.fb-panel--visible {
+  transform: translateX(-50%) translateY(0%);
+}
+
+/* ── Garis drag handle ── */
+.fb-panel::before {
+  content: '';
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 36px;
+  height: 4px;
+  background: var(--border-2);
+  border-radius: var(--radius-full);
+}
+
+/* ── Overlay gelap di belakang panel ── */
+.fb-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15,23,42,0.35);
+  z-index: calc(var(--z-modal) - 1);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+}
+
+.fb-overlay.fb-overlay--visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ============================================================
+   2. VARIASI PANEL PER TIPE
+   ============================================================ */
+
+/* ── BENAR ── */
+.fb-panel--correct {
+  border-top: 3px solid var(--accent);
+}
+
+.fb-panel--correct .fb-header-icon-ring {
+  background: linear-gradient(135deg, var(--accent-100), var(--accent-50, #F0FDF4));
+  border: 2px solid var(--accent-200);
+  box-shadow: 0 0 0 6px var(--accent-50, #F0FDF4);
+  animation: glowCorrect 2s ease-in-out infinite;
+}
+
+/* ── SALAH ── */
+.fb-panel--wrong {
+  border-top: 3px solid var(--primary-300);
+}
+
+.fb-panel--wrong .fb-header-icon-ring {
+  background: linear-gradient(135deg, var(--primary-100), var(--primary-50));
+  border: 2px solid var(--primary-200);
+  animation: breathePulse 2.5s ease-in-out infinite;
+}
+
+/* ── TIMEOUT ── */
+.fb-panel--timeout {
+  border-top: 3px solid var(--warm);
+}
+
+.fb-panel--timeout .fb-header-icon-ring {
+  background: linear-gradient(135deg, var(--warm-100), var(--warm-50));
+  border: 2px solid var(--warm-200);
+}
+
+/* ============================================================
+   3. HEADER PANEL
+   ============================================================ */
+.fb-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  margin-bottom: var(--space-4);
+  padding-top: var(--space-3); /* ruang untuk drag handle */
+}
+
+.fb-header-icon-ring {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 1.6rem;
+  line-height: 1;
+}
+
+.fb-header-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.fb-heading {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-tight);
+  margin-bottom: 2px;
+}
+
+.fb-heading--correct { color: var(--accent-700); }
+.fb-heading--wrong   { color: var(--primary-700); }
+.fb-heading--timeout { color: var(--warm-700); }
+
+.fb-subheading {
+  font-size: var(--font-size-sm);
+  color: var(--text-muted);
+  line-height: var(--line-height-snug);
+}
+
+/* ============================================================
+   4. JAWABAN HIGHLIGHT (saat salah)
+   ============================================================ */
+.fb-answer-compare {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+}
+
+.fb-answer-row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  border-radius: var(--radius-lg);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-snug);
+}
+
+.fb-answer-row--selected {
+  background: #FFF7ED;
+  border: 1.5px solid #FED7AA;
+}
+
+.fb-answer-row--correct {
+  background: var(--accent-50, #F0FDF4);
+  border: 1.5px solid var(--accent-200);
+}
+
+.fb-answer-icon {
+  font-size: 1rem;
+  flex-shrink: 0;
+  margin-top: 1px;
+  line-height: 1;
+}
+
+.fb-answer-label {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.fb-answer-row--selected .fb-answer-label  { color: #C2410C; }
+.fb-answer-row--correct  .fb-answer-label  { color: var(--accent-700); }
+
+.fb-answer-text {
+  color: var(--text-main);
+  font-weight: var(--font-weight-medium);
+}
+
+/* ============================================================
+   5. BLOK PENJELASAN MENGAPA
+   ============================================================ */
+.fb-why-block {
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  margin-bottom: var(--space-3);
+}
+
+.fb-why-block--correct {
+  background: var(--accent-50, #F0FDF4);
+  border-left: 3px solid var(--accent);
+}
+
+.fb-why-block--wrong {
+  background: var(--primary-50);
+  border-left: 3px solid var(--primary-300);
+}
+
+.fb-why-title {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  margin-bottom: var(--space-2);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.fb-why-title--correct { color: var(--accent-700); }
+.fb-why-title--wrong   { color: var(--primary-700); }
+
+.fb-why-text {
+  font-size: var(--font-size-sm);
+  color: var(--text-body);
+  line-height: var(--line-height-relaxed);
+}
+
+/* ============================================================
+   6. CONTOH PENGGUNAAN
+   ============================================================ */
+.fb-example-block {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-3) var(--space-4);
+  margin-bottom: var(--space-4);
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+}
+
+.fb-example-icon {
+  font-size: 1.1rem;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.fb-example-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.fb-example-label {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-faint);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  margin-bottom: 3px;
+}
+
+.fb-example-text {
+  font-size: var(--font-size-sm);
+  color: var(--text-body);
+  line-height: var(--line-height-relaxed);
+  font-style: italic;
+}
+
+/* ============================================================
+   7. TOMBOL AKSI
+   ============================================================ */
+.fb-actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+
+/* Tombol lanjut / coba lagi */
+.fb-btn-primary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  width: 100%;
+  padding: var(--space-4) var(--space-6);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+  border: none;
+  transition: all var(--transition-fast);
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.fb-btn-primary:active { transform: scale(0.97); }
+
+/* Lanjut (benar) → hijau */
+.fb-btn-primary--next {
+  background: var(--accent);
+  color: white;
+  box-shadow: 0 4px 14px rgba(16,185,129,.3);
+}
+.fb-btn-primary--next:hover {
+  background: var(--accent-600);
+  box-shadow: 0 6px 20px rgba(16,185,129,.4);
+}
+
+/* Coba Lagi (salah) → biru */
+.fb-btn-primary--retry {
+  background: var(--primary);
+  color: white;
+  box-shadow: 0 4px 14px rgba(37,99,235,.25);
+}
+.fb-btn-primary--retry:hover {
+  background: var(--primary-700);
+  box-shadow: 0 6px 20px rgba(37,99,235,.35);
+}
+
+/* Coba Lagi (timeout) → amber */
+.fb-btn-primary--timeout {
+  background: var(--warm);
+  color: white;
+  box-shadow: 0 4px 14px rgba(245,158,11,.3);
+}
+.fb-btn-primary--timeout:hover {
+  background: var(--warm-600);
+}
+
+/* Tombol sekunder: Lewati */
+.fb-btn-skip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  width: 100%;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-muted);
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  transition: all var(--transition-fast);
+}
+.fb-btn-skip:hover {
+  background: var(--surface);
+  color: var(--text-main);
+}
+.fb-btn-skip:active { transform: scale(0.97); }
+
+/* ============================================================
+   8. SPARKLE EMOJIS (jawaban benar)
+   ============================================================ */
+.fb-sparkle-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+  border-radius: inherit;
+}
+
+.fb-sparkle {
+  position: absolute;
+  font-size: 1.2rem;
+  animation: sparkleFloat 1.8s ease-out forwards;
+  user-select: none;
+  pointer-events: none;
+}
+
+/* ============================================================
+   9. SKOR MINI di panel (jawaban benar)
+   ============================================================ */
+.fb-score-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  background: linear-gradient(135deg, var(--accent-100), var(--accent-50, #F0FDF4));
+  border: 1px solid var(--accent-200);
+  border-radius: var(--radius-full);
+  padding: var(--space-1) var(--space-3);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  color: var(--accent-700);
+  margin-top: var(--space-2);
+}
+
+.fb-score-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+/* ============================================================
+   10. DIVIDER
+   ============================================================ */
+.fb-divider {
+  height: 1px;
+  background: var(--border);
+  margin: var(--space-4) 0;
+}
+
+/* ============================================================
+   11. RETRY COUNTER BADGE
+   ============================================================ */
+.fb-retry-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--primary-100);
+  color: var(--primary-700);
+  border-radius: var(--radius-full);
+  padding: 2px var(--space-2);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+}
+
+/* ============================================================
+   12. TOAST NOTIFIKASI RINGAN (menggantikan versi lama)
+   ============================================================ */
+.fb-toast {
+  position: fixed;
+  bottom: 100px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  z-index: var(--z-toast);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  box-shadow: var(--shadow-lg);
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.25s ease, transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+  font-family: var(--font-family);
+}
+
+.fb-toast.fb-toast--show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.fb-toast--correct {
+  background: var(--accent);
+  color: white;
+}
+
+.fb-toast--wrong {
+  background: var(--warm-50);
+  color: var(--warm-700);
+  border: 1px solid var(--warm-200);
+}
+
+.fb-toast--timeout {
+  background: var(--primary-50);
+  color: var(--primary-700);
+  border: 1px solid var(--primary-200);
+}
+
+/* ============================================================
+   13. PREFERS-REDUCED-MOTION
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  .fb-panel {
+    transition: none !important;
+  }
+
+  .fb-panel--visible {
+    transition: none !important;
+  }
+
+  .fb-overlay {
+    transition: none !important;
+  }
+
+  .fb-header-icon-ring {
+    animation: none !important;
+  }
+
+  .fb-sparkle {
+    display: none !important;
+  }
+
+  .fb-toast {
+    transition: opacity 0.15s ease !important;
+  }
+
+  .fb-btn-primary:hover {
+    transform: none !important;
+  }
+}
+
+/* ============================================================
+   14. RESPONSIVE
+   ============================================================ */
+@media (min-width: 640px) {
+  .fb-panel {
+    border-radius: var(--radius-2xl);
+    bottom: var(--space-6);
+    box-shadow: var(--shadow-xl);
+  }
+
+  .fb-panel.fb-panel--visible {
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .fb-panel:not(.fb-panel--visible) {
+    transform: translateX(-50%) translateY(calc(100% + 24px));
+  }
+}
+
+/* Dark mode: baris jawaban terpilih (latar terang hardcoded) */
+@media (prefers-color-scheme: dark) {
+  .fb-answer-row--selected { background: #422006; border-color: #B45309; }
+}

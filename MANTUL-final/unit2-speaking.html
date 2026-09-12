@@ -1,0 +1,1746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>/*MANTUL_THEME_BOOT*/
+(function(){try{var t=localStorage.getItem('mantul_theme');if(!t){t=(window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches)?'dark':'light';}document.documentElement.setAttribute('data-theme',t);}catch(e){}})();
+window.toggleTheme=function(){try{var cur=document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',cur);localStorage.setItem('mantul_theme',cur);var ic=document.getElementById('theme-icon');if(ic)ic.textContent=cur==='dark'?'☀️':'🌙';var fic=document.getElementById('mantul-float-icon');if(fic)fic.textContent=cur==='dark'?'☀️':'🌙';}catch(e){}};
+document.addEventListener('DOMContentLoaded',function(){try{var cur=document.documentElement.getAttribute('data-theme');var ic=document.getElementById('theme-icon');if(ic){ic.textContent=cur==='dark'?'☀️':'🌙';return;}var b=document.createElement('button');b.type='button';b.title='Toggle Light/Dark Mode';b.setAttribute('aria-label','Toggle light and dark mode');b.onclick=window.toggleTheme;b.style.cssText='position:fixed;top:14px;right:14px;z-index:99999;width:40px;height:40px;border-radius:9999px;border:none;background:rgba(120,120,120,.18);color:inherit;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.18);';var s=document.createElement('span');s.id='mantul-float-icon';s.textContent=cur==='dark'?'☀️':'🌙';b.appendChild(s);document.body.appendChild(b);}catch(e){}});
+</script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Unit 2 Speaking – Practice English conversation in real situations with confidence." />
+  <title>Unit 2: Speak Up! | MANTUL</title>
+
+  <link rel="stylesheet" href="css/design-system.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/animations.css" />
+  <link rel="stylesheet" href="css/feedback.css" />
+
+  <style>
+    /* ══════════════════════════════════════════════════════
+       SPEAKING PAGE – Page-specific styles
+       ══════════════════════════════════════════════════════ */
+    body { background: var(--surface); }
+
+    /* ── SESSION TABS ── */
+    .sess-tabs {
+      display: flex; gap: var(--space-2); overflow-x: auto;
+      scrollbar-width: none; -webkit-overflow-scrolling: touch;
+      padding-bottom: var(--space-1);
+    }
+    .sess-tabs::-webkit-scrollbar { display: none; }
+    .sess-tab {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: var(--space-2) var(--space-3); border-radius: var(--radius-full);
+      font-size: var(--font-size-sm); font-weight: var(--font-weight-semibold);
+      border: 1.5px solid var(--border); background: var(--card);
+      color: var(--text-muted); cursor: pointer; white-space: nowrap;
+      flex-shrink: 0; transition: all var(--transition-fast);
+      -webkit-tap-highlight-color: transparent;
+    }
+    .sess-tab.active  { background: var(--primary); border-color: var(--primary); color: white; }
+    .sess-tab.done    { background: var(--accent-50); border-color: var(--accent); color: var(--accent-700); }
+    .sess-tab.locked  { opacity: .4; cursor: not-allowed; pointer-events: none; }
+
+    /* ── PHASE STRIP ── */
+    .phase-strip { display: flex; align-items: center; gap: 0; }
+    .phase-node { display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; }
+    .phase-dot {
+      width: 30px; height: 30px; border-radius: 50%; display: flex;
+      align-items: center; justify-content: center; font-size: 13px;
+      font-weight: 700; transition: all var(--transition-base);
+      border: 2px solid transparent;
+    }
+    .phase-dot.done    { background: var(--accent); color: white; }
+    .phase-dot.active  { background: var(--primary); color: white; box-shadow: 0 0 0 4px var(--primary-100); }
+    .phase-dot.upcoming{ background: var(--surface-2); color: var(--text-faint); border-color: var(--border-2); }
+    .phase-label { font-size: 9px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .05em; color: var(--text-faint); text-align: center; }
+    .phase-label.active-label { color: var(--primary); }
+    .phase-line { flex: 1; height: 2px; background: var(--border); margin: 0 -4px;
+      position: relative; top: -10px; transition: background var(--transition-base); }
+    .phase-line.done { background: var(--accent); }
+
+    /* ── HERO CARD ── */
+    .sess-hero {
+      border-radius: var(--radius-2xl); padding: var(--space-5) var(--space-6);
+      color: white; position: relative; overflow: hidden; margin-bottom: var(--space-4);
+    }
+    .sess-hero-deco {
+      position: absolute; right: -10px; top: 50%; transform: translateY(-50%);
+      font-size: 5rem; opacity: .15; pointer-events: none; line-height: 1;
+    }
+
+    /* ── CHAT UI (BUBBLES) ── */
+    .chat-container {
+      display: flex; flex-direction: column; gap: var(--space-4);
+      padding: var(--space-2) 0;
+    }
+    .chat-row {
+      display: flex; gap: var(--space-3); max-width: 90%;
+      opacity: 0; transform: translateY(15px);
+      animation: chatPop .4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+    @keyframes chatPop { to { opacity:1; transform:translateY(0); } }
+    .chat-row.right { align-self: flex-end; flex-direction: row-reverse; }
+    .chat-row.left  { align-self: flex-start; }
+
+    .chat-avatar {
+      width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; background: var(--surface-2); border: 2px solid white;
+      box-shadow: var(--shadow-sm); z-index: 2;
+    }
+    .chat-row.right .chat-avatar { background: var(--primary-100); }
+    .chat-row.left .chat-avatar  { background: var(--accent-100); }
+
+    .chat-bubble-wrap { display: flex; flex-direction: column; gap: 4px; }
+    .chat-row.right .chat-bubble-wrap { align-items: flex-end; }
+    .chat-row.left .chat-bubble-wrap  { align-items: flex-start; }
+
+    .chat-bubble {
+      padding: var(--space-3) var(--space-4);
+      border-radius: var(--radius-2xl);
+      font-size: var(--font-size-base); line-height: 1.5;
+      position: relative; box-shadow: var(--shadow-sm);
+    }
+    .chat-row.left .chat-bubble {
+      background: white; border-top-left-radius: 4px; color: var(--text-main);
+      border: 1px solid var(--border);
+    }
+    .chat-row.right .chat-bubble {
+      background: var(--primary); border-top-right-radius: 4px; color: white;
+    }
+
+    .chat-trans {
+      font-size: var(--font-size-sm); color: var(--text-muted);
+      font-style: italic; margin-top: 4px; padding: 0 8px;
+    }
+    .chat-row.right .chat-trans { text-align: right; }
+
+    /* TTS Button */
+    .btn-tts {
+      width: 28px; height: 28px; border-radius: 50%; border: none;
+      display: inline-flex; align-items: center; justify-content: center;
+      background: rgba(0,0,0,.08); color: inherit; cursor: pointer;
+      transition: all var(--transition-fast); margin-left: 8px; vertical-align: middle;
+    }
+    .chat-row.right .btn-tts { background: rgba(255,255,255,.2); color: white; }
+    .btn-tts:hover { transform: scale(1.1); background: rgba(0,0,0,.15); }
+    .chat-row.right .btn-tts:hover { background: rgba(255,255,255,.3); }
+    .btn-tts.playing {
+      animation: pulsePlay 1.5s infinite;
+      background: var(--accent); color: white;
+    }
+    @keyframes pulsePlay {
+      0% { box-shadow: 0 0 0 0 rgba(16,185,129,.5); }
+      70% { box-shadow: 0 0 0 6px rgba(16,185,129,0); }
+      100% { box-shadow: 0 0 0 0 rgba(16,185,129,0); }
+    }
+
+    /* ── MIC BUTTON (Imitate Phase) ── */
+    .mic-wrap { text-align: center; margin: var(--space-5) 0; }
+    .btn-mic {
+      width: 70px; height: 70px; border-radius: 50%; border: none;
+      background: linear-gradient(135deg, var(--primary), var(--primary-700));
+      color: white; font-size: 1.8rem; display: inline-flex;
+      align-items: center; justify-content: center; cursor: pointer;
+      box-shadow: 0 8px 16px rgba(37,99,235,.25); transition: all .3s cubic-bezier(0.175,0.885,0.32,1.275);
+      position: relative;
+    }
+    .btn-mic::before {
+      content: ''; position: absolute; inset: -10px; border-radius: 50%;
+      border: 2px solid var(--primary-300); opacity: 0; transition: all .3s ease;
+    }
+    .btn-mic:active { transform: scale(0.92); }
+    .btn-mic.recording {
+      background: linear-gradient(135deg, var(--danger), #991B1B);
+      animation: micPulse 1.5s infinite;
+    }
+    @keyframes micPulse {
+      0% { box-shadow: 0 0 0 0 rgba(239,68,68,.6); }
+      70% { box-shadow: 0 0 0 15px rgba(239,68,68,0); }
+      100% { box-shadow: 0 0 0 0 rgba(239,68,68,0); }
+    }
+
+    /* ── BLANK CHAT (Compose Phase) ── */
+    .chat-blank {
+      display: inline-block; min-width: 60px; height: 24px;
+      border-bottom: 2px dashed var(--border-2); margin: 0 4px;
+      vertical-align: bottom; background: rgba(255,255,255,.5);
+    }
+    .chat-row.right .chat-blank { border-color: rgba(255,255,255,.5); background: rgba(0,0,0,.1); }
+
+    /* ── ACTIVITY TAG ── */
+    .act-tag {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 3px var(--space-2); border-radius: var(--radius-full);
+      font-size: 10px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: .07em; margin-bottom: var(--space-3);
+    }
+    .act-listen { background: var(--primary-100); color: var(--primary-700); }
+    .act-speak  { background: var(--accent-100);  color: var(--accent-700); }
+    .act-fill   { background: var(--warm-100);    color: var(--warm-700); }
+
+    /* ── SCORE RING ── */
+    .score-ring {
+      width: 110px; height: 110px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto var(--space-4); position: relative;
+    }
+    .score-ring-inner {
+      width: 80px; height: 80px; border-radius: 50%; background: white;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+    }
+    .result-grade {
+      font-size: 2.5rem; font-weight: 800;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="confetti-container" id="confetti-container" aria-hidden="true"></div>
+
+  <!-- ══════════════════════════════════════════════════════
+       NAVBAR
+       ══════════════════════════════════════════════════════ -->
+  <nav class="navbar" role="navigation" aria-label="Navigasi halaman">
+    <div class="container">
+      <div style="display: flex; align-items: center; gap: var(--space-4);">
+        <a href="index.html" class="btn-back" aria-label="Back to home">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2.5" stroke-linecap="round" aria-hidden="true">
+            <polyline points="15 18 9 12 15 6"/>
+          </svg>
+          Home
+        </a>
+        <!-- Quick Tools -->
+        <div style="display: flex; gap: var(--space-2); align-items: center;">
+          <button onclick="toggleTheme()" class="btn" style="background: var(--surface-2); border-radius: var(--radius-full); width: 32px; height: 32px; padding: 0; display: flex; align-items: center; justify-content: center; color: var(--text-main); font-size: 14px; transition: transform 0.2s ease;" title="Toggle Light/Dark Mode" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+            <span id="theme-icon">🌙</span>
+          </button>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:var(--space-2);">
+        <span class="chip chip--primary" style="background:var(--accent-100);color:var(--accent-700);">Unit 2</span>
+        <span style="font-size:var(--font-size-sm);font-weight:700;color:var(--text-main);">Speak Up!</span>
+      </div>
+      <!-- XP counter -->
+      <div style="display:flex;align-items:center;gap:6px;
+        background:var(--warm-50);border:1px solid var(--warm-200);
+        border-radius:var(--radius-full);padding:4px var(--space-3);">
+        <span style="font-size:.9rem;" aria-hidden="true">⭐</span>
+        <span id="nav-xp" style="font-size:var(--font-size-xs);font-weight:800;
+          color:var(--warm-700);">0 XP</span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ══════════════════════════════════════════════════════
+       MAIN
+       ══════════════════════════════════════════════════════ -->
+  <main class="page-content" id="main-content" style="padding-bottom:90px;">
+    <div class="container">
+
+      <!-- SESSION HERO -->
+      <div class="sess-hero anim-fade-in-up" id="sess-hero"
+        style="background:linear-gradient(135deg,var(--primary),var(--primary-700));">
+        <span class="sess-hero-deco" id="hero-deco" aria-hidden="true">👋</span>
+        <div style="position:relative;z-index:1;">
+          <p style="font-size:10px;font-weight:800;text-transform:uppercase;
+            letter-spacing:.09em;color:rgba(255,255,255,.65);margin-bottom:2px;">
+            UNIT 2 · SPEAK UP</p>
+          <h1 id="hero-title" style="font-size:var(--font-size-xl);font-weight:800;
+            color:white;margin-bottom:var(--space-3);">Greetings & Introductions</h1>
+          
+          <p id="hero-desc" style="font-size:var(--font-size-sm);color:rgba(255,255,255,.8);
+            margin-bottom:var(--space-3);line-height:1.5;">
+            Learn how to start a friendly conversation with someone new.</p>
+
+          <div class="progress-bar-track" style="background:rgba(255,255,255,.2);">
+            <div id="hero-bar" class="progress-bar-fill"
+              style="width:0%;background:white;transition:width .8s ease;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SESSION TABS -->
+      <div class="sess-tabs anim-fade-in-up delay-100" role="tablist"
+        aria-label="Choose a conversation scenario" style="margin-bottom:var(--space-4);">
+        <button class="sess-tab active" id="tab-0" role="tab" onclick="App.goTo(0)">👋 Greetings</button>
+        <button class="sess-tab" id="tab-1" role="tab" onclick="App.goTo(1)">🛒 At the Coffee Shop</button>
+        <button class="sess-tab" id="tab-2" role="tab" onclick="App.goTo(2)">🗺️ Directions</button>
+        <button class="sess-tab" id="tab-3" role="tab" onclick="App.goTo(3)">⏰ Routine</button>
+        <button class="sess-tab locked" id="tab-4" role="tab" onclick="App.goTo(4)">🎯 Quiz</button>
+      </div>
+
+      <!-- PHASE PROGRESS -->
+      <div class="card anim-fade-in-up delay-200"
+        style="padding:var(--space-4);margin-bottom:var(--space-4);" id="phase-panel">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--space-3);">
+          <span style="font-size:10px;font-weight:800;color:var(--text-faint);
+            text-transform:uppercase;letter-spacing:.07em;">Practice Steps</span>
+          <span id="phase-label-text"
+            style="display:none;"></span>
+        </div>
+        <div class="phase-strip" id="phase-strip"></div>
+      </div>
+
+      <!-- ACTIVITY AREA -->
+      <div id="activity-area" class="anim-fade-in-up delay-300">
+        <!-- Rendered by JS -->
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ══════════════════════════════════════════════════════
+       SCRIPTS
+       ══════════════════════════════════════════════════════ -->
+  <script src="js/app.js"></script>
+  <script src="js/quiz-store.js"></script>
+  <script src="js/feedback.js"></script>
+  <script>
+  'use strict';
+
+  /* ════════════════════════════════════════════════════════
+     1. SCENARIO DATA (4 Situasi Nyata)
+     ════════════════════════════════════════════════════════ */
+  const SCENARIOS = [
+    /* ─── SESSION 0: Greetings & Introductions ─── */
+    {
+      id: 0, title: 'Greetings & Introductions', emoji: '👋', color: 'blue',
+      bg: 'linear-gradient(135deg,#2563EB,#1D4ED8)',
+      desc: 'Learn how to start a friendly conversation with a coworker or someone new.',
+      tips: [
+        { icon:'💡', title:'Greeting Phrases', body:'Use <b>Good morning</b> (pagi), <b>Good afternoon</b> (siang), <b>Good evening</b> (malam/sore). For casual settings say <b>Hi</b> or <b>Hello</b>.' },
+        { icon:'🗣️', title:'Responding to "How are you?"', body:'Common answers: <b>I am fine</b> · <b>I am well</b> · <b>Not bad</b> · <b>Pretty good</b>. Always add <b>thank you</b> to sound polite.' },
+        { icon:'🤝', title:'Nice to meet you', body:'When you first meet someone, say <b>"Nice to meet you."</b> The other person replies <b>"Nice to meet you too."</b>' }
+      ],
+      dialogue: [
+        { role:'A', avatar:'👩', en:"Good morning! How are you today?",              id_:"Selamat pagi! Bagaimana kabarmu hari ini?",         delay: 0 },
+        { role:'B', avatar:'👨', en:"Good morning. I am fine, thank you. And you?",  id_:"Selamat pagi. Saya baik, terima kasih. Dan kamu?", delay: 700 },
+        { role:'A', avatar:'👩', en:"I am doing well. My name is Siti.",             id_:"Saya baik-baik saja. Nama saya Siti.",              delay: 700 },
+        { role:'B', avatar:'👨', en:"Nice to meet you, Siti. I am Budi.",            id_:"Senang bertemu denganmu, Siti. Saya Budi.",         delay: 700 },
+        { role:'A', avatar:'👩', en:"Are you new here, Budi?",                       id_:"Apakah kamu orang baru di sini, Budi?",             delay: 700 },
+        { role:'B', avatar:'👨', en:"Yes, today is my first day at work.",           id_:"Ya, hari ini hari pertama saya bekerja.",           delay: 700 },
+        { role:'A', avatar:'👩', en:"Welcome! I hope you enjoy working here.",       id_:"Selamat datang! Semoga kamu betah bekerja di sini.", delay: 700 },
+        { role:'B', avatar:'👨', en:"Thank you very much. See you later, Siti.",     id_:"Terima kasih banyak. Sampai jumpa, Siti.",          delay: 700 }
+      ],
+      exerciseDialogue: [
+        { role:'A', avatar:'👩', en:"Hello! Good afternoon.",                        id_:"Halo! Selamat siang.",                              delay: 0 },
+        { role:'B', avatar:'👨', en:"Hi! Good afternoon. How are you?",              id_:"Hai! Selamat siang. Bagaimana kabarmu?",            delay: 700 },
+        { role:'A', avatar:'👩', en:"I am pretty good, thank you. What is your name?", id_:"Saya cukup baik, terima kasih. Siapa namamu?", delay: 700 },
+        { role:'B', avatar:'👨', en:"My name is Andi. Nice to meet you.",            id_:"Nama saya Andi. Senang bertemu denganmu.",          delay: 700 },
+        { role:'A', avatar:'👩', en:"Nice to meet you too, Andi. I am Rina.",        id_:"Senang bertemu denganmu juga, Andi. Saya Rina.",    delay: 700 },
+        { role:'B', avatar:'👨', en:"Do you work here, Rina?",                       id_:"Apakah kamu bekerja di sini, Rina?",                delay: 700 },
+        { role:'A', avatar:'👩', en:"Yes, I am a cashier here.",                     id_:"Ya, saya adalah kasir di sini.",                    delay: 700 },
+        { role:'B', avatar:'👨', en:"Great. See you around, Rina.",                  id_:"Bagus. Sampai jumpa lagi, Rina.",                   delay: 700 }
+      ],
+      quiz: [
+        {
+          id:'q0_1',
+          text:'Complete: "Good morning. I am ____, thank you."',
+          options: ['bad', 'fine', 'busy', 'sleepy'],
+          correct: 1,
+          whyCorrect: '"I am fine, thank you" is the standard polite response to "How are you?" It means you are feeling good.',
+          whyWrong: ['"bad" means you feel unwell — not a polite greeting response.', null, '"busy" (sibuk) is not typically used as a direct response to "How are you?".', '"sleepy" is too informal and not appropriate in a first meeting.'],
+          example: 'A: How are you? | B: I am fine, thank you!'
+        },
+        {
+          id:'q0_2',
+          text:'How does Budi reply when Siti says "My name is Siti"?',
+          options: ['See you later.', 'Thank you.', 'Nice to meet you.', 'I am sorry.'],
+          correct: 2,
+          whyCorrect: '"Nice to meet you" is the standard expression when meeting someone for the first time.',
+          whyWrong: ['"See you later" is used when saying goodbye.', '"Thank you" does not fit this context.', null, '"I am sorry" is used to apologize.'],
+          example: 'A: My name is Siti. → B: Nice to meet you, Siti!'
+        },
+        {
+          id:'q0_3',
+          text:'Which greeting do you use in the evening?',
+          options: ['Good morning', 'Good afternoon', 'Good night', 'Good evening'],
+          correct: 3,
+          whyCorrect: '"Good evening" is used when greeting someone in the evening (around 6 PM onwards). "Good night" is only used when saying goodbye at night.',
+          whyWrong: ['"Good morning" is for the morning hours.', '"Good afternoon" is for midday to around 5–6 PM.', '"Good night" is a farewell, not a greeting.', null],
+          example: 'Good evening, everyone! How was your day?'
+        },
+        {
+          id:'q0_4',
+          text:'How do you ask someone\'s name politely?',
+          options: ['Who are you?', 'What is your name?', 'Your name?', 'Name please?'],
+          correct: 1,
+          whyCorrect: '"What is your name?" is the polite and complete way to ask for someone\'s name in English.',
+          whyWrong: ['"Who are you?" sounds rude in a social context.', null, '"Your name?" is too short and informal.', '"Name please?" is also too casual.'],
+          example: 'A: What is your name? B: My name is Budi.'
+        },
+        {
+          id:'q0_5',
+          text:'What is the correct reply to "Nice to meet you"?',
+          options: ['Me too.', 'Nice to meet you too.', 'Good.', 'Yes, I know.'],
+          correct: 1,
+          whyCorrect: 'The standard reply is "Nice to meet you too." The word "too" shows you feel the same way.',
+          whyWrong: ['"Me too" alone sounds incomplete in formal or semi-formal conversation.', null, '"Good" does not relate to the expression.', '"Yes, I know" sounds dismissive and rude.'],
+          example: 'A: Nice to meet you. B: Nice to meet you too!'
+        }
+      ]
+    },
+
+    /* ─── SESSION 1: At the Coffee Shop ─── */
+    {
+      id: 1, title: 'At the Coffee Shop', emoji: '☕', color: 'amber',
+      bg: 'linear-gradient(135deg,#D97706,#92400E)',
+      desc: 'Practice ordering food or drinks and asking about the price in everyday situations.',
+      tips: [
+        { icon:'💡', title:'Ordering politely', body:'Always start with <b>Excuse me</b> or <b>Can I have…?</b> / <b>I would like…</b> to sound polite when ordering.' },
+        { icon:'💰', title:'Asking the price', body:'Use <b>"How much is it?"</b> for one item, and <b>"How much are they?"</b> for multiple items.' },
+        { icon:'🙏', title:'Thank you expressions', body:'After receiving your order or change, say <b>"Thank you"</b> or <b>"Thank you very much."</b> The seller may reply <b>"You\'re welcome."</b>' }
+      ],
+      dialogue: [
+        { role:'A', avatar:'🙋', en:"Excuse me, can I see the menu, please?",         id_:"Permisi, boleh saya lihat menunya?",                   delay: 0 },
+        { role:'B', avatar:'🧑‍🍳', en:"Of course! Here you are.",                     id_:"Tentu saja! Ini dia.",                                  delay: 700 },
+        { role:'A', avatar:'🙋', en:"I would like one cup of coffee, please.",         id_:"Saya ingin satu cangkir kopi, tolong.",                 delay: 700 },
+        { role:'B', avatar:'🧑‍🍳', en:"Hot or iced coffee?",                          id_:"Kopi panas atau dingin?",                              delay: 700 },
+        { role:'A', avatar:'🙋', en:"Iced coffee, please. How much is it?",            id_:"Kopi dingin, tolong. Berapa harganya?",                 delay: 700 },
+        { role:'B', avatar:'🧑‍🍳', en:"It is fifteen thousand rupiah.",                id_:"Harganya lima belas ribu rupiah.",                      delay: 700 },
+        { role:'A', avatar:'🙋', en:"Here is twenty thousand. Keep the change.",       id_:"Ini dua puluh ribu. Ambil kembaliannya.",               delay: 700 },
+        { role:'B', avatar:'🧑‍🍳', en:"Thank you! Your coffee will be ready soon.",   id_:"Terima kasih! Kopi Anda akan segera siap.",             delay: 700 }
+      ],
+      exerciseDialogue: [
+        { role:'A', avatar:'🙋', en:"Excuse me, do you have hot tea?", id_:"Permisi, apakah Anda punya teh panas?", delay: 0 },
+        { role:'B', avatar:'🧑‍🍳', en:"Yes, we do. Would you like one?", id_:"Ya, kami punya. Apakah Anda mau satu?", delay: 700 },
+        { role:'A', avatar:'🙋', en:"Yes, please. How much is it?", id_:"Ya, tolong. Berapa harganya?", delay: 700 },
+        { role:'B', avatar:'🧑‍🍳', en:"It is ten thousand rupiah.", id_:"Harganya sepuluh ribu rupiah.", delay: 700 },
+        { role:'A', avatar:'🙋', en:"Here is the money.", id_:"Ini uangnya.", delay: 700 },
+        { role:'B', avatar:'🧑‍🍳', en:"Thank you. Please wait a moment.", id_:"Terima kasih. Silakan tunggu sebentar.", delay: 700 }
+      ],
+      quiz: [
+        {
+          id:'q1_1',
+          text:'Which phrase is correct for asking the price?',
+          options: ['How much is it?', 'How many is it?', 'What time is it?', 'Where is it?'],
+          correct: 0,
+          whyCorrect: '"How much" is used to ask about the price of something or an uncountable noun.',
+          whyWrong: [null, '"How many" is for countable nouns (books, apples).', '"What time" is for asking about the clock.', '"Where" is used to ask about a location.'],
+          example: 'How much is this coffee? — It is fifteen thousand rupiah.'
+        },
+        {
+          id:'q1_2',
+          text:'How do you politely order something?',
+          options: ['Give me coffee!', 'I want coffee.', 'I would like a coffee, please.', 'Coffee now.'],
+          correct: 2,
+          whyCorrect: '"I would like…" is the most polite way to order. Adding "please" makes it even more courteous.',
+          whyWrong: ['"Give me" sounds demanding and rude.', '"I want" is acceptable but less formal.', null, '"Coffee now" is too abrupt and impolite.'],
+          example: 'I would like one iced coffee, please.'
+        },
+        {
+          id:'q1_3',
+          text:'The seller says "Here is your change." What does "change" mean?',
+          options: ['Penggantian', 'Kembalian', 'Perubahan', 'Pergantian'],
+          correct: 1,
+          whyCorrect: '"Change" in a shopping context means kembalian — the money you receive back after paying more than the price.',
+          whyWrong: ['"Penggantian" means replacement.', null, '"Perubahan" means a general change or difference.', '"Pergantian" means a handover or shift.'],
+          example: 'I paid 20,000. The price is 15,000. My change is 5,000.'
+        },
+        {
+          id:'q1_4',
+          text:'Complete: "Can I ____ the menu, please?"',
+          options: ['look', 'see', 'watch', 'read'],
+          correct: 1,
+          whyCorrect: '"Can I see the menu?" is the most natural and common way to ask for the menu.',
+          whyWrong: ['"Look at" needs a preposition — "Can I look at the menu?" is also correct, but "look" alone is incomplete.', null, '"Watch" is used for moving things like TV or movies.', '"Read" could work but "see" is the most natural choice for a menu.'],
+          example: 'Excuse me, can I see the menu, please?'
+        },
+        {
+          id:'q1_5',
+          text:'The seller says "Here you are." What does this mean?',
+          options: ['Di sini kamu berada.', 'Di sana kamu ada.', 'Ini untuk kamu.', 'Kamu di sini.'],
+          correct: 2,
+          whyCorrect: '"Here you are" is a polite expression used when handing something to someone. It means "Ini untuk kamu / Silakan."',
+          whyWrong: ['"Di sini kamu berada" is a literal but incorrect translation.', '"Di sana kamu ada" is completely wrong.', null, '"Kamu di sini" means "You are here" — not related.'],
+          example: 'A: Can I have a menu? B: Of course! Here you are.'
+        }
+      ]
+    },
+
+    /* ─── SESSION 2: Asking for Directions ─── */
+    {
+      id: 2, title: 'Asking for Directions', emoji: '🗺️', color: 'green',
+      bg: 'linear-gradient(135deg,#059669,#065F46)',
+      desc: 'How to politely ask for a location and understand directions in public places.',
+      tips: [
+        { icon:'💡', title:'Asking directions politely', body:'Start with <b>Excuse me</b> before asking. Use <b>"Where is the …?"</b> or <b>"How do I get to …?"</b>' },
+        { icon:'🧭', title:'Direction vocabulary', body:'<b>Go straight</b> = lurus · <b>Turn left</b> = belok kiri · <b>Turn right</b> = belok kanan · <b>Go back</b> = kembali' },
+        { icon:'📍', title:'Landmark words', body:'<b>next to</b> = di samping · <b>in front of</b> = di depan · <b>behind</b> = di belakang · <b>across from</b> = di seberang' }
+      ],
+      dialogue: [
+        { role:'A', avatar:'👱‍♀️', en:"Excuse me, where is the nearest ATM?",               id_:"Permisi, di mana ATM terdekat?",                     delay: 0 },
+        { role:'B', avatar:'👨‍🔧', en:"Go straight along this road.",                         id_:"Jalan lurus di sepanjang jalan ini.",                 delay: 700 },
+        { role:'A', avatar:'👱‍♀️', en:"Then, do I turn left or right?",                       id_:"Lalu, saya belok kiri atau kanan?",                  delay: 700 },
+        { role:'B', avatar:'👨‍🔧', en:"Turn right at the traffic light.",                      id_:"Belok kanan di lampu merah.",                        delay: 700 },
+        { role:'A', avatar:'👱‍♀️', en:"Is it far from here?",                                 id_:"Apakah jauh dari sini?",                             delay: 700 },
+        { role:'B', avatar:'👨‍🔧', en:"No, it is very close. Only about five minutes on foot.", id_:"Tidak, sangat dekat. Hanya sekitar lima menit jalan kaki.", delay: 700 },
+        { role:'A', avatar:'👱‍♀️', en:"Is the ATM in front of the minimarket?",               id_:"Apakah ATM itu di depan minimarket?",                 delay: 700 },
+        { role:'B', avatar:'👨‍🔧', en:"Yes, that is correct. You cannot miss it!",            id_:"Ya, betul. Kamu pasti tidak akan terlewat!",          delay: 700 }
+      ],
+      exerciseDialogue: [
+        { role:'A', avatar:'👱‍♀️', en:"Excuse me, where is the toilet?", id_:"Permisi, di mana toilet?", delay: 0 },
+        { role:'B', avatar:'👨‍🔧', en:"It is behind the minimarket.", id_:"Itu ada di belakang minimarket.", delay: 700 },
+        { role:'A', avatar:'👱‍♀️', en:"How do I get there?", id_:"Bagaimana cara saya ke sana?", delay: 700 },
+        { role:'B', avatar:'👨‍🔧', en:"Go straight, then turn left.", id_:"Jalan lurus, lalu belok kiri.", delay: 700 },
+        { role:'A', avatar:'👱‍♀️', en:"Thank you for your help.", id_:"Terima kasih atas bantuan Anda.", delay: 700 },
+        { role:'B', avatar:'👨‍🔧', en:"You are welcome.", id_:"Sama-sama.", delay: 700 }
+      ],
+      quiz: [
+        {
+          id:'q2_1',
+          text:'Complete: "Go ____, then turn right at the traffic light."',
+          options: ['back', 'straight', 'left', 'down'],
+          correct: 1,
+          whyCorrect: '"Go straight" means lurus — moving forward without turning.',
+          whyWrong: ['"Go back" means kembali.', null, '"Turn left" means belok kiri — that contradicts the direction.', '"Go down" means turun, not lurus.'],
+          example: 'Go straight along this road, then turn right.'
+        },
+        {
+          id:'q2_2',
+          text:'Someone says "Turn right at the corner." Where do you go?',
+          options: ['Belok kiri di pojok', 'Lurus di pojok', 'Belok kanan di pojok', 'Balik di pojok'],
+          correct: 2,
+          whyCorrect: '"Turn right" means belok kanan. "At the corner" means di pojok/tikungan.',
+          whyWrong: ['"Belok kiri" is turn left, not right.', '"Lurus" means straight, not turning.', null, '"Balik" means to turn around/go back.'],
+          example: 'Turn right at the corner, and the office is on your left.'
+        },
+        {
+          id:'q2_3',
+          text:'How do you ask for directions politely?',
+          options: ['Where is toilet?', 'Excuse me, where is the toilet?', 'Toilet where?', 'I need toilet!'],
+          correct: 1,
+          whyCorrect: 'A polite question starts with "Excuse me" and uses the full sentence structure "Where is the…?"',
+          whyWrong: ['"Where is toilet?" is missing the article "the".', null, '"Toilet where?" is too informal.', '"I need toilet!" is a demand, not a question.'],
+          example: 'Excuse me, where is the nearest bus stop?'
+        },
+        {
+          id:'q2_4',
+          text:'The bank is "in front of" the school. Where is the bank?',
+          options: ['Di belakang sekolah', 'Di samping sekolah', 'Di depan sekolah', 'Di dalam sekolah'],
+          correct: 2,
+          whyCorrect: '"In front of" = di depan. So the bank is located in front of the school.',
+          whyWrong: ['"Di belakang" means behind.', '"Di samping" means next to.', null, '"Di dalam" means inside.'],
+          example: 'The minimarket is in front of the bus station.'
+        },
+        {
+          id:'q2_5',
+          text:'Someone says "It is only five minutes on foot." What does this mean?',
+          options: ['Naik kendaraan 5 menit', 'Jalan kaki 5 menit', 'Berlari 5 menit', '5 menit dengan ojek'],
+          correct: 1,
+          whyCorrect: '"On foot" means by walking (jalan kaki). So "five minutes on foot" means 5 menit jalan kaki.',
+          whyWrong: ['"By vehicle" would be "by car/motorbike", not "on foot".', null, '"Running" would be "by running" not "on foot".', '"By ojek" is also by vehicle, not on foot.'],
+          example: 'The market is only ten minutes on foot from here.'
+        }
+      ]
+    },
+
+    /* ─── SESSION 3: Daily Routine ─── */
+    {
+      id: 3, title: 'Daily Routine', emoji: '⏰', color: 'purple',
+      bg: 'linear-gradient(135deg,#7C3AED,#4C1D95)',
+      desc: 'Talk about your daily schedule, work activities, and morning habits.',
+      tips: [
+        { icon:'💡', title:'Simple Present for Routines', body:'Use the simple present tense for daily habits: <b>I wake up</b>, <b>I cook</b>, <b>She opens the shop</b>. Add -s/-es for he/she/it.' },
+        { icon:'⏱️', title:'Prepositions of Time', body:'<b>at</b> + specific time (at 6 AM) · <b>in</b> + part of day (in the morning) · <b>on</b> + day name (on Monday).' },
+        { icon:'📅', title:'Frequency Adverbs', body:'<b>always</b> (selalu) · <b>usually</b> (biasanya) · <b>often</b> (sering) · <b>sometimes</b> (kadang) · <b>never</b> (tidak pernah).' }
+      ],
+      dialogue: [
+        { role:'A', avatar:'👨', en:"What time do you usually wake up?",                id_:"Jam berapa biasanya kamu bangun?",                     delay: 0 },
+        { role:'B', avatar:'👩', en:"I usually wake up at five in the morning.",        id_:"Saya biasanya bangun jam lima pagi.",                  delay: 700 },
+        { role:'A', avatar:'👨', en:"That is very early! What do you do first?",        id_:"Itu sangat pagi! Apa yang kamu lakukan pertama?",     delay: 700 },
+        { role:'B', avatar:'👩', en:"I wash my face and then cook rice.",               id_:"Saya mencuci muka lalu memasak nasi.",                 delay: 700 },
+        { role:'A', avatar:'👨', en:"Do you go to work every day?",                     id_:"Apakah kamu bekerja setiap hari?",                    delay: 700 },
+        { role:'B', avatar:'👩', en:"Yes, I open my stall at six and close at five.",   id_:"Ya, saya membuka lapak jam enam dan tutup jam lima.", delay: 700 },
+        { role:'A', avatar:'👨', en:"Do you ever take a rest in the afternoon?",        id_:"Apakah kamu pernah istirahat di siang hari?",         delay: 700 },
+        { role:'B', avatar:'👩', en:"Sometimes I rest for one hour after lunch.",       id_:"Kadang saya istirahat satu jam setelah makan siang.", delay: 700 }
+      ],
+      exerciseDialogue: [
+        { role:'A', avatar:'👨', en:"What do you usually do in the evening?", id_:"Apa yang biasanya kamu lakukan di malam hari?", delay: 0 },
+        { role:'B', avatar:'👩', en:"I usually watch TV and relax.", id_:"Saya biasanya menonton TV dan bersantai.", delay: 700 },
+        { role:'A', avatar:'👨', en:"Do you study English every day?", id_:"Apakah kamu belajar bahasa Inggris setiap hari?", delay: 700 },
+        { role:'B', avatar:'👩', en:"Yes, I always study at night.", id_:"Ya, saya selalu belajar di malam hari.", delay: 700 },
+        { role:'A', avatar:'👨', en:"What time do you sleep?", id_:"Jam berapa kamu tidur?", delay: 700 },
+        { role:'B', avatar:'👩', en:"I never sleep late. I sleep at ten.", id_:"Saya tidak pernah tidur larut. Saya tidur jam sepuluh.", delay: 700 }
+      ],
+      quiz: [
+        {
+          id:'q3_1',
+          text:'Complete: "I wake up ____ five in the morning."',
+          options: ['in', 'on', 'at', 'to'],
+          correct: 2,
+          whyCorrect: 'The preposition "at" is always used before specific times (at 5 AM, at noon, at midnight).',
+          whyWrong: ['"in" is used for months, years, or parts of the day (in the morning).', '"on" is used for days (on Monday, on Sunday).', null, '"to" shows direction — not used for time.'],
+          example: 'I start work at 7 AM and finish at 5 PM.'
+        },
+        {
+          id:'q3_2',
+          text:'She works every day. Which word best replaces "every day" to show a strong habit?',
+          options: ['sometimes', 'never', 'always', 'rarely'],
+          correct: 2,
+          whyCorrect: '"Always" means selalu — it shows a very consistent, daily habit.',
+          whyWrong: ['"Sometimes" means kadang-kadang — not every day.', '"Never" means tidak pernah — the opposite!', null, '"Rarely" means jarang — also not every day.'],
+          example: 'She always wakes up at five in the morning.'
+        },
+        {
+          id:'q3_3',
+          text:'Complete: "I open my stall ____ Monday ____ Saturday."',
+          options: ['in … in', 'on … on', 'from … to', 'at … at'],
+          correct: 2,
+          whyCorrect: '"From … to" is used to describe a range of time — from Monday to Saturday (dari Senin sampai Sabtu).',
+          whyWrong: ['"in … in" is for months or general periods, not day ranges.', '"on … on" is used for single days, not a range.', null, '"at … at" is for specific times, not day ranges.'],
+          example: 'She opens her shop from Monday to Saturday.'
+        },
+        {
+          id:'q3_4',
+          text:'Budi says "I cook rice every morning." Change it to "she":',
+          options: ['She cook rice every morning.', 'She cooks rice every morning.', 'She cooking rice every morning.', 'She cooked rice every morning.'],
+          correct: 1,
+          whyCorrect: 'In simple present tense, add -s/-es for he/she/it. So "I cook" → "She cooks".',
+          whyWrong: ['"She cook" is missing the -s for third person.', null, '"She cooking" is missing the verb "is" (progressive tense).', '"She cooked" is past tense, not present.'],
+          example: 'I cook rice. → She cooks rice. He opens the shop. → He opens the shop.'
+        },
+        {
+          id:'q3_5',
+          text:'What does "sometimes" mean in Indonesian?',
+          options: ['Selalu', 'Sering', 'Kadang-kadang', 'Tidak pernah'],
+          correct: 2,
+          whyCorrect: '"Sometimes" = kadang-kadang. It means the action does not happen all the time, but once in a while.',
+          whyWrong: ['"Selalu" = always.', '"Sering" = often.', null, '"Tidak pernah" = never.'],
+          example: 'Sometimes I rest for one hour after lunch.'
+        }
+      ]
+    }
+  ];
+
+  /* ════════════════════════════════════════════════════════
+     2. APP STATE & CONFIG
+     ════════════════════════════════════════════════════════ */
+  const App = {
+    sess:  0,
+    phase: 0, // 0=Listen, 1=Imitate, 2=Compose
+    xp:    0,
+    done:  [false,false,false,false],
+    
+    ls: { currentLine: 0 }, // Listen state
+    is: { currentLine: 0, recording: false }, // Imitate state
+    cs: { qi: 0, qs: [], quizSess: null }, // Compose state
+    cq: { qi: 0, score: 0, qs: [], quizSess: null }, // Closing quiz state
+
+    PHASE_ICONS: ['📖', '✍️', '🎮'],
+    PHASE_NAMES: ['Material', 'Exercise', 'Game'],
+
+    /* ── INIT ── */
+    init(){
+      this._loadProgress();
+      this._loadXP();
+      FeedbackEngine.init({
+        onNext:  () => this.sess === 4 ? this._closingQuizNext() : this._composeNext(),
+        onRetry: () => this.sess === 4 ? this._closingQuizRetry() : this._composeRetry(),
+        onSkip:  () => this.sess === 4 ? this._closingQuizNext() : this._composeNext(),
+      });
+      
+      // Warm up TTS
+      if('speechSynthesis' in window){
+        window.speechSynthesis.getVoices();
+      }
+
+      this.render();
+    },
+
+    goTo(n){
+      FeedbackEngine.dismiss();
+      if('speechSynthesis' in window) window.speechSynthesis.cancel();
+      this.sess=n; this.phase=0;
+      this.render();
+      window.scrollTo({top:0,behavior:'smooth'});
+    },
+
+    nextPhase(){
+      if(this.phase<2){
+        this.phase++;
+        this.render();
+        setTimeout(()=>window.scrollTo({top:100,behavior:'smooth'}),50);
+      } else {
+        this._completeSess();
+      }
+    },
+
+    /* ── RENDER ROOT ── */
+    render(){
+      this._updateHero();
+      this._updateTabs();
+      this._updatePhaseStrip();
+      if(this.sess===4){ this._renderClosingQuiz(); return; }
+      [this._renderListen, this._renderImitate, this._renderGameHub][this.phase].call(this);
+    },
+
+    _updateHero(){
+      if(this.sess===4){
+        document.getElementById('sess-hero').style.background='linear-gradient(135deg,#DC2626,#7F1D1D)';
+        document.getElementById('hero-deco').textContent='🎯';
+        document.getElementById('hero-title').textContent='Quiz';
+        document.getElementById('hero-desc').textContent='Test your knowledge from all speaking scenarios.';
+        const bar=document.getElementById('hero-bar');
+        if(bar) bar.style.width='0%';
+        return;
+      }
+      const s = SCENARIOS[this.sess];
+      document.getElementById('sess-hero').style.background = s.bg;
+      document.getElementById('hero-deco').textContent = s.emoji;
+      document.getElementById('hero-title').textContent = s.title;
+      document.getElementById('hero-desc').textContent = s.desc;
+
+      const sessPct = Math.round((this.phase/3)*100);
+      const bar = document.getElementById('hero-bar');
+      if(bar){ bar.style.width='0%'; setTimeout(()=>{ bar.style.width=`${sessPct}%`; },100); }
+    },
+
+    _updateTabs(){
+      for(let i=0;i<5;i++){
+        const el=document.getElementById(`tab-${i}`);
+        if(!el) continue;
+        el.className='sess-tab';
+        if(i===this.sess){ el.classList.add('active'); }
+        else if(i<4 && this.done[i]){ el.classList.add('done'); }
+        el.setAttribute('aria-selected', i===this.sess?'true':'false');
+      }
+    },
+
+    _updatePhaseStrip(){
+      const strip=document.getElementById('phase-strip');
+      const lbl=document.getElementById('phase-label-text');
+      const pp=document.getElementById('phase-panel');
+      if(this.sess===4){
+        if(pp) pp.style.display='none'; return;
+      }
+      if(pp) pp.style.display='';
+      if(!strip) return;
+
+      let html='';
+      this.PHASE_NAMES.forEach((name,i)=>{
+        const isDone=i<this.phase;
+        const isAct=i===this.phase;
+        const cls=isDone?'done':isAct?'active':'upcoming';
+        const icon=isDone?'✓':this.PHASE_ICONS[i];
+        const lblCls=isAct?'phase-label active-label':'phase-label';
+        
+        html+=`<div class="phase-node">
+          <div class="phase-dot ${cls}" title="${name}">${icon}</div>
+          <span class="${lblCls}">${name}</span>
+        </div>`;
+        if(i<2) html+=`<div class="phase-line ${isDone?'done':''}"></div>`;
+      });
+      strip.innerHTML=html;
+    },
+
+    /* ═══════════════════════════════════════════════════════
+       PHASE 0: LISTEN (Dengar)
+       ═══════════════════════════════════════════════════════ */
+    _renderListen(){
+      this.ls.currentLine = 0;
+      const s = SCENARIOS[this.sess];
+
+      document.getElementById('activity-area').innerHTML=`
+        <span class="act-tag act-listen">
+          🎧 Listen & Understand &middot; Notice the pronunciation
+        </span>
+
+        <div class="card" style="padding:var(--space-5);background:var(--card);">
+          <p style="font-size:10px;font-weight:800;text-transform:uppercase;
+            letter-spacing:.07em;color:var(--text-faint);margin-bottom:var(--space-3);">💬 Sample Dialogue — Listen & Read Along</p>
+          <div class="chat-container" id="listen-chat"></div>
+          <div style="margin-top:var(--space-6);display:flex;justify-content:center;">
+            <button class="btn btn-primary" onclick="App._playAllListen()" id="btn-play-all">
+              ▶️ Play All Dialogue
+            </button>
+            <button class="btn btn-accent" onclick="App.nextPhase()" id="btn-next-phase" style="display:none;">
+              Next: Exercise →
+            </button>
+          </div>
+        </div>`;
+
+      // Render all bubbles at once but keep them static initially
+      const chat = document.getElementById('listen-chat');
+      let html = '';
+      s.dialogue.forEach((line, i) => {
+        const side = line.role === 'A' ? 'left' : 'right';
+        const gender = (line.avatar.includes('👩') || line.avatar.includes('👱‍♀️')) ? 'female' : 'male';
+        const safeText = line.en.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+        html += `
+          <div class="chat-row ${side}" id="lr-${i}" style="animation-delay:${i*0.2}s">
+            <div class="chat-avatar">${line.avatar}</div>
+            <div class="chat-bubble-wrap">
+              <div class="chat-bubble">
+                ${line.en}
+                <button class="btn-tts" onclick="window.playTTS('${safeText}', this, '${gender}', '${line.role}')" aria-label="Listen to this sentence">🔊</button>
+              </div>
+              <span class="chat-trans">${line.id_}</span>
+            </div>
+          </div>`;
+      });
+      chat.innerHTML = html;
+
+      // Automatically let user proceed, listening is self-paced
+      setTimeout(() => {
+        document.getElementById('btn-play-all').style.display = 'none';
+        document.getElementById('btn-next-phase').style.display = 'inline-flex';
+        this._addXP(10);
+      }, 5000); // just reveal button after 5s
+    },
+
+    async _playAllListen(){
+      if(!('speechSynthesis' in window)) return;
+      const s = SCENARIOS[this.sess];
+
+      const btnPlay = document.getElementById('btn-play-all');
+      const btnNext = document.getElementById('btn-next-phase');
+      if(btnPlay) btnPlay.style.display = 'none';
+      if(btnNext) btnNext.style.display = 'none';
+
+      // Play each line sequentially — wait for TTS to finish before next
+      for(let i = 0; i < s.dialogue.length; i++){
+        const line = s.dialogue[i];
+        const btn = document.querySelector(`#lr-${i} .btn-tts`);
+        const gender = (line.avatar.includes('👩') || line.avatar.includes('👱‍♀️')) ? 'female' : 'male';
+        await window.playTTS(line.en, btn, gender, line.role);
+        // Short natural pause between lines
+        await new Promise(res => setTimeout(res, 400));
+      }
+
+      if(btnNext) btnNext.style.display = 'inline-flex';
+      this._addXP(15);
+    },
+
+    /* ═══════════════════════════════════════════════════════
+       PHASE 1: IMITATE (Tirukan)
+       ═══════════════════════════════════════════════════════ */
+    _renderImitate(){
+      this.is.currentLine = 0;
+      this._renderImitateLine();
+    },
+
+    _renderImitateLine(){
+      const s = SCENARIOS[this.sess];
+      if(this.is.currentLine >= s.exerciseDialogue.length){
+        this._addXP(25);
+        this.nextPhase();
+        return;
+      }
+      
+      const line = s.exerciseDialogue[this.is.currentLine];
+      const side = line.role === 'A' ? 'left' : 'right';
+      const _gender = (line.avatar === '\ud83d\udc69' || line.avatar === '\ud83d\udc71\u200d\u2640\ufe0f' || line.avatar === '\ud83d\udc71\u200d\u2640') ? 'female' : 'male';
+      const _safe = line.en.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+
+      document.getElementById('activity-area').innerHTML=`
+        <span class="act-tag act-speak">
+          🎙️ Your Turn &middot; Line ${this.is.currentLine + 1} of ${s.exerciseDialogue.length}
+        </span>
+        
+        <div class="card" style="padding:var(--space-6);min-height:300px;display:flex;flex-direction:column;">
+          <p style="text-align:center;color:var(--text-muted);font-size:var(--font-size-sm);margin-bottom:var(--space-4);">
+            1. Listen to the sentence<br>2. Tap the mic and repeat it!
+          </p>
+          
+          <div class="chat-row ${side}" style="margin:0 auto;max-width:100%;align-self:center;">
+            <div class="chat-avatar">${line.avatar}</div>
+            <div class="chat-bubble-wrap">
+              <div class="chat-bubble" style="font-size:var(--font-size-lg);">
+                ${line.en}
+                <button class="btn-tts" onclick="window.playTTS('${_safe}', this, '${_gender}', '${line.role}')">🔊</button>
+              </div>
+              <span class="chat-trans" style="text-align:center;">${line.id_}</span>
+            </div>
+          </div>
+
+          <div style="flex:1;"></div>
+
+          <div class="mic-wrap">
+            <button class="btn-mic" id="btn-mic" onclick="App._toggleMic()">🎤</button>
+            <p id="mic-hint" style="margin-top:var(--space-3);color:var(--text-faint);font-size:var(--font-size-sm);font-weight:600;">
+              Tap to speak
+            </p>
+          </div>
+        </div>`;
+    },
+
+    _toggleMic(){
+      const btn = document.getElementById('btn-mic');
+      const hint = document.getElementById('mic-hint');
+      if(this.is.recording) return;
+
+      const s = SCENARIOS[this.sess];
+      const line = s.exerciseDialogue[this.is.currentLine];
+      const target = line.en;
+
+      const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+      // Fallback: browser tanpa Speech Recognition - jangan klaim benar
+      if(!SR){
+        btn.classList.remove('recording');
+        btn.innerHTML = '🎤';
+        hint.innerHTML = 'This browser cannot score your voice. Say the sentence aloud, then tap "Next".';
+        hint.style.color = 'var(--warm-600)';
+        if(!document.getElementById('mic-manual-next')){
+          const b = document.createElement('button');
+          b.id = 'mic-manual-next';
+          b.className = 'btn btn-sm';
+          b.style.marginTop = 'var(--space-3)';
+          b.textContent = 'Next ➔';
+          b.onclick = () => { this.is.recording=false; this.is.currentLine++; this._renderImitateLine(); };
+          hint.parentElement.appendChild(b);
+        }
+        return;
+      }
+
+      this.is.recording = true;
+      btn.classList.add('recording');
+      btn.innerHTML = '🎤';
+      btn.style.background = '';
+      hint.textContent = 'Listening... say it now!';
+      hint.style.color = 'var(--danger)';
+
+      const rec = new SR();
+      rec.lang = 'en-US';
+      rec.interimResults = false;
+      rec.maxAlternatives = 3;
+      let handled = false;
+
+      const finish = () => { this.is.recording = false; btn.classList.remove('recording'); };
+
+      rec.onresult = (e) => {
+        handled = true;
+        let best = '', bestScore = 0;
+        const res = e.results[0];
+        for(let i=0;i<res.length;i++){
+          const sc = App._similarity(target, res[i].transcript);
+          if(sc >= bestScore){ bestScore = sc; best = res[i].transcript; }
+        }
+        finish();
+        App._judgeSpeech(target, best, bestScore, btn, hint);
+      };
+
+      rec.onerror = (e) => {
+        finish();
+        btn.innerHTML = '🎤';
+        if(e.error === 'not-allowed' || e.error === 'service-not-allowed'){
+          hint.innerHTML = 'Please allow microphone access to check your pronunciation.';
+        } else if(e.error === 'no-speech'){
+          hint.innerHTML = 'No voice detected. Tap the mic and try again.';
+        } else {
+          hint.innerHTML = 'Something went wrong. Tap the mic to try again.';
+        }
+        hint.style.color = 'var(--warm-600)';
+      };
+
+      rec.onend = () => { if(!handled) finish(); };
+
+      try { rec.start(); } catch(err){ finish(); }
+    },
+
+    /* ─── Bandingkan target vs ucapan → skor 0..1 ───
+       Menggunakan karakter-level Levenshtein yang dinormalisasi.
+       Ini jauh lebih ketat dari word-overlap:
+       - "morning" vs "evening"  → skor rendah (~0.1)
+       - "I am fine thank you"   → skor tinggi (>0.9)
+    */
+    _similarity(target, spoken){
+      const norm = (t) => {
+        let s = (t||'').toLowerCase().replace(/[^a-z0-9\s']/g,'').replace(/\s+/g,' ').trim();
+        s = s.replace(/\b10000\b/g, 'ten thousand')
+             .replace(/\b15000\b/g, 'fifteen thousand')
+             .replace(/\b20000\b/g, 'twenty thousand')
+             .replace(/\b1\b/g, 'one')
+             .replace(/\b2\b/g, 'two')
+             .replace(/\b3\b/g, 'three')
+             .replace(/\b4\b/g, 'four')
+             .replace(/\b5\b/g, 'five')
+             .replace(/\b6\b/g, 'six')
+             .replace(/\b7\b/g, 'seven')
+             .replace(/\b8\b/g, 'eight')
+             .replace(/\b9\b/g, 'nine')
+             .replace(/\b10\b/g, 'ten');
+        return s;
+      };
+      const a = norm(target);
+      const b = norm(spoken);
+      if(!a && !b) return 1;
+      if(!a || !b) return 0;
+
+      // Levenshtein distance (karakter)
+      const la = a.length, lb = b.length;
+      const dp = Array.from({length: la+1}, (_,i) => Array.from({length: lb+1}, (_,j) => i===0?j:j===0?i:0));
+      for(let i=1; i<=la; i++){
+        for(let j=1; j<=lb; j++){
+          dp[i][j] = a[i-1]===b[j-1]
+            ? dp[i-1][j-1]
+            : 1 + Math.min(dp[i-1][j], dp[i][j-1], dp[i-1][j-1]);
+        }
+      }
+      const dist = dp[la][lb];
+      const charSim = 1 - dist / Math.max(la, lb);
+
+      // Word overlap sebagai sinyal tambahan
+      const wa = a.split(' ').filter(Boolean);
+      const wb = b.split(' ').filter(Boolean);
+      const wbCount = {};
+      wb.forEach(w => wbCount[w] = (wbCount[w]||0)+1);
+      let matched = 0;
+      wa.forEach(w => { if(wbCount[w]>0){ matched++; wbCount[w]--; } });
+      const wordSim = wa.length ? matched/wa.length : 0;
+
+      // Gabungkan: 70% char similarity + 30% word overlap
+      let score = charSim * 0.7 + wordSim * 0.3;
+
+      // STRICT PENALTY: Untuk kalimat panjang, satu kata penting (seperti angka/arah) 
+      // yang salah bisa tetap menghasilkan skor > 0.7. Kita wajibkan kata kunci ini cocok.
+      const critical = ['one','two','three','four','five','six','seven','eight','nine','ten','fifteen','twenty','thousand','left','right'];
+      for(let w of critical){
+        const inA = wa.some(x => x === w || x === w+'s');
+        const inB = wb.some(x => x === w || x === w+'s');
+        if(inA !== inB){
+          score = Math.min(score, 0.4); // Pastikan tidak lolos
+        }
+      }
+
+      // STRICT PENALTY 2: Jika kata yang diucapkan kurang dari kalimat target (tidak lengkap)
+      if (wb.length < wa.length) {
+        const missingWords = wa.length - wb.length;
+        score -= (missingWords * 0.15); // Kurangi 15% untuk setiap kata yang hilang
+      }
+
+      return Math.max(0, score);
+    },
+
+    _judgeSpeech(target, spoken, score, btn, hint){
+      const PASS = 0.7;
+      if(score >= PASS){
+        btn.innerHTML = '✓';
+        btn.style.background = 'var(--accent)';
+        const label = score >= 0.95 ? 'Perfect! 🌟' : 'Good job! Your pronunciation is correct.';
+        hint.innerHTML = label + '<br><span style="color:var(--text-faint);font-weight:400;">Heard: “'+ (spoken||'') +'”</span>';
+        hint.style.color = 'var(--accent-700)';
+        this._addXP(5);
+        setTimeout(() => { this.is.currentLine++; this._renderImitateLine(); }, 1800);
+      } else {
+        btn.innerHTML = '↻';
+        btn.style.background = 'var(--danger)';
+        const pct = Math.round(score*100);
+        hint.innerHTML = 'Not quite ('+pct+'% match). Try again!'
+          + '<br><span style="color:var(--text-faint);font-weight:400;">Heard: “'+ (spoken||'(nothing)') +'”</span>'
+          + '<br><span style="color:var(--text-faint);font-weight:400;">Target: “'+ target +'”</span>'
+          + '<br><span style="color:var(--danger);font-size:0.85em;margin-top:4px;display:block;">(Tap mic to retry)</span>';
+        hint.style.color = 'var(--danger)';
+        setTimeout(() => { btn.innerHTML='🎤'; btn.style.background=''; }, 1500);
+      }
+    },
+
+
+    /* ═══════════════════════════════════════════════════════
+       SESSION COMPLETE
+       ═══════════════════════════════════════════════════════ */
+
+    /* ═══ GAME HUB + EXTRA INTERACTIVE GAMES (Unit 2) ═══ */
+    _gsess:-1,
+    _renderGameHub(){
+      if(this._gsess!==this.sess){ this.gamesDone={}; this._gsess=this.sess; }
+      if(!this.gamesDone) this.gamesDone={};
+      const games=[
+        {key:'listen',  icon:'🎧', name:'Listen & Respond',      desc:'Hear a line, then choose the best reply.',        fn:'_renderListenGame'},
+        {key:'say',     icon:'🎤', name:'Say It!',               desc:'Get a random line and say it out loud.',          fn:'_renderSayGame'},
+        {key:'answer',  icon:'🗣️', name:'Answer It!',            desc:'Hear a question, then answer out loud.',          fn:'_renderAnswerGame'},
+        {key:'reorder', icon:'🔄', name:'Reorder Conversation',  desc:'Put the jumbled dialogue lines in order.',        fn:'_renderReorderGame'}
+      ];
+      const cards=games.map(g=>{
+        const done=this.gamesDone[g.key];
+        const check=done?' <span style="color:var(--accent);">✓</span>':'';
+        const bcol=done?'var(--accent)':'var(--border)';
+        return `<button class="card" onclick="App.${g.fn}()" style="text-align:left;padding:var(--space-4);display:flex;align-items:center;gap:var(--space-4);border:1.5px solid ${bcol};cursor:pointer;width:100%;background:var(--card);"><div style="font-size:2rem;flex-shrink:0;">${g.icon}</div><div style="flex:1;"><p style="font-weight:800;color:var(--text-main);">${g.name}${check}</p><p style="font-size:var(--font-size-xs);color:var(--text-muted);">${g.desc}</p></div><span style="color:var(--text-faint);font-size:1.2rem;">▶</span></button>`;
+      }).join('');
+      const played=Object.keys(this.gamesDone).length;
+      document.getElementById('activity-area').innerHTML=`<span class="act-tag act-listen">🎮 Game · choose one</span><p style="font-size:var(--font-size-sm);color:var(--text-muted);margin:var(--space-3) 0 var(--space-4);">Choose any game to practice this conversation. Play as many as you like, then finish.</p><div style="display:flex;flex-direction:column;gap:var(--space-3);margin-bottom:var(--space-5);">${cards}</div><button class="btn ${played>0?'btn-accent':'btn-outline'} btn-block" onclick="App._completeSess()">${played>0?'Finish this session 🏆':'Play at least one game to finish'}</button>`;
+    },
+    _backToGames(key){
+      if(!this.gamesDone) this.gamesDone={};
+      if(key) this.gamesDone[key]=true;
+      this._renderGameHub();
+      try{ window.scrollTo({top:120,behavior:'smooth'}); }catch(e){}
+    },
+    _shufArr(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); const t=a[i]; a[i]=a[j]; a[j]=t; } return a; },
+    _lg:null,
+    _renderListenGame(){
+      const dialogue=SCENARIOS[this.sess].dialogue;
+      let pairs = [];
+      for(let i=0; i<dialogue.length-1; i++){
+        if(dialogue[i].en && dialogue[i+1].en && dialogue[i].role !== dialogue[i+1].role){
+          pairs.push({ q: dialogue[i], a: dialogue[i+1] });
+        }
+      }
+      this._lg={qs:this._shufArr(pairs).slice(0,Math.min(5,pairs.length)), i:0, score:0};
+      this._renderListenQ();
+    },
+    _renderListenQ(){
+      const st=this._lg;
+      if(st.i>=st.qs.length){ this._listenResult(); return; }
+      const cur=st.qs[st.i];
+      const pool=[]; SCENARIOS.forEach(s=>s.dialogue.forEach(l=>{ if(l.en && l.en !== cur.a.en) pool.push(l.en); }));
+      const opts=this._shufArr([cur.a.en].concat(this._shufArr(pool).slice(0,3)));
+      const keys=['A','B','C','D'];
+      const enJson=JSON.stringify(cur.q.en);
+      document.getElementById('activity-area').innerHTML=`<span class="act-tag act-listen">🎧 Listen & Respond · ${st.i+1} / ${st.qs.length}</span><div class="card" style="padding:var(--space-5);text-align:center;"><p style="color:var(--text-muted);margin-bottom:var(--space-3);">Tap play, listen, then choose the best reply.</p><button class="btn btn-primary" onclick='window.playTTS(${enJson}, this, "female", "${cur.q.role||'A'}")' style="margin-bottom:var(--space-4);">🔊 Play line</button><div style="display:flex;flex-direction:column;gap:var(--space-2);text-align:left;">${opts.map((o,i)=>`<button class="quiz-option" data-correct="${o===cur.a.en}" onclick="App._listenAns(this,${o===cur.a.en})"><span class="quiz-option-key">${keys[i]}</span><span class="quiz-option-text">${o}</span></button>`).join('')}</div></div>`;
+    },
+    _listenAns(btn, ok){
+      document.querySelectorAll('#activity-area .quiz-option').forEach(b=>{ b.classList.add('quiz-option--disabled'); b.onclick=null; });
+      if(ok){ 
+        btn.classList.add('quiz-option--correct'); 
+        this._lg.score++; 
+        this._addXP(10); 
+      } else { 
+        btn.classList.add('quiz-option--wrong'); 
+        const correctBtn = document.querySelector('#activity-area .quiz-option[data-correct="true"]');
+        if(correctBtn) correctBtn.classList.add('quiz-option--correct');
+      }
+      
+      const st = this._lg;
+      const cur = st.qs[st.i];
+      const card = document.querySelector('#activity-area .card');
+      
+      const fbDiv = document.createElement('div');
+      fbDiv.style.marginTop = 'var(--space-4)';
+      fbDiv.style.padding = 'var(--space-3)';
+      fbDiv.style.borderRadius = 'var(--radius-md)';
+      fbDiv.style.backgroundColor = ok ? 'rgba(34, 197, 94, 0.1)' : 'rgba(239, 68, 68, 0.1)';
+      fbDiv.style.color = ok ? '#16a34a' : '#dc2626';
+      fbDiv.style.border = ok ? '1px solid #16a34a' : '1px solid #dc2626';
+      fbDiv.style.textAlign = 'left';
+      fbDiv.innerHTML = `<p style="font-weight:700;margin-bottom:var(--space-2);">${ok ? '🎉 Correct!' : '❌ Not quite!'}</p>
+                         <p style="font-size:var(--font-size-sm);color:var(--text-main);margin-bottom:4px;"><strong>Question:</strong> "${cur.q.en}"</p>
+                         <p style="font-size:var(--font-size-sm);color:var(--text-main);"><strong>Answer:</strong> "${cur.a.en}"</p>`;
+      
+      card.appendChild(fbDiv);
+
+      const nextBtn = document.createElement('button');
+      nextBtn.className = 'btn btn-primary btn-block';
+      nextBtn.style.marginTop = 'var(--space-3)';
+      nextBtn.innerHTML = 'Next ➔';
+      nextBtn.onclick = () => { this._lg.i++; this._renderListenQ(); };
+      card.appendChild(nextBtn);
+    },
+    _listenResult(){
+      const st=this._lg; const pct=Math.round((st.score/st.qs.length)*100); this._addXP(15);
+      document.getElementById('activity-area').innerHTML=`<div class="card" style="padding:var(--space-6);text-align:center;"><div style="font-size:3rem;margin-bottom:var(--space-2);">🎧</div><div style="font-size:1.6rem;font-weight:800;color:var(--accent-700);margin-bottom:var(--space-1);">${pct}%</div><p style="color:var(--text-muted);margin-bottom:var(--space-5);">You matched ${st.score} of ${st.qs.length} lines.</p><button class="btn btn-primary btn-block" onclick="App._backToGames('listen')">← Back to Games</button></div>`;
+    },
+    
+    _ag:null,
+    _renderAnswerGame(){
+      const dialogue = SCENARIOS[this.sess].dialogue;
+      let qs = [];
+      for(let i=0; i<dialogue.length-1; i++){
+        if(dialogue[i].en && dialogue[i].en.includes('?')){
+          qs.push({ q: dialogue[i], a: dialogue[i+1] });
+        }
+      }
+      if(qs.length===0){ qs = [{ q: dialogue[0], a: dialogue[1] || dialogue[0] }]; }
+      this._ag={qs:this._shufArr(qs).slice(0,Math.min(5,qs.length)), i:0, recording:false};
+      this._renderAnswerQ();
+    },
+    _renderAnswerQ(){
+      const st=this._ag;
+      if(st.i>=st.qs.length){ this._answerResult(); return; }
+      const cur=st.qs[st.i];
+      const enJson=JSON.stringify(cur.q.en);
+      document.getElementById('activity-area').innerHTML=`<span class="act-tag act-listen">🗣️ Answer It! · ${st.i+1} / ${st.qs.length}</span><div class="card" style="padding:var(--space-5);text-align:center;"><p style="color:var(--text-muted);margin-bottom:var(--space-3);">Listen to the question, then answer out loud.</p><p style="font-size:var(--font-size-lg);font-weight:800;color:var(--text-main);margin-bottom:var(--space-2);">${cur.q.en}</p><p style="color:var(--text-muted);margin-bottom:var(--space-4);">${cur.q.id_||''}</p><button class="btn btn-outline" onclick='window.playTTS(${enJson}, this, "female", "${cur.q.role||'A'}")' style="margin-bottom:var(--space-4);">🔊 Hear question</button><div class="mic-wrap" style="margin-top:0;"><button class="btn-mic" id="ans-btn-mic" onclick="App._toggleAnsMic()">🎤</button><p id="ans-mic-hint" style="margin-top:var(--space-3);color:var(--text-faint);font-size:var(--font-size-sm);font-weight:600;">Tap to answer</p></div><div id="ans-fb" style="margin-top:15px;"></div><div style="margin-top:20px;"><button class="btn btn-outline btn-sm" onclick="App._answerNext()">Skip / Lanjut ➔</button></div></div>`;
+    },
+    _toggleAnsMic(){
+      const btn = document.getElementById('ans-btn-mic');
+      const hint = document.getElementById('ans-mic-hint');
+      const fb = document.getElementById('ans-fb');
+      if(this._ag.recording) return;
+
+      const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if(!SR){
+        btn.classList.remove('recording'); btn.innerHTML = '🎤';
+        hint.innerHTML = 'Browser tidak mendukung rekaman suara. Coba pakai Chrome / Browser does not support speech recognition.'; hint.style.color = 'var(--warm-600)';
+        return;
+      }
+      this._ag.recording = true; btn.classList.add('recording'); btn.innerHTML = '🎤'; btn.style.background = '';
+      hint.textContent = 'Listening... answer now!'; hint.style.color = 'var(--danger)'; fb.innerHTML = '';
+      const rec = new SR(); rec.lang = 'en-US'; rec.interimResults = false; let handled = false;
+      const finish = () => { this._ag.recording = false; btn.classList.remove('recording'); };
+
+      rec.onresult = (e) => {
+        handled = true; finish();
+        const best = e.results[0][0].transcript;
+        if(best.trim().length > 0){
+          btn.innerHTML = '✓'; btn.style.background = 'var(--accent)';
+          hint.innerHTML = 'Good job! 🌟<br><span style="color:var(--text-faint);font-weight:400;">Heard: “'+ best +'”</span>';
+          hint.style.color = 'var(--accent-700)';
+          fb.innerHTML = '<div style="background:var(--accent-50);border:1px solid var(--accent);border-radius:var(--radius-lg);padding:10px;text-align:left;"><div style="font-size:var(--font-size-xs);font-weight:800;color:var(--text-muted);text-transform:uppercase;margin-bottom:4px;">Sample Answer:</div><div style="font-weight:700;color:var(--text-main);">'+this._ag.qs[this._ag.i].a.en+'</div></div>';
+          setTimeout(() => App._answerNext(), 4500);
+        } else {
+          btn.innerHTML = '↻'; btn.style.background = 'var(--danger)';
+          hint.innerHTML = 'Could not hear you well.<br><span style="color:var(--text-faint);font-weight:400;">Try speaking louder</span>';
+          hint.style.color = 'var(--danger)';
+          setTimeout(() => { btn.innerHTML='🎤'; btn.style.background=''; hint.textContent='Tap to try again'; hint.style.color='var(--text-faint)'; }, 3000);
+        }
+      };
+      rec.onerror = (e) => { finish(); btn.innerHTML = '🎤'; hint.innerHTML = 'Error listening. Tap to try again.'; hint.style.color = 'var(--warm-600)'; };
+      rec.onend = () => { if(!handled) finish(); };
+      try { rec.start(); } catch(err){ finish(); }
+    },
+    _answerNext(){ this._addXP(10); this._ag.i++; this._renderAnswerQ(); },
+    _answerResult(){
+      this._addXP(20);
+      document.getElementById('activity-area').innerHTML=`<div class="card" style="padding:var(--space-6);text-align:center;"><div style="font-size:3rem;margin-bottom:var(--space-2);">🗣️</div><div style="font-size:1.4rem;font-weight:800;color:var(--accent-700);margin-bottom:var(--space-1);">Great answering!</div><p style="color:var(--text-muted);margin-bottom:var(--space-5);">You tried answering every question.</p><button class="btn btn-primary btn-block" onclick="App._backToGames('answer')">← Back to Games</button></div>`;
+    },
+    _sg:null,
+    _renderSayGame(){
+      const lines=SCENARIOS[this.sess].dialogue.filter(l=>l.en);
+      this._sg={qs:this._shufArr(lines).slice(0,Math.min(5,lines.length)),i:0,recording:false};
+      this._renderSayQ();
+    },
+    _renderSayQ(){
+      const st=this._sg;
+      if(st.i>=st.qs.length){ this._sayResult(); return; }
+      const cur=st.qs[st.i];
+      const enJson=JSON.stringify(cur.en);
+      document.getElementById('activity-area').innerHTML=`<span class="act-tag act-listen">🎤 Say It! · ${st.i+1} / ${st.qs.length}</span><div class="card" style="padding:var(--space-5);text-align:center;"><p style="color:var(--text-muted);margin-bottom:var(--space-3);">Read this line out loud. Tap the speaker to hear a model first.</p><p style="font-size:var(--font-size-lg);font-weight:800;color:var(--text-main);margin-bottom:var(--space-2);">${cur.en}</p><p style="color:var(--text-muted);margin-bottom:var(--space-4);">${cur.id_||''}</p><button class="btn btn-outline" onclick='window.playTTS(${enJson}, this, "female", "A")' style="margin-bottom:var(--space-4);">🔊 Hear the model</button><div class="mic-wrap" style="margin-top:0;"><button class="btn-mic" id="say-btn-mic" onclick="App._toggleSayMic()">🎤</button><p id="say-mic-hint" style="margin-top:var(--space-3);color:var(--text-faint);font-size:var(--font-size-sm);font-weight:600;">Tap to speak</p></div><div style="margin-top:20px;"><button class="btn btn-outline btn-sm" onclick="App._sayNext()">Skip / Lanjut ➔</button></div></div>`;
+    },
+    _toggleSayMic(){
+      const btn = document.getElementById('say-btn-mic');
+      const hint = document.getElementById('say-mic-hint');
+      if(this._sg.recording) return;
+
+      const target = this._sg.qs[this._sg.i].en;
+      const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+      if(!SR){
+        btn.classList.remove('recording');
+        btn.innerHTML = '🎤';
+        hint.innerHTML = 'Browser tidak mendukung rekaman suara. Coba pakai Chrome / Browser does not support speech recognition.';
+        hint.style.color = 'var(--warm-600)';
+        return;
+      }
+
+      this._sg.recording = true;
+      btn.classList.add('recording');
+      btn.innerHTML = '🎤';
+      btn.style.background = '';
+      hint.textContent = 'Listening... say it now!';
+      hint.style.color = 'var(--danger)';
+
+      const rec = new SR();
+      rec.lang = 'en-US';
+      rec.interimResults = false;
+      rec.maxAlternatives = 3;
+      let handled = false;
+
+      const finish = () => { this._sg.recording = false; btn.classList.remove('recording'); };
+
+      rec.onresult = (e) => {
+        handled = true;
+        let best = '', bestScore = 0;
+        const res = e.results[0];
+        for(let i=0;i<res.length;i++){
+          const sc = App._similarity(target, res[i].transcript);
+          if(sc >= bestScore){ bestScore = sc; best = res[i].transcript; }
+        }
+        finish();
+        
+        const PASS = 0.55;
+        if(bestScore >= PASS){
+          btn.innerHTML = '✓';
+          btn.style.background = 'var(--accent)';
+          hint.innerHTML = 'Perfect! 🌟<br><span style="color:var(--text-faint);font-weight:400;">Heard: “'+ (best||'') +'”</span>';
+          hint.style.color = 'var(--accent-700)';
+          setTimeout(() => App._sayNext(), 1500);
+        } else {
+          btn.innerHTML = '↻';
+          btn.style.background = 'var(--danger)';
+          const pct = Math.round(bestScore*100);
+          hint.innerHTML = 'Try again! ('+pct+'% match)<br><span style="color:var(--text-faint);font-weight:400;">Heard: “'+ (best||'(nothing)') +'”</span><br><span style="color:var(--danger);font-size:0.85em;margin-top:4px;display:block;">(Tap mic to retry)</span>';
+          hint.style.color = 'var(--danger)';
+          setTimeout(() => { btn.innerHTML='🎤'; btn.style.background=''; }, 1500);
+        }
+      };
+      rec.onerror = (e) => { finish(); btn.innerHTML = '🎤'; hint.innerHTML = 'Error listening. Tap to try again.'; hint.style.color = 'var(--warm-600)'; };
+      rec.onend = () => { if(!handled) finish(); };
+      try { rec.start(); } catch(err){ finish(); }
+    },
+    _sayNext(){ this._addXP(8); this._sg.i++; this._renderSayQ(); },
+    _sayResult(){
+      this._addXP(12);
+      document.getElementById('activity-area').innerHTML=`<div class="card" style="padding:var(--space-6);text-align:center;"><div style="font-size:3rem;margin-bottom:var(--space-2);">🗣️</div><div style="font-size:1.4rem;font-weight:800;color:var(--accent-700);margin-bottom:var(--space-1);">Great speaking!</div><p style="color:var(--text-muted);margin-bottom:var(--space-5);">You practiced every line out loud.</p><button class="btn btn-primary btn-block" onclick="App._backToGames('say')">← Back to Games</button></div>`;
+    },
+    /* ── Reorder the Conversation (Unit 2) ── */
+    _renderReorderGame(){
+      const dialogue = SCENARIOS[this.sess].dialogue;
+      this.ro = {
+        lines: [...dialogue],
+        shuffled: this._shufArr([...dialogue]),
+        placed: [],
+        checked: false
+      };
+      this._renderReorderBoard();
+    },
+    _renderReorderBoard(){
+      const ro = this.ro;
+      const dz = ro.placed.map((l, i) => `
+        <div onclick="App._removeReorder(${i})" class="card" style="padding:10px;margin-bottom:8px;background:var(--primary-50);border:1px solid var(--primary-200);cursor:pointer;display:flex;gap:10px;">
+          <div style="font-size:1.5rem;">${l.avatar}</div>
+          <div style="flex:1;">
+            <div style="font-size:var(--font-size-sm);font-weight:700;">${l.en}</div>
+            <div style="font-size:var(--font-size-xs);color:var(--text-muted);">${l.id_}</div>
+          </div>
+        </div>
+      `).join('');
+
+      const bank = ro.shuffled.map((l, i) => {
+        const used = ro.placed.includes(l);
+        if(used) return '';
+        return `
+        <div onclick="App._tapReorder(${i})" class="card" style="padding:10px;margin-bottom:8px;background:white;border:1px solid var(--border);cursor:pointer;display:flex;gap:10px;">
+          <div style="font-size:1.5rem;">${l.avatar}</div>
+          <div style="flex:1;">
+            <div style="font-size:var(--font-size-sm);font-weight:700;">${l.en}</div>
+            <div style="font-size:var(--font-size-xs);color:var(--text-muted);">${l.id_}</div>
+          </div>
+        </div>
+        `;
+      }).join('');
+
+      document.getElementById('activity-area').innerHTML=`<span class="act-tag act-listen">🔄 Reorder Conversation</span>
+      <div class="card" style="padding:var(--space-5);">
+        <p style="color:var(--text-muted);margin-bottom:var(--space-3);font-size:var(--font-size-sm);">Put the dialogue lines in the correct order. Tap a line below to add it.</p>
+        <div style="font-size:10px;font-weight:800;color:var(--text-faint);text-transform:uppercase;margin-bottom:8px;">Your Dialogue Order ↓</div>
+        <div id="ro-dz" style="min-height:100px;border:2px dashed var(--border);border-radius:var(--radius-md);padding:10px;margin-bottom:var(--space-4);">
+          ${dz || '<span style="color:var(--text-faint);font-size:12px;">Tap lines below to start building the conversation...</span>'}
+        </div>
+        <div style="font-size:10px;font-weight:800;color:var(--text-faint);text-transform:uppercase;margin-bottom:8px;">Available Lines ↓</div>
+        <div id="ro-bank" style="margin-bottom:var(--space-4);">
+          ${bank}
+        </div>
+        <div style="display:flex;gap:10px;">
+          <button class="btn btn-outline" style="flex:1" onclick="App._renderReorderGame()">↺ Reset</button>
+          <button class="btn btn-primary" style="flex:2" onclick="App._checkReorder()">Check ✓</button>
+        </div>
+        <div id="ro-fb" style="margin-top:15px;"></div>
+      </div>`;
+    },
+    _tapReorder(i){
+      const l = this.ro.shuffled[i];
+      if(this.ro.placed.includes(l)) return;
+      this.ro.placed.push(l);
+      this._renderReorderBoard();
+    },
+    _removeReorder(pi){
+      this.ro.placed.splice(pi, 1);
+      this._renderReorderBoard();
+    },
+    _checkReorder(){
+      if(this.ro.checked) return;
+      const fb=document.getElementById('ro-fb');
+      if(this.ro.placed.length !== this.ro.lines.length){
+        fb.innerHTML='<div style="color:var(--danger);font-weight:bold;margin-bottom:10px;">⚠️ Please place all lines first!</div>';
+        setTimeout(()=>fb.innerHTML='', 2000);
+        return;
+      }
+      let correct = true;
+      for(let i=0; i<this.ro.lines.length; i++){
+        if(this.ro.placed[i] !== this.ro.lines[i]){
+          correct = false; break;
+        }
+      }
+      if(correct){
+        this.ro.checked=true; this._addXP(30);
+        fb.innerHTML=`<div style="color:var(--accent-700);font-weight:bold;margin-bottom:10px;">✅ Correct! You ordered the conversation perfectly.</div><div style="display:flex;flex-direction:column;gap:10px;"><button class="btn btn-accent btn-block" onclick="App._renderRoleplayGame()">🎭 Practice this dialogue</button><button class="btn btn-outline btn-block" onclick="App._reorderResult()">Finish Game ➔</button></div>`;
+      } else {
+        fb.innerHTML='<div style="color:var(--danger);font-weight:bold;margin-bottom:10px;">❌ Not quite, the order is wrong. Try again!</div>';
+        setTimeout(()=>fb.innerHTML='', 2000);
+      }
+    },
+    _reorderResult(){
+      this._addXP(20);
+      document.getElementById('activity-area').innerHTML=`<div class="card" style="padding:var(--space-6);text-align:center;"><div style="font-size:3rem;margin-bottom:var(--space-2);">🔄</div><div style="font-size:1.4rem;font-weight:800;color:var(--accent-700);margin-bottom:var(--space-1);">Great job!</div><p style="color:var(--text-muted);margin-bottom:var(--space-5);">You successfully rebuilt the conversation.</p><button class="btn btn-primary btn-block" onclick="App._backToGames('reorder')">← Back to Games</button></div>`;
+    },
+
+    _rp:null,
+    _renderRoleplayGame(){
+      const lines = this.ro.lines;
+      const userRole = lines[1]?.role || 'B';
+      this._rp = { lines, i:0, userRole, recording:false };
+      this._renderRoleplayLine();
+    },
+    _renderRoleplayLine(){
+      const rp = this._rp;
+      if(rp.i >= rp.lines.length){ this._reorderResult(); return; }
+      const cur = rp.lines[rp.i];
+      const isUser = cur.role === rp.userRole;
+      
+      const prevLines = rp.lines.slice(0, rp.i+1).map((l, idx) => {
+        const active = idx === rp.i;
+        return `<div style="display:flex;gap:10px;margin-bottom:10px;opacity:${active?'1':'0.4'};"><div style="font-size:1.5rem;">${l.avatar}</div><div style="background:${l.role===rp.userRole?'var(--primary-50)':'var(--surface-2)'};border-radius:var(--radius-lg);padding:8px 12px;flex:1;"><div style="font-size:var(--font-size-sm);font-weight:700;">${l.en}</div><div style="font-size:var(--font-size-xs);color:var(--text-muted);">${l.id_}</div></div></div>`;
+      }).join('');
+      
+      let actionArea = '';
+      if(!isUser){
+        const enJson = JSON.stringify(cur.en);
+        actionArea = `<button class="btn btn-primary btn-block" onclick='window.playTTS(${enJson}, this, "female", "${cur.role}"); setTimeout(()=>App._rpNext(), 2000)'>🔊 Listen to ${cur.role}</button><button class="btn btn-ghost btn-sm btn-block" onclick="App._rpNext()" style="margin-top:10px;">Skip ➔</button>`;
+      } else {
+        actionArea = `<div style="text-align:center;"><div class="mic-wrap" style="margin-top:0;"><button class="btn-mic" id="rp-btn-mic" onclick="App._toggleRPMic()">🎤</button><p id="rp-mic-hint" style="margin-top:var(--space-3);color:var(--text-faint);font-size:var(--font-size-sm);font-weight:600;">Tap to say your line</p></div><button class="btn btn-ghost btn-sm" onclick="App._rpNext()" style="margin-top:10px;">Skip ➔</button></div>`;
+      }
+      
+      document.getElementById('activity-area').innerHTML=`<span class="act-tag act-listen">🎭 Roleplay</span><div class="card" style="padding:var(--space-5);"><p style="color:var(--text-muted);margin-bottom:var(--space-3);">You are <b>Role ${rp.userRole}</b>. Read your lines out loud.</p><div style="max-height:300px;overflow-y:auto;margin-bottom:20px;padding-right:5px;" id="rp-chat">${prevLines}</div>${actionArea}</div>`;
+      const chat = document.getElementById('rp-chat');
+      if(chat) chat.scrollTop = chat.scrollHeight;
+    },
+    _rpNext(){ this._addXP(5); this._rp.i++; this._renderRoleplayLine(); },
+    _toggleRPMic(){
+      const rp = this._rp;
+      if(rp.recording) return;
+      const btn = document.getElementById('rp-btn-mic');
+      const hint = document.getElementById('rp-mic-hint');
+      
+      const target = rp.lines[rp.i].en;
+      const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if(!SR){
+        btn.classList.remove('recording'); btn.innerHTML = '🎤';
+        hint.innerHTML = 'Browser tidak mendukung rekaman suara. Coba pakai Chrome.'; hint.style.color = 'var(--warm-600)';
+        return;
+      }
+      rp.recording = true; btn.classList.add('recording'); btn.innerHTML = '🎤';
+      hint.textContent = 'Listening...'; hint.style.color = 'var(--danger)';
+
+      const rec = new SR(); rec.lang = 'en-US'; rec.interimResults = false; let handled = false;
+      const finish = () => { rp.recording = false; btn.classList.remove('recording'); };
+      
+      rec.onresult = (e) => {
+        handled = true; finish();
+        let best = '', bestScore = 0;
+        for(let j=0; j<e.results[0].length; j++){
+          const sc = App._similarity(target, e.results[0][j].transcript);
+          if(sc > bestScore){ bestScore = sc; best = e.results[0][j].transcript; }
+        }
+        
+        if(bestScore >= 0.55){
+          btn.innerHTML = '✓'; btn.style.background = 'var(--accent)';
+          hint.innerHTML = 'Good job! 🌟<br><span style="color:var(--text-faint);font-weight:400;">Heard: “'+ (best||'') +'”</span>'; hint.style.color = 'var(--accent-700)';
+          setTimeout(() => App._rpNext(), 1500);
+        } else {
+          btn.innerHTML = '↻'; btn.style.background = 'var(--danger)';
+          hint.innerHTML = 'Try again! (' + Math.round(bestScore*100) + '%)<br><span style="color:var(--text-faint);font-weight:400;">Heard: “'+ (best||'(nothing)') +'”</span><br><span style="color:var(--text-faint);font-weight:400;">Target: “'+ target +'”</span><br><span style="color:var(--danger);font-size:0.85em;margin-top:4px;display:block;">(Tap mic to retry)</span>';
+          hint.style.color = 'var(--danger)';
+          setTimeout(() => { btn.innerHTML='🎤'; btn.style.background=''; }, 1500);
+        }
+      };
+      rec.onerror = () => { finish(); btn.innerHTML = '🎤'; hint.innerHTML = 'Error listening.'; hint.style.color = 'var(--warm-600)'; };
+      rec.onend = () => { if(!handled) finish(); };
+      try { rec.start(); } catch(err){ finish(); }
+    },
+
+    _completeSess(){
+      this.done[this.sess] = true;
+      this._saveProgress();
+      this._updateTabs();
+      this._updateHero();
+
+      const next = SCENARIOS[this.sess+1];
+      const allDone = this.done.every(Boolean);
+
+      // Sync ke index (appState)
+      try {
+        const raw = localStorage.getItem('emodul_state');
+        if(raw){
+          const state = JSON.parse(raw);
+          const u = (state.units||[]).find(u=>u.id===2);
+          if(u){
+            const doneCount = this.done.filter(Boolean).length;
+            u.progress = Math.max(u.progress||0, Math.round((doneCount/4)*100));
+            if(allDone) u.status = 'done';
+            localStorage.setItem('emodul_state', JSON.stringify(state));
+          }
+        }
+      } catch{}
+
+      document.getElementById('activity-area').innerHTML=`
+        <div class="card" style="padding:var(--space-6);text-align:center;border:2px solid var(--accent);">
+          <div style="font-size:3.5rem;animation:badgeBounce .6s ease both;margin-bottom:var(--space-3);" aria-hidden="true">🏆</div>
+          <h2 style="font-size:var(--font-size-2xl);font-weight:800;color:var(--accent-700);margin-bottom:var(--space-2);">
+            Session ${this.sess+1} complete!</h2>
+          <p style="color:var(--text-muted);margin-bottom:var(--space-5);">
+            ${allDone?'Excellent! All sessions complete. The Quiz is now unlocked.':
+              next?`Selanjutnya: <strong>${next.title}</strong>`:''}</p>
+          <div style="display:flex;flex-direction:column;gap:var(--space-3);margin-top:var(--space-5);">
+            ${next ? `<button class="btn btn-accent btn-block" onclick="App.goTo(${this.sess+1})">Next Session ${this.sess+2}: ${next.title} →</button>` : ''}
+            ${allDone ? `<button class="btn btn-primary btn-block" onclick="App.goTo(4)">Start Quiz 🎯</button>` : ''}
+            <a href="index.html" class="btn btn-outline btn-block">← Back to Home</a>
+          </div>
+        </div>`;
+
+      if(typeof Utils !== 'undefined') Utils.showConfetti?.();
+    },
+
+    /* ═══════════════════════════════════════════════════════
+       UTILS (TTS, XP)
+       ═══════════════════════════════════════════════════════ */
+    speak(text, btnElement) {
+      if(!('speechSynthesis' in window)) return;
+      
+      // Hanya cancel jika memang sedang ada yang berbicara/antre untuk menghindari bug cancel() di Windows
+      if (window.speechSynthesis.speaking || window.speechSynthesis.pending) {
+        window.speechSynthesis.cancel();
+      }
+      
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.rate = 0.9;
+      
+      const voices = window.speechSynthesis.getVoices();
+      let selectedVoice = voices.find(v => (v.lang === 'en-GB' || v.lang === 'en_GB') && (v.name.includes('Google') || v.name.includes('Natural'))) 
+                          || voices.find(v => v.lang === 'en-GB' || v.lang === 'en_GB')
+                          || voices.find(v => v.lang.startsWith('en'));
+      
+      // Jika sama sekali tidak ada suara bahasa Inggris, ambil suara default pertama
+      if (!selectedVoice && voices.length > 0) {
+        selectedVoice = voices[0];
+      }
+      
+      if (selectedVoice) {
+        utterance.voice = selectedVoice;
+        utterance.lang = selectedVoice.lang;
+      } else {
+        utterance.lang = 'en-US';
+      }
+      
+      // Mencegah Garbage Collection bug
+      window._synth_utterance = utterance;
+      
+      if(btnElement) {
+        // Hapus kelas playing dari tombol lain yang mungkin nyangkut
+        document.querySelectorAll('.btn-tts.playing').forEach(el => el.classList.remove('playing'));
+        btnElement.classList.add('playing');
+        utterance.onend = () => btnElement.classList.remove('playing');
+        utterance.onerror = () => btnElement.classList.remove('playing');
+      }
+      
+      window.speechSynthesis.speak(utterance);
+      
+      // Workaround ampuh untuk bug Chrome/Edge dimana TTS nyangkut dan diam saja
+      if (window.speechSynthesis.pause && window.speechSynthesis.resume) {
+        window.speechSynthesis.resume();
+      }
+    },
+
+    _addXP(n){
+      this.xp += n;
+      try{ localStorage.setItem('emodul_speak_xp', this.xp); }catch{}
+      const el = document.getElementById('nav-xp');
+      if(el){
+        el.textContent = `${this.xp} XP`;
+        el.style.animation = 'none';
+        el.offsetHeight;
+        el.style.animation = 'heartbeat .4s ease both';
+      }
+    },
+    _loadXP(){
+      try{ this.xp = parseInt(localStorage.getItem('emodul_speak_xp')||'0',10)||0; }catch{}
+    },
+    _saveProgress(){
+      try{ localStorage.setItem('emodul_speak_prog', JSON.stringify(this.done)); }catch{}
+    },
+    _loadProgress(){
+      try{ 
+        const d = JSON.parse(localStorage.getItem('emodul_speak_prog'));
+        if(d && d.length===4) { this.done = d; return; }
+      }catch{}
+      this.done = [false,false,false,false];
+    },
+
+    /* ═══════════════════════════════════════════════════════
+       CLOSING QUIZ (Quiz Section)
+       ═══════════════════════════════════════════════════════ */
+    _renderClosingQuiz(){
+      // Collect all quiz questions from all scenarios
+      const allQs = SCENARIOS.flatMap(s => s.quiz || []);
+      const pool = this._shufArr([...allQs]).slice(0, 10);
+
+      this.cq = {
+        qi: 0, score: 0, qs: pool,
+        quizSess: QuizStore.startSession('speak_unit2_close'),
+      };
+      this._renderClosingQ();
+    },
+
+    _renderClosingQ(){
+      const cq = this.cq;
+      if(cq.qi >= cq.qs.length){ this._renderClosingResult(); return; }
+      const q = cq.qs[cq.qi];
+      const keys = ['A','B','C','D'];
+      const pct = Math.round((cq.qi / cq.qs.length) * 100);
+
+      document.getElementById('activity-area').innerHTML = `
+        <span class="act-tag act-quiz" style="margin-bottom:var(--space-3);display:inline-flex;">
+          🎯 Quiz &middot; ${cq.qi+1} / ${cq.qs.length}
+        </span>
+
+        <div class="progress-bar-track progress-bar-track--thin" style="margin-bottom:var(--space-4);">
+          <div class="progress-bar-fill" style="width:${pct}%;transition:width .4s ease;"></div>
+        </div>
+
+        <div class="card" style="padding:var(--space-5);" id="quiz-question-card">
+          <div style="text-align:center;margin-bottom:var(--space-5);">
+            <p style="font-size:var(--font-size-lg);font-weight:800;color:var(--text-main);">
+              ${q.text}</p>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:var(--space-2);" id="quiz-options">
+            ${q.options.map((opt,i) => `
+              <button class="quiz-option" id="option-${i}" data-index="${i}"
+                onclick="App._handleCloseAns(${i})"
+                aria-label="Option ${keys[i]}: ${opt}">
+                <span class="quiz-option-key">${keys[i]}</span>
+                <span class="quiz-option-text">${opt}</span>
+              </button>`).join('')}
+          </div>
+        </div>`;
+    },
+
+    _handleCloseAns(sel){
+      const cq = this.cq;
+      const q = cq.qs[cq.qi];
+      const ok = sel === q.correct;
+
+      document.querySelectorAll('#quiz-options .quiz-option').forEach((btn,i) => {
+        btn.classList.add('quiz-option--disabled');
+        if(i === q.correct) btn.classList.add('quiz-option--correct');
+        else if(i === sel && !ok) btn.classList.add('quiz-option--wrong');
+      });
+
+      QuizStore.recordAnswer(cq.quizSess, q.id, ok, 0, sel);
+      if(ok){ cq.score++; this._addXP(20); FeedbackEngine.showCorrect(q, sel); }
+      else { 
+        this.wrongAnswers = this.wrongAnswers || [];
+        this.wrongAnswers.push({q, sel});
+        FeedbackEngine.showWrong(q, sel); 
+      }
+    },
+
+    _closingQuizNext(){ this.cq.qi++; this._renderClosingQ(); },
+    _closingQuizRetry(){
+      this.wrongAnswers = [];
+      document.querySelectorAll('#quiz-options .quiz-option').forEach((btn,i) => {
+        btn.classList.remove('quiz-option--disabled','quiz-option--wrong','quiz-option--correct');
+        btn.onclick = () => this._handleCloseAns(i);
+      });
+    },
+
+    _renderClosingResult(){
+      const cq = this.cq;
+      const total = cq.qs.length;
+      const pct = Math.round((cq.score / total) * 100);
+      this._addXP(60);
+
+      const res = QuizStore.finishSession(cq.quizSess, total);
+
+      // Sync ke AppState
+      try{
+        const raw = localStorage.getItem('emodul_state');
+        if(raw){
+          const state = JSON.parse(raw);
+          const u = (state.units||[]).find(u => u.id === 2);
+          if(u){ u.progress = Math.max(u.progress||0, pct); if(pct >= 60) u.status = 'done'; }
+          localStorage.setItem('emodul_state', JSON.stringify(state));
+        }
+      }catch{}
+
+      const allDone = this.done.every(Boolean);
+
+      document.getElementById('activity-area').innerHTML = `
+        <div class="card" style="padding:var(--space-6);text-align:center;overflow:hidden;">
+          <!-- Score ring -->
+          <div class="score-ring" style="background:conic-gradient(
+            var(--accent) ${pct*3.6}deg, var(--surface-2) ${pct*3.6}deg);">
+            <div class="score-ring-inner">
+              <span style="font-size:1.65rem;font-weight:800;color:var(--accent-700);">${pct}%</span>
+              <span style="font-size:9px;color:var(--text-faint);font-weight:700;">SCORE</span>
+            </div>
+          </div>
+
+          <h2 style="font-size:var(--font-size-2xl);font-weight:800;margin-bottom:var(--space-2);">
+            ${pct>=80?'🏆 Outstanding!':pct>=60?'💪 Good job!':'🔄 Keep Practicing!'}</h2>
+          <p style="color:var(--text-muted);margin-bottom:var(--space-4);">
+            Correct: <strong>${cq.score} of ${total} questions</strong></p>
+
+          ${res.isNewBest?`
+            <div style="background:var(--warm-50);border:1px solid var(--warm-200);
+              border-radius:var(--radius-lg);padding:var(--space-3);margin-bottom:var(--space-4);">
+              <p style="font-size:var(--font-size-sm);font-weight:700;color:var(--warm-700);">
+                🎉 New record! Best score: ${pct}%</p>
+            </div>`:''}
+
+          ${(this.wrongAnswers && this.wrongAnswers.length > 0) ? `
+            <div style="background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--danger);
+              border-radius:var(--radius-lg);padding:var(--space-4);margin-bottom:var(--space-4);
+              text-align:left;">
+              <p style="font-size:var(--font-size-xs);font-weight:800;color:var(--text-faint);
+                text-transform:uppercase;letter-spacing:.06em;margin-bottom:var(--space-3);">
+                📝 Review My Mistakes (${this.wrongAnswers.length})</p>
+              <div style="display:flex;flex-direction:column;gap:var(--space-3);">
+                ${this.wrongAnswers.map((item, idx) => {
+                  const keys = ['A','B','C','D'];
+                  return `
+                    <div style="border-bottom:1px solid var(--border);padding-bottom:var(--space-2);">
+                      <p style="font-size:var(--font-size-sm);font-weight:700;color:var(--text-main);margin-bottom:4px;">Q${idx+1}: ${item.q.text}</p>
+                      <div style="font-size:12px;display:flex;flex-direction:column;gap:2px;">
+                        <span style="color:var(--danger);"><strong style="background:var(--danger-100);padding:0 4px;border-radius:4px;">Your Answer:</strong> ${item.q.options[item.sel]}</span>
+                        <span style="color:var(--accent);"><strong style="background:var(--accent-100);padding:0 4px;border-radius:4px;">Correct:</strong> ${item.q.options[item.q.correct]}</span>
+                        <span style="color:var(--text-body);margin-top:2px;">💡 ${item.q.whyCorrect || 'No explanation'}</span>
+                      </div>
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+            </div>
+          ` : ''}
+
+          <!-- XP earned -->
+          <div style="background:var(--warm-50);border:1px solid var(--warm-200);
+            border-radius:var(--radius-lg);padding:var(--space-3);margin-bottom:var(--space-5);
+            display:flex;align-items:center;justify-content:center;gap:var(--space-2);">
+            <span style="font-size:1.2rem;" aria-hidden="true">⭐</span>
+            <span style="font-size:var(--font-size-base);font-weight:800;color:var(--warm-700);">
+              ${this.xp} XP earned this session!</span>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:var(--space-3);">
+            <button class="btn btn-primary btn-block" onclick="App._renderClosingQuiz()">
+              ↺ Retry Quiz</button>
+            ${allDone?`<a href="unit3-reading.html" class="btn btn-accent btn-block">
+              Continue to Unit 3: Read & Respond 📖
+            </a>` : ''}
+            <a href="index.html" class="btn btn-outline btn-block">
+              ← Back to Home</a>
+          </div>
+        </div>`;
+
+      if(pct >= 80 && typeof Utils !== 'undefined') Utils.showConfetti?.();
+    }
+  };
+
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded', ()=>App.init());
+  } else {
+    App.init();
+  }
+  </script>
+</body>
+</html>

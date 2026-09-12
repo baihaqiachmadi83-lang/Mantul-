@@ -1,0 +1,551 @@
+/* ============================================================
+   ANIMATIONS – E-Modul Visual
+   Semua keyframe & micro-animation CSS.
+   prefers-reduced-motion dipatuhi di akhir file.
+   ============================================================ */
+
+/* ============================================================
+   1. KEYFRAMES DASAR
+   ============================================================ */
+
+/* Fade in dari bawah (card enter) */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Fade in saja */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Fade out */
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+/* Scale in (badge bounce) */
+@keyframes scaleIn {
+  0%   { opacity: 0; transform: scale(0.5); }
+  70%  { transform: scale(1.15); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+/* Badge bounce – lebih dramatis */
+@keyframes badgeBounce {
+  0%   { opacity: 0; transform: scale(0) rotate(-15deg); }
+  50%  { transform: scale(1.2) rotate(5deg); }
+  70%  { transform: scale(0.95) rotate(-2deg); }
+  85%  { transform: scale(1.05) rotate(1deg); }
+  100% { opacity: 1; transform: scale(1) rotate(0deg); }
+}
+
+/* Slide dari kanan (next question) */
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(60px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Slide ke kiri (prev question) */
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-60px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Slide keluar ke kiri */
+@keyframes slideOutLeft {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-60px);
+  }
+}
+
+/* Shake (jawaban salah) */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  15%       { transform: translateX(-8px); }
+  30%       { transform: translateX(7px); }
+  45%       { transform: translateX(-6px); }
+  60%       { transform: translateX(5px); }
+  75%       { transform: translateX(-4px); }
+  90%       { transform: translateX(3px); }
+}
+
+/* Bounce ringan (jawaban benar) */
+@keyframes bounceCorrect {
+  0%, 100% { transform: translateY(0); }
+  30%      { transform: translateY(-6px); }
+  60%      { transform: translateY(-3px); }
+}
+
+/* Confetti jatuh */
+@keyframes confettiFall {
+  0% {
+    transform: translateY(-10px) rotate(0deg) scale(1);
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(720deg) scale(0.5);
+    opacity: 0;
+  }
+}
+
+/* Confetti bergelombang (horizontal wiggle) */
+@keyframes confettiWiggle {
+  0%   { margin-left: 0; }
+  25%  { margin-left: 15px; }
+  50%  { margin-left: -10px; }
+  75%  { margin-left: 12px; }
+  100% { margin-left: 0; }
+}
+
+/* Shimmer (progress bar & skeleton) */
+@keyframes shimmer {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* Skeleton loading */
+@keyframes skeletonShimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Pulse dot (progress pill) */
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.6; transform: scale(0.8); }
+}
+
+/* Timer pulse (saat waktu habis) */
+@keyframes timerPulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.6; }
+}
+
+/* Float (dekoratif) */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-8px); }
+}
+
+/* Spin (loading) */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* Count up (angka skor) */
+@keyframes countUp {
+  from { transform: scale(0.8); opacity: 0; }
+  to   { transform: scale(1);   opacity: 1; }
+}
+
+/* Tada (badge reveal) */
+@keyframes tada {
+  0%   { transform: scale(1); }
+  10%  { transform: scale(0.9) rotate(-3deg); }
+  20%  { transform: scale(0.9) rotate(-3deg); }
+  30%  { transform: scale(1.1) rotate(3deg); }
+  40%  { transform: scale(1.1) rotate(-3deg); }
+  50%  { transform: scale(1.1) rotate(3deg); }
+  60%  { transform: scale(1.1) rotate(-3deg); }
+  70%  { transform: scale(1.1) rotate(3deg); }
+  80%  { transform: scale(1.1) rotate(-3deg); }
+  90%  { transform: scale(1.1) rotate(3deg); }
+  100% { transform: scale(1) rotate(0); }
+}
+
+/* SVG stroke draw (ikon sukses) */
+@keyframes drawStroke {
+  from { stroke-dashoffset: 100; }
+  to   { stroke-dashoffset: 0; }
+}
+
+/* ─────────────────────────────────────────────────────────
+   KEYFRAMES SISTEM FEEDBACK (breatheIn, glowCorrect, dll.)
+   ───────────────────────────────────────────────────────── */
+
+/*
+ * breatheIn – animasi menenangkan saat jawaban salah.
+ * Membesar lembut lalu kembali normal. Bukan shake/red flash.
+ */
+@keyframes breatheIn {
+  0%   { opacity: 0; transform: scale(0.95) translateY(6px); }
+  40%  { opacity: 1; transform: scale(1.015) translateY(0); }
+  70%  { transform: scale(0.995); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/*
+ * breathePulse – icon ring bernapas lembut (salah/timeout).
+ */
+@keyframes breathePulse {
+  0%, 100% { box-shadow: 0 0 0 0   rgba(37,99,235,.15); }
+  50%       { box-shadow: 0 0 0 8px rgba(37,99,235,.0); }
+}
+
+/*
+ * glowCorrect – icon ring bersinar hijau (benar).
+ */
+@keyframes glowCorrect {
+  0%, 100% { box-shadow: 0 0 0 6px rgba(16,185,129,.08), 0 0 0 0 rgba(16,185,129,.2); }
+  50%       { box-shadow: 0 0 0 6px rgba(16,185,129,.08), 0 0 0 10px rgba(16,185,129,.0); }
+}
+
+/*
+ * sparkleFloat – bintang/emoji kecil melayang ke atas lalu hilang.
+ */
+@keyframes sparkleFloat {
+  0%   { opacity: 1; transform: translateY(0) scale(1) rotate(0deg); }
+  60%  { opacity: 1; transform: translateY(-40px) scale(1.1) rotate(15deg); }
+  100% { opacity: 0; transform: translateY(-80px) scale(0.5) rotate(30deg); }
+}
+
+/*
+ * heartbeat – denyut kecil satu kali (skor bertambah).
+ */
+@keyframes heartbeat {
+  0%   { transform: scale(1); }
+  25%  { transform: scale(1.25); }
+  50%  { transform: scale(1); }
+  75%  { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
+/*
+ * slideUpPanel – panel feedback muncul dari bawah.
+ * (dipakai juga oleh JS via classList.add)
+ */
+@keyframes slideUpPanel {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(60px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+/*
+ * wobbleGentle – gerakan halus soal yang di-retry
+ * (lebih lembut dari shake, untuk menandai transisi)
+ */
+@keyframes wobbleGentle {
+  0%, 100% { transform: translateX(0); }
+  20%       { transform: translateX(-5px); }
+  40%       { transform: translateX(4px); }
+  60%       { transform: translateX(-3px); }
+  80%       { transform: translateX(2px); }
+}
+
+/* ============================================================
+   2. UTILITY CLASSES ANIMASI
+   ============================================================ */
+
+/* Entrance */
+.anim-fade-in-up {
+  animation: fadeInUp 0.4s ease both;
+}
+
+.anim-fade-in {
+  animation: fadeIn 0.3s ease both;
+}
+
+.anim-scale-in {
+  animation: scaleIn 0.4s var(--transition-spring) both;
+}
+
+.anim-badge-bounce {
+  animation: badgeBounce 0.6s var(--transition-spring) both;
+}
+
+.anim-slide-right {
+  animation: slideInRight 0.35s ease both;
+}
+
+.anim-slide-left {
+  animation: slideInLeft 0.35s ease both;
+}
+
+/* Feedback */
+.anim-shake {
+  animation: shake 0.4s ease both;
+}
+
+.anim-bounce-correct {
+  animation: bounceCorrect 0.4s ease both;
+}
+
+.anim-tada {
+  animation: tada 0.8s ease both;
+}
+
+/* Continuous */
+.anim-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.anim-spin {
+  animation: spin 1s linear infinite;
+}
+
+.anim-pulse {
+  animation: pulse-dot 2s ease infinite;
+}
+
+/* Delay utilities */
+.delay-100 { animation-delay: 100ms; }
+.delay-150 { animation-delay: 150ms; }
+.delay-200 { animation-delay: 200ms; }
+.delay-300 { animation-delay: 300ms; }
+.delay-400 { animation-delay: 400ms; }
+.delay-500 { animation-delay: 500ms; }
+.delay-600 { animation-delay: 600ms; }
+.delay-700 { animation-delay: 700ms; }
+.delay-800 { animation-delay: 800ms; }
+
+/* ============================================================
+   3. CARD ENTRANCE dengan STAGGER
+   ============================================================ */
+.card-stagger > *:nth-child(1) { animation: fadeInUp 0.4s ease 0ms both; }
+.card-stagger > *:nth-child(2) { animation: fadeInUp 0.4s ease 80ms both; }
+.card-stagger > *:nth-child(3) { animation: fadeInUp 0.4s ease 160ms both; }
+.card-stagger > *:nth-child(4) { animation: fadeInUp 0.4s ease 240ms both; }
+.card-stagger > *:nth-child(5) { animation: fadeInUp 0.4s ease 320ms both; }
+.card-stagger > *:nth-child(6) { animation: fadeInUp 0.4s ease 400ms both; }
+
+/* ============================================================
+   4. KONFETI WARNA
+   ============================================================ */
+.confetti-piece:nth-child(1)  { left: 10%; background: #2563EB; animation-duration: 2.2s; animation-delay: 0ms; }
+.confetti-piece:nth-child(2)  { left: 20%; background: #10B981; animation-duration: 2.5s; animation-delay: 100ms; border-radius: 50%; }
+.confetti-piece:nth-child(3)  { left: 30%; background: #F59E0B; animation-duration: 2.0s; animation-delay: 50ms; }
+.confetti-piece:nth-child(4)  { left: 40%; background: #EC4899; animation-duration: 2.7s; animation-delay: 150ms; border-radius: 50%; }
+.confetti-piece:nth-child(5)  { left: 50%; background: #8B5CF6; animation-duration: 2.3s; animation-delay: 0ms; }
+.confetti-piece:nth-child(6)  { left: 60%; background: #EF4444; animation-duration: 2.6s; animation-delay: 200ms; border-radius: 50%; }
+.confetti-piece:nth-child(7)  { left: 70%; background: #06B6D4; animation-duration: 2.1s; animation-delay: 80ms; }
+.confetti-piece:nth-child(8)  { left: 80%; background: #F59E0B; animation-duration: 2.4s; animation-delay: 120ms; border-radius: 50%; }
+.confetti-piece:nth-child(9)  { left: 15%; background: #8B5CF6; animation-duration: 2.8s; animation-delay: 60ms; }
+.confetti-piece:nth-child(10) { left: 45%; background: #10B981; animation-duration: 2.2s; animation-delay: 180ms; border-radius: 50%; }
+.confetti-piece:nth-child(11) { left: 65%; background: #2563EB; animation-duration: 2.9s; animation-delay: 30ms; }
+.confetti-piece:nth-child(12) { left: 85%; background: #EC4899; animation-duration: 2.0s; animation-delay: 220ms; }
+.confetti-piece:nth-child(13) { left: 5%;  background: #06B6D4; animation-duration: 2.6s; animation-delay: 90ms; border-radius: 50%; }
+.confetti-piece:nth-child(14) { left: 35%; background: #EF4444; animation-duration: 2.3s; animation-delay: 140ms; }
+.confetti-piece:nth-child(15) { left: 55%; background: #F59E0B; animation-duration: 2.7s; animation-delay: 70ms; border-radius: 50%; }
+.confetti-piece:nth-child(16) { left: 75%; background: #2563EB; animation-duration: 2.1s; animation-delay: 190ms; }
+
+/* ============================================================
+   5. PROGRESS BAR ANIMASI
+   ============================================================ */
+.progress-bar-fill.animate {
+  animation: progressGrow 0.8s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+@keyframes progressGrow {
+  from { width: 0% !important; }
+}
+
+/* ============================================================
+   6. HOVER EFEK TOMBOL LANJUT
+   ============================================================ */
+.btn-primary .btn-arrow {
+  display: inline-block;
+  transition: transform var(--transition-base);
+}
+
+.btn-primary:hover .btn-arrow {
+  transform: translateX(4px);
+}
+
+/* ============================================================
+   7. SCORE RING SVG ANIMASI
+   ============================================================ */
+.score-ring-track {
+  stroke: var(--surface-2);
+  stroke-width: 10;
+  fill: none;
+}
+
+.score-ring-progress {
+  stroke-width: 10;
+  fill: none;
+  stroke-linecap: round;
+  stroke-dasharray: 377; /* 2π × 60 */
+  stroke-dashoffset: 377;
+  transition: stroke-dashoffset 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.score-ring-progress--high   { stroke: var(--accent); }
+.score-ring-progress--medium { stroke: var(--warm); }
+.score-ring-progress--low    { stroke: var(--danger); }
+
+/* ============================================================
+   8. QUIZ OPTION CORRECT / WRONG ANIMATION
+   ============================================================ */
+.quiz-option--correct {
+  animation: bounceCorrect 0.4s ease both;
+}
+
+.quiz-option--wrong {
+  animation: shake 0.4s ease both;
+}
+
+/* ============================================================
+   9. HERO DECORATIVE BLOB (animasi lambat)
+   ============================================================ */
+.hero-blob {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255,255,255,.05);
+  animation: float 6s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.hero-blob--1 {
+  width: 180px;
+  height: 180px;
+  top: -60px;
+  right: -40px;
+  animation-delay: 0s;
+}
+
+.hero-blob--2 {
+  width: 120px;
+  height: 120px;
+  bottom: -40px;
+  left: -20px;
+  animation-delay: 2s;
+}
+
+/* ============================================================
+   10. TOAST NOTIFICATION
+   ============================================================ */
+.toast {
+  position: fixed;
+  bottom: var(--space-8);
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  z-index: var(--z-toast);
+  background: var(--text-main);
+  color: white;
+  padding: var(--space-3) var(--space-5);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  box-shadow: var(--shadow-xl);
+  transition: transform 0.3s var(--transition-spring);
+  white-space: nowrap;
+}
+
+.toast.show {
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ============================================================
+   11. SPINNER LOADING
+   ============================================================ */
+.spinner {
+  width: 24px;
+  height: 24px;
+  border: 3px solid var(--border);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+/* ============================================================
+   12. PREFERS-REDUCED-MOTION
+   Semua animasi dimatikan / disederhanakan.
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  /* Konfeti tidak muncul sama sekali */
+  .confetti-container {
+    display: none !important;
+  }
+
+  /* Hero blob diam */
+  .hero-blob {
+    animation: none !important;
+  }
+
+  /* Progress bar tetap tampil dengan nilai akhir */
+  .progress-bar-fill {
+    transition: none !important;
+  }
+
+  /* Card tidak bergerak saat hover */
+  .unit-card:hover,
+  .card--interactive:hover {
+    transform: none !important;
+  }
+
+  /* Tombol tidak bergerak */
+  .btn:hover {
+    transform: none !important;
+  }
+
+  /* Badge langsung muncul */
+  .anim-badge-bounce,
+  .anim-scale-in {
+    animation: fadeIn 0.2s ease both !important;
+  }
+
+  /* Quiz option tidak shake/bounce */
+  .quiz-option--correct,
+  .quiz-option--wrong {
+    animation: none !important;
+  }
+
+  /* Score ring tidak animasi */
+  .score-ring-progress {
+    transition: none !important;
+  }
+
+  /* Shimmer dimatikan */
+  .progress-bar-fill::after {
+    animation: none !important;
+    display: none;
+  }
+
+  /* Float dimatikan */
+  .anim-float {
+    animation: none !important;
+  }
+}

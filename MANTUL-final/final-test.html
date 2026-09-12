@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>/*MANTUL_THEME_BOOT*/
+(function(){try{var t=localStorage.getItem('mantul_theme');if(!t){t=(window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches)?'dark':'light';}document.documentElement.setAttribute('data-theme',t);}catch(e){}})();
+window.toggleTheme=function(){try{var cur=document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',cur);localStorage.setItem('mantul_theme',cur);var ic=document.getElementById('theme-icon');if(ic)ic.textContent=cur==='dark'?'☀️':'🌙';var fic=document.getElementById('mantul-float-icon');if(fic)fic.textContent=cur==='dark'?'☀️':'🌙';}catch(e){}};
+document.addEventListener('DOMContentLoaded',function(){try{var cur=document.documentElement.getAttribute('data-theme');var ic=document.getElementById('theme-icon');if(ic){ic.textContent=cur==='dark'?'☀️':'🌙';return;}var b=document.createElement('button');b.type='button';b.title='Toggle Light/Dark Mode';b.setAttribute('aria-label','Toggle light and dark mode');b.onclick=window.toggleTheme;b.style.cssText='position:fixed;top:14px;right:14px;z-index:99999;width:40px;height:40px;border-radius:9999px;border:none;background:rgba(120,120,120,.18);color:inherit;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.18);';var s=document.createElement('span');s.id='mantul-float-icon';s.textContent=cur==='dark'?'☀️':'🌙';b.appendChild(s);document.body.appendChild(b);}catch(e){}});
+</script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Final Test MANTUL – Test your understanding of vocabulary, speaking, and reading skills." />
+  <title>Final Test | MANTUL</title>
+
+  <link rel="stylesheet" href="css/design-system.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/animations.css" />
+  <link rel="stylesheet" href="css/feedback.css" />
+
+  <style>
+    body { background: var(--surface); }
+
+    /* ── SESSION TABS ── */
+    .sess-tabs {
+      display: flex; gap: var(--space-2); overflow-x: auto;
+      scrollbar-width: none; -webkit-overflow-scrolling: touch;
+      padding-bottom: var(--space-1); margin-bottom: var(--space-4);
+    }
+    .sess-tabs::-webkit-scrollbar { display: none; }
+    .sess-tab {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: var(--space-2) var(--space-3); border-radius: var(--radius-full);
+      font-size: var(--font-size-sm); font-weight: var(--font-weight-semibold);
+      border: 1.5px solid var(--border); background: var(--card);
+      color: var(--text-muted); white-space: nowrap; flex-shrink: 0;
+      transition: all var(--transition-fast); cursor: pointer;
+    }
+    .sess-tab.active { background: #DC2626; border-color: #DC2626; color: white; }
+    .sess-tab.done   { background: #FEF2F2; border-color: #EF4444; color: #B91C1C; }
+
+    /* ── HERO CARD ── */
+    .sess-hero {
+      border-radius: var(--radius-2xl); padding: var(--space-5) var(--space-6);
+      color: white; position: relative; overflow: hidden; margin-bottom: var(--space-4);
+      background: linear-gradient(135deg, #DC2626, #7F1D1D);
+    }
+    .sess-hero-deco {
+      position: absolute; right: -10px; top: 50%; transform: translateY(-50%);
+      font-size: 5rem; opacity: .15; pointer-events: none; line-height: 1;
+    }
+
+    /* ── PROGRESS STRIP ── */
+    .phase-strip { display: flex; align-items: center; gap: 0; }
+    .phase-node { display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; }
+    .phase-dot {
+      width: 30px; height: 30px; border-radius: 50%; display: flex;
+      align-items: center; justify-content: center; font-size: 13px;
+      font-weight: 700; transition: all var(--transition-base);
+      border: 2px solid transparent; background: var(--surface-2); color: var(--text-faint);
+    }
+    .phase-dot.done { background: #EF4444; color: white; border-color: #EF4444; }
+    .phase-dot.active { background: #DC2626; color: white; box-shadow: 0 0 0 4px #FCA5A5; }
+    
+    .phase-line { flex: 1; height: 2px; background: var(--border); margin: 0 -4px;
+      position: relative; top: -10px; transition: background var(--transition-base); }
+    .phase-line.done { background: #EF4444; }
+
+    /* ── RESULT BARS ── */
+    .skill-res-card {
+      background: white; border: 1px solid var(--border); border-radius: var(--radius-lg);
+      padding: var(--space-4); margin-bottom: var(--space-3);
+      display: flex; align-items: center; gap: var(--space-4);
+    }
+    .skill-res-icon {
+      width: 48px; height: 48px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem; flex-shrink: 0;
+    }
+    .skill-res-body { flex: 1; }
+    
+    .sr-vocab { background: #DBEAFE; color: #1D4ED8; }
+    .sr-speak { background: #FEF3C7; color: #B45309; }
+    .sr-read  { background: var(--accent-100); color: var(--accent-700); }
+
+    /* ── ACTIVITY TAG ── */
+    .act-tag {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 3px var(--space-2); border-radius: var(--radius-full);
+      font-size: 10px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: .07em; margin-bottom: var(--space-3);
+      background: var(--danger-100); color: var(--danger);
+    }
+
+    /* TTS Button Mini */
+    .btn-tts-mini {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 40px; height: 40px; border-radius: 50%;
+      background: var(--danger-100); color: var(--danger); border: none;
+      font-size: 1.2rem; cursor: pointer; transition: all .2s;
+    }
+    .btn-tts-mini.playing { animation: pulsePlay 1s infinite; background: #DC2626; color: white; }
+    @keyframes pulsePlay {
+      0% { box-shadow: 0 0 0 0 rgba(220,38,38,.4); }
+      70% { box-shadow: 0 0 0 8px rgba(220,38,38,0); }
+      100% { box-shadow: 0 0 0 0 rgba(220,38,38,0); }
+    }
+
+    .read-box {
+      background: var(--surface-2); padding: var(--space-4); border-radius: var(--radius-md);
+      margin-bottom: var(--space-4); font-size: var(--font-size-sm); color: var(--text-body);
+      border-left: 4px solid var(--accent);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="confetti-container" id="confetti-container" aria-hidden="true"></div>
+
+  <!-- ══════════════════════════════════════════════════════
+       NAVBAR
+       ══════════════════════════════════════════════════════ -->
+  <nav class="navbar" role="navigation" aria-label="Navigasi halaman">
+    <div class="container">
+      <a href="index.html" class="btn-back" aria-label="Back to home">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+        Home
+      </a>
+      <div style="display:flex;align-items:center;gap:var(--space-2);">
+        <span class="chip" style="background:var(--danger-100);color:var(--danger);border:1px solid var(--danger);">Final Test</span>
+      </div>
+      <!-- XP counter -->
+      <div style="display:flex;align-items:center;gap:6px; background:var(--warm-50);border:1px solid var(--warm-200); border-radius:var(--radius-full);padding:4px var(--space-3);">
+        <span style="font-size:.9rem;" aria-hidden="true">⭐</span>
+        <span id="nav-xp" style="font-size:var(--font-size-xs);font-weight:800; color:var(--warm-700);">0 XP</span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ══════════════════════════════════════════════════════
+       MAIN
+       ══════════════════════════════════════════════════════ -->
+  <main class="page-content" id="main-content" style="padding-bottom:90px;">
+    <div class="container">
+
+      <!-- SESSION HERO -->
+      <div class="sess-hero anim-fade-in-up" id="sess-hero">
+        <span class="sess-hero-deco" id="hero-deco" aria-hidden="true">🎯</span>
+        <div style="position:relative;z-index:1;">
+          <p style="font-size:10px;font-weight:800;text-transform:uppercase; letter-spacing:.09em;color:rgba(255,255,255,.7);margin-bottom:2px;">
+            FINAL TEST
+          </p>
+          <h1 id="hero-title" style="font-size:var(--font-size-xl);font-weight:800; color:white;margin-bottom:var(--space-2);">
+            Final Test
+          </h1>
+          <p id="hero-desc" style="font-size:var(--font-size-sm);color:rgba(255,255,255,.9); line-height:1.5; margin-bottom:var(--space-3);">
+            Test your Vocabulary, Speaking, and Reading skills (45 Soal).
+          </p>
+          <div class="progress-bar-track" style="background:rgba(255,255,255,.3);">
+            <div id="hero-bar" class="progress-bar-fill" style="width:0%;background:white;transition:width .4s ease;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SESSION TABS -->
+      <div class="sess-tabs anim-fade-in-up delay-100" role="tablist" id="sess-tabs-container">
+        <!-- Generated by JS -->
+      </div>
+
+      <!-- ACTIVITY AREA -->
+      <div id="activity-area" class="anim-fade-in-up delay-200">
+        <!-- Rendered by JS -->
+      </div>
+
+    </div>
+  </main>
+
+  <script src="js/app.js"></script>
+  <script src="js/quiz-store.js"></script>
+  <script src="js/feedback.js"></script>
+  <script>
+  'use strict';
+
+  /* ════════════════════════════════════════════════════════
+     1. FINAL TEST DATA
+     ════════════════════════════════════════════════════════ */
+  const TEST_DATA = [
+    {
+      id: 'vocab', title: 'Vocabulary', emoji: '📖', themeClass: 'sr-vocab',
+      desc: 'Everyday vocabulary, buying and selling, and time.',
+      questions: [
+        {
+          id: 'ft_v1', imageUrl: 'vegetables.png', text: 'What does the word "Vegetables" mean?',
+          options: ['Buah-buahan', 'Sayur-sayuran', 'Daging', 'Minuman'],
+          correct: 1, whyCorrect: '"Vegetables" means sayur-sayuran (plants we eat, like spinach, carrots, and beans).',
+          whyWrong: ['"Buah-buahan" = Fruits.', null, '"Daging" = Meat.', '"Minuman" = Drinks.']
+        },
+        {
+          id: 'ft_v2', type: 'fill', text: 'Complete the sentence: "The market opens in the ____ (pagi)."',
+          answer: 'morning', whyCorrect: '"Morning" means pagi hari — the early part of the day.'
+        },
+        {
+          id: 'ft_v3', text: 'Choose the correct translation: "This phone is very expensive."',
+          options: ['HP ini sangat murah.', 'HP ini sangat mahal.', 'HP ini baru.', 'HP ini rusak.'],
+          correct: 1, whyCorrect: '"Expensive" means mahal — it costs a lot of money.',
+          whyWrong: ['"Murah" = cheap.', null, '"Baru" = new.', '"Rusak" = broken.']
+        },
+        {
+          id: 'ft_v4', text: 'The correct English word for "membeli" (to buy) is...',
+          options: ['sell', 'buy', 'pay', 'cook'],
+          correct: 1, whyCorrect: '"Buy" means membeli — to get something by paying for it.',
+          whyWrong: ['"sell" = menjual.', null, '"pay" = membayar.', '"cook" = memasak.']
+        },
+        {
+          id: 'ft_v5', text: 'What does the word "Table" mean?',
+          options: ['Kursi', 'Lemari', 'Meja', 'Tempat tidur'],
+          correct: 2, whyCorrect: '"Table" means meja — a flat-surfaced piece of furniture.',
+          whyWrong: ['"Kursi" = Chair.', '"Lemari" = Cupboard.', null, '"Tempat tidur" = Bed.']
+        },
+        {
+          id: 'ft_v6', text: 'What does the word "Money" mean?',
+          options: ['Waktu', 'Uang', 'Harga', 'Pasar'],
+          correct: 1, whyCorrect: '"Money" means uang — the currency used to buy things.',
+          whyWrong: ['"Waktu" = Time.', null, '"Harga" = Price.', '"Pasar" = Market.']
+        },
+        {
+          id: 'ft_v7', text: 'The question "What is the price?" is asking about...',
+          options: ['Time', 'Name', 'Cost / Price', 'Location'],
+          correct: 2, whyCorrect: '"Price" means harga — how much something costs.',
+          whyWrong: ['"Time" would use "What time is it?".', '"Name" would use "What is the name?".', null, '"Location" would use "Where is it?".']
+        },
+        {
+          id: 'ft_v8', text: 'The word "Kitchen" means...',
+          options: ['Kamar tidur', 'Dapur', 'Ruang tamu', 'Kamar mandi'],
+          correct: 1, whyCorrect: '"Kitchen" means dapur — the room where food is prepared and cooked.',
+          whyWrong: ['"Kamar tidur" = Bedroom.', null, '"Ruang tamu" = Living room.', '"Kamar mandi" = Bathroom.']
+        },
+        {
+          id: 'ft_v9', type: 'fill', text: 'Complete: "The price is twenty ____ rupiah." (ribu)',
+          answer: 'thousand', whyCorrect: '"Thousand" means ribu. So "twenty thousand" = dua puluh ribu.'
+        },
+        {
+          id: 'ft_v10', text: 'Choose the correct translation: "The vegetables are fresh and cheap."',
+          options: ['Sayurannya segar dan mahal.', 'Sayurannya segar dan murah.', 'Sayurannya busuk dan murah.', 'Sayurannya sedikit dan mahal.'],
+          correct: 1, whyCorrect: '"Fresh" = segar and "cheap" = murah.',
+          whyWrong: ['"mahal" = expensive.', null, '"busuk" = rotten.', '"sedikit" = few.']
+        },
+        {
+          id: 'ft_v11', text: 'The correct translation for "Selamat pagi" is...',
+          options: ['Good night', 'Good morning', 'Good bye', 'Good afternoon'],
+          correct: 1, whyCorrect: '"Good morning" = Selamat pagi.',
+          whyWrong: ['"Good night" = used when sleeping.', null, '"Good bye" = Selamat tinggal.', '"Good afternoon" = Selamat siang.']
+        },
+        {
+          id: 'ft_v12', text: 'What does the word "Water" mean?',
+          options: ['Air', 'Api', 'Angin', 'Tanah'],
+          correct: 0, whyCorrect: '"Water" means air.',
+          whyWrong: [null, '"Api" = Fire.', '"Angin" = Wind.', '"Tanah" = Soil/Earth.']
+        },
+        {
+          id: 'ft_v13', type: 'fill', text: 'Complete: "I want to ____ some fish at the market." (membeli)',
+          answer: 'buy', whyCorrect: '"Buy" means membeli.'
+        },
+        {
+          id: 'ft_v14', text: 'The word "Cheap" is the opposite of...',
+          options: ['expensive', 'big', 'new', 'hot'],
+          correct: 0, whyCorrect: '"Cheap" (murah) is the opposite of "expensive" (mahal).',
+          whyWrong: [null, '"big" = besar.', '"new" = baru.', '"hot" = panas.']
+        },
+        {
+          id: 'ft_v15', text: 'What does the word "Chair" mean?',
+          options: ['Meja', 'Kursi', 'Pintu', 'Jendela'],
+          correct: 1, whyCorrect: '"Chair" means kursi.',
+          whyWrong: ['"Meja" = Table.', null, '"Pintu" = Door.', '"Jendela" = Window.']
+        }
+      ]
+    },
+    {
+      id: 'speak', title: 'Speaking', emoji: '🎙️', themeClass: 'sr-speak',
+      desc: 'Conversation responses and dialogue comprehension.',
+      questions: [
+        {
+          id: 'ft_s1', text: 'Someone greets you: "Good morning! How are you?"<br>The best response is:',
+          options: ['I am fine, thank you.', 'See you later.', 'Nice to meet you.', 'I am sorry.'],
+          correct: 0, whyCorrect: '"I am fine, thank you" is the standard polite response to "How are you?".',
+          whyWrong: [null, '"See you later" is for saying goodbye.', '"Nice to meet you" is for first meetings.', '"I am sorry" is an apology.']
+        },
+        {
+          id: 'ft_s2', text: 'You want to ask the price of vegetables at the market. Which sentence do you use?',
+          options: ['How many is it?', 'What time is it?', 'How much is it?', 'Where is it?'],
+          correct: 2, whyCorrect: '"How much is it?" is used to ask about the price of something.',
+          whyWrong: ['"How many" asks about quantity.', '"What time is it?" asks about time.', null, '"Where is it?" asks about location.']
+        },
+        {
+          id: 'ft_s3', text: 'Listen to the question: "Excuse me, where is the toilet?"<br>Which answer below is appropriate?',
+          audioText: "Excuse me, where is the toilet?",
+          options: ['It is twenty thousand.', 'Go straight, then turn left.', 'I wake up at five.', 'Nice to meet you.'],
+          correct: 1, whyCorrect: '"Go straight, then turn left" gives directions to a location.',
+          whyWrong: ['Answers a question about price.', null, 'Answers a question about daily routine.', 'Greeting expression.']
+        },
+        {
+          id: 'ft_s4', text: 'You are introducing yourself for the first time. The correct expression is:',
+          options: ['See you tomorrow.', 'Nice to meet you.', 'How much is it?', 'Good bye.'],
+          correct: 1, whyCorrect: '"Nice to meet you" is used when meeting someone for the first time.',
+          whyWrong: ['"See you tomorrow" is for farewells.', null, '"How much is it?" asks about price.', '"Good bye" is a farewell.']
+        },
+        {
+          id: 'ft_s5', text: 'At a coffee shop, the seller asks "Anything else?". If that is enough, you answer...',
+          options: ['No, thank you. That is all.', 'Yes, I am fine.', 'See you later.', 'What time is it?'],
+          correct: 0, whyCorrect: '"No, thank you. That is all." politely tells the seller your order is complete.',
+          whyWrong: [null, '"Yes, I am fine" responds to "How are you?".', '"See you later" is a farewell.', '"What time is it?" asks time.']
+        },
+        {
+          id: 'ft_s6', text: 'Listen to the following question. The best answer about daily routine is:',
+          audioText: 'What do you do every morning?',
+          options: ['I wake up at five and pray.', 'It is twenty thousand.', 'Turn left.', 'Nice to meet you.'],
+          correct: 0, whyCorrect: '"I wake up at five and pray" describes a morning routine.',
+          whyWrong: [null, 'Answers a price question.', 'Answers a direction question.', 'Greeting for first meetings.']
+        },
+        {
+          id: 'ft_s7', text: 'When you do not understand what the other person said, you can say...',
+          options: ['Could you repeat that, please?', 'You are welcome.', 'See you later.', 'It is cheap.'],
+          correct: 0, whyCorrect: '"Could you repeat that, please?" politely asks the other person to say it again.',
+          whyWrong: [null, '"You are welcome" replies to "Thank you."', '"See you later" is a farewell.', '"It is cheap" is about price.']
+        },
+        {
+          id: 'ft_s8', text: 'The correct answer to the question "Where are you from?" is...',
+          options: ['I am fine.', 'I am from Indonesia.', 'My name is Sri.', 'It is five o\'clock.'],
+          correct: 1, whyCorrect: '"Where are you from?" asks about your origin. "I am from Indonesia" correctly answers it.',
+          whyWrong: ['Answers "How are you?".', null, 'Answers "What is your name?".', 'Answers "What time is it?".']
+        },
+        {
+          id: 'ft_s9', text: 'To ask for directions to the station, you say...',
+          options: ['What is your name?', 'How much is the ticket?', 'Where is the station?', 'What time is it?'],
+          correct: 2, whyCorrect: '"Where is the station?" correctly asks for the location of the station.',
+          whyWrong: ['"What is your name?" asks for a person\'s name.', '"How much is the ticket?" asks about price, not location.', null, '"What time is it?" asks about the clock.']
+        },
+        {
+          id: 'ft_s10', text: 'To politely get someone\'s attention or to pass by, you say...',
+          options: ['Excuse me.', 'I am sorry.', 'Good bye.', 'Thank you.'],
+          correct: 0, whyCorrect: '"Excuse me" is used to politely get someone\'s attention or to ask to pass through.',
+          whyWrong: [null, '"I am sorry" is used to apologize for a mistake you made.', '"Good bye" is a farewell.', '"Thank you" expresses gratitude.']
+        },
+        {
+          id: 'ft_s11', text: 'To politely end a phone call, you say...',
+          options: ['Good bye, talk to you later.', 'How much is it?', 'What is this?', 'I am sorry.'],
+          correct: 0, whyCorrect: '"Good bye, talk to you later" is a polite and natural way to end a phone call.',
+          whyWrong: [null, '"How much is it?" asks about price.', '"What is this?" asks about an object.', '"I am sorry" is an apology.']
+        },
+        {
+          id: 'ft_s12', text: 'Someone offers help: "Can I help you?". If you need help, answer...',
+          options: ['Yes, please.', 'No problem.', 'Good night.', 'See you.'],
+          correct: 0, whyCorrect: '"Yes, please" politely accepts an offer of help.',
+          whyWrong: [null, '"No problem" is used to respond to an apology.', '"Good night" is a farewell.', '"See you" is a casual farewell.']
+        },
+        {
+          id: 'ft_s13', text: 'Listen to the following question. The correct response is:',
+          audioText: 'How much is this?',
+          options: ['It is ten thousand rupiah.', 'I am a student.', 'Turn right.', 'Good morning.'],
+          correct: 0, whyCorrect: '"How much" asks about price. "It is ten thousand rupiah" gives a price.',
+          whyWrong: [null, 'Answers "What do you do?".', 'Answers a direction question.', 'Is a greeting.']
+        },
+        {
+          id: 'ft_s14', type: 'speaking', text: 'Introduce yourself briefly. (e.g. state your name)',
+          sampleAnswer: 'Hello, my name is Budi. Nice to meet you.',
+          audioText: 'Hello, my name is Budi. Nice to meet you.'
+        },
+        {
+          id: 'ft_s15', type: 'speaking', text: 'Answer this question out loud: "What do you do every morning?"',
+          sampleAnswer: 'I wake up at five and pray.',
+          audioText: 'I wake up at five and pray.'
+        }
+      ]
+    },
+    {
+      id: 'read', title: 'Reading', emoji: '👀', themeClass: 'sr-read',
+      desc: 'Understanding short texts, signs, and labels.',
+      questions: [
+        {
+          id: 'ft_r1', imageUrl: 'no-smoking.png', readingText: "<b>Store Notice:</b><br>NO SMOKING IN THIS AREA.",
+          text: 'Based on the notice above, visitors...',
+          options: ['May smoke anywhere.', 'May smoke in this area.', 'Must not smoke in this area.', 'Must buy cigarettes.'],
+          correct: 2, whyCorrect: '"No smoking" is a prohibition sign. You are not allowed to smoke here.',
+          whyWrong: ['No smoking means not allowed.', 'Forbidden in this area.', null, 'About smoking, not buying.']
+        },
+        {
+          id: 'ft_r2', readingText: "<b>Fresh Milk Label</b><br>Store in a cool place.<br>Best before: 20 December.",
+          text: 'Where should this product be stored?',
+          options: ['In a hot place', 'Under direct sunlight', 'In a cool place', 'Outdoors in the sun'],
+          correct: 2, whyCorrect: 'The label says "Store in a cool place".',
+          whyWrong: ['Heat will spoil the milk.', 'Direct sunlight makes it warm.', null, 'Outdoors is hot.']
+        },
+        {
+          id: 'ft_r3', readingText: "Budi is a mechanic. He works at a garage. He fixes cars and motorcycles every day.",
+          text: 'What does Budi do every day at his job?',
+          options: ['Cook rice', 'Sell vegetables', 'Teach students', 'Fix cars and motorcycles'],
+          correct: 3, whyCorrect: '"He fixes cars and motorcycles every day".',
+          whyWrong: ['Cook\'s job.', 'Seller\'s job.', 'Teacher\'s job.', null]
+        },
+        {
+          id: 'ft_r4', readingText: '<b>Menu</b><br>Fried rice — 15,000<br>Iced tea — 5,000',
+          text: 'What is the price of the fried rice?',
+          options: ['5,000', '15,000', '20,000', '10,000'],
+          correct: 1, whyCorrect: 'The menu lists "Fried rice — 15,000".',
+          whyWrong: ['Price of iced tea.', null, 'Total of both.', 'Not listed.']
+        },
+        {
+          id: 'ft_r5', type: 'fill', readingText: '<b>Sign on the door:</b><br>PUSH',
+          text: 'The sign "PUSH" on a door means you must ____ the door away from you.',
+          answer: 'push', whyCorrect: '"Push" means dorong — press away from you.'
+        },
+        {
+          id: 'ft_r6', readingText: '<b>Store Sign:</b><br>OPEN 08.00 – 17.00',
+          text: 'This store closes at...',
+          options: ['08.00', '12.00', '17.00', '24.00'],
+          correct: 2, whyCorrect: 'Closing time is 17.00 (5 PM).',
+          whyWrong: ['08.00 is opening time.', 'Not mentioned.', null, 'Not mentioned.']
+        },
+        {
+          id: 'ft_r7', readingText: '<b>Label:</b><br>Keep away from children.',
+          text: 'This warning means the product must be kept away from...',
+          options: ['Water', 'Sunlight', 'Children', 'Fire'],
+          correct: 2, whyCorrect: 'The label clearly says "Keep away from children".',
+          whyWrong: ['Not about water.', 'Not about sunlight.', null, 'Not about fire.']
+        },
+        {
+          id: 'ft_r8', type: 'fill', readingText: '<b>Notice:</b><br>Please keep silent in the library.',
+          text: 'In the library, visitors are asked to keep ____.',
+          answer: 'silent', whyCorrect: '"Keep silent" means to stay quiet.'
+        },
+        {
+          id: 'ft_r9', type: 'fill', readingText: '<b>Bus Schedule</b><br>First bus: 06.00<br>Last bus: 21.00',
+          text: 'The last bus departs at ____.',
+          answer: '21.00', whyCorrect: '"Last bus: 21.00" — that is 9 PM.'
+        },
+        {
+          id: 'ft_r10', readingText: '<b>Product Label:</b><br>Best before: 10 March',
+          text: '"Best before: 10 March" tells you the...',
+          options: ['Date of production', 'Last date for best quality consumption', 'Date of purchase', 'Date of delivery'],
+          correct: 1, whyCorrect: '"Best before" means it is at its best quality up to that date.',
+          whyWrong: ['Usually "Manufactured on".', null, 'When you buy it.', 'When it was sent.']
+        },
+        {
+          id: 'ft_r11', readingText: 'Ani works at a clinic. She checks patients\' blood pressure and gives them medicine.',
+          text: 'Based on the text, what is Ani\'s job?',
+          options: ['Doctor', 'Nurse or health worker', 'Teacher', 'Shop assistant'],
+          correct: 1, whyCorrect: 'Checking blood pressure and giving medicine are tasks done by a nurse or health worker.',
+          whyWrong: ['A doctor usually diagnoses and prescribes.', null, 'A teacher works in a school.', 'A shop assistant sells products.']
+        },
+        {
+          id: 'ft_r12', readingText: '<b>Sign at the market:</b><br>Fresh fish sold here.',
+          text: 'Based on the sign, this stall sells...',
+          options: ['Vegetables', 'Fresh fish', 'Bread', 'Clothes'],
+          correct: 1, whyCorrect: 'The sign says "Fresh fish sold here" — so the stall sells fresh fish.',
+          whyWrong: ['Vegetables are not mentioned in this sign.', null, 'Bread is not mentioned in this sign.', 'Clothes are not sold at a fish stall.']
+        },
+        {
+          id: 'ft_r13', readingText: '<b>Cafe Menu</b><br>Coffee — 8,000<br>Bread — 6,000',
+          text: 'If you buy one coffee and one bread, what is the total amount to pay?',
+          options: ['8,000', '6,000', '14,000', '16,000'],
+          correct: 2, whyCorrect: '8,000 + 6,000 = 14,000.',
+          whyWrong: ['8,000 is only the price of the coffee.', '6,000 is only the price of the bread.', null, '16,000 is incorrect.']
+        },
+        {
+          id: 'ft_r14', readingText: 'Sri is a vegetable seller. She opens her stall at the market at 6 AM. She goes home at 4 PM.',
+          text: 'What time does Sri start working?',
+          options: ['5 AM', '6 AM', '4 PM', '8 AM'],
+          correct: 1, whyCorrect: 'The text says "She opens her stall at the market at 6 AM".',
+          whyWrong: ['5 AM is not mentioned in the text.', null, '4 PM is when she goes home.', '8 AM is not mentioned in the text.']
+        },
+        {
+          id: 'ft_r15', readingText: 'Joko is a farmer. He plants rice in the field. He works hard every day from sunrise to sunset.',
+          text: 'Where does Joko work?',
+          options: ['In an office', 'In the rice field', 'In the market', 'In a school'],
+          correct: 1, whyCorrect: 'The text says "He plants rice in the field".',
+          whyWrong: ['An office worker does not plant rice.', null, 'A market is for buying and selling.', 'A school is where teachers work.']
+        }
+      ]
+    }
+  ];
+
+  /* ════════════════════════════════════════════════════════
+     2. APP STATE & CONFIG
+     ════════════════════════════════════════════════════════ */
+  const App = {
+    sess: 0, // 0=Vocab, 1=Speak, 2=Read, 3=Result
+    qi: 0,
+    xp: 0,
+    scores: [0, 0, 0], // Store score per section
+    wrongAnswers: [],   // Track wrong answers for review
+    quizSess: null,
+
+    init(){
+      this._loadXP();
+      FeedbackEngine.init({
+        onNext:  () => this._nextQuestion(),
+        onRetry: () => this._retryQuestion(),
+        onSkip:  () => this._nextQuestion(),
+      });
+      if('speechSynthesis' in window) window.speechSynthesis.getVoices();
+      this.render();
+    },
+
+    goTo(n) {
+      if (n >= 0 && n <= 3) {
+        FeedbackEngine.dismiss();
+        if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+        this.sess = n;
+        this.qi = 0;
+        this.quizSess = null;
+        this.render();
+      }
+    },
+
+    render(){
+      this._updateTabs();
+      this._updateHeroBar();
+
+      if(this.sess === 3) {
+        this._renderResultPage();
+        return;
+      }
+
+      if(!this.quizSess) {
+        this.wrongAnswers = this.wrongAnswers || [];
+        this.quizSess = QuizStore.startSession(`final_${TEST_DATA[this.sess].id}`);
+      }
+
+      const currentSection = TEST_DATA[this.sess];
+      if(this.qi >= currentSection.questions.length){
+        const res = QuizStore.finishSession(this.quizSess, currentSection.questions.length);
+        this.scores[this.sess] = Math.round(res.score); // save percentage score
+        this.quizSess = null;
+        this.sess++;
+        this.qi = 0;
+        this.render();
+        return;
+      }
+
+      this._renderQuestion();
+    },
+
+    _updateTabs(){
+      const container = document.getElementById('sess-tabs-container');
+      let html = '';
+      TEST_DATA.forEach((s, i) => {
+        const isDone = i < this.sess;
+        const isAct = i === this.sess;
+        
+        let cls = 'sess-tab';
+        if(isAct) cls += ' active';
+        else if(isDone) cls += ' done';
+        
+        html += `<button class="${cls}" onclick="App.goTo(${i})">${s.emoji} ${s.title}</button>`;
+      });
+      if(this.sess === 3) {
+        html += `<button class="sess-tab active">🏆 Result</button>`;
+      }
+      container.innerHTML = html;
+    },
+
+    _updateHeroBar(){
+      let totalQ = 0, answered = 0;
+      TEST_DATA.forEach((s, i) => {
+        totalQ += s.questions.length;
+        if(i < this.sess) answered += s.questions.length;
+        else if(i === this.sess) answered += this.qi;
+      });
+      const pct = Math.round((answered / totalQ) * 100);
+      const pb = document.getElementById('hero-bar');
+      if(pb) pb.style.width = `${pct}%`;
+    },
+
+    _renderQuestion(){
+      const s = TEST_DATA[this.sess];
+      const q = s.questions[this.qi];
+      const keys = ['A','B','C','D'];
+
+      let readBoxHtml = '';
+      if(q.readingText){
+        readBoxHtml = `<div class="read-box">${q.readingText}</div>`;
+      }
+      
+      let audioHtml = '';
+      if(q.audioText){
+        audioHtml = `
+          <div style="text-align:center;margin-bottom:var(--space-3);">
+            <button class="btn-tts-mini" id="btn-audio" onclick="App._playAudio('${q.audioText.replace(/'/g,"\\'")}')">🔊</button>
+          </div>
+        `;
+      }
+
+      let imgHtml = '';
+      if(q.imageUrl){
+        imgHtml = `
+          <div style="text-align:center;margin-bottom:var(--space-4);">
+            <img src="${q.imageUrl}" alt="Question Graphic" style="max-width:100%; border-radius:var(--radius-lg); box-shadow:var(--shadow-sm); height:auto; max-height:200px; object-fit:cover;">
+          </div>
+        `;
+      }
+
+      let questionHtml = '';
+      if (q.type === 'speaking') {
+        questionHtml = `
+          <div style="text-align:center;margin-bottom:var(--space-4);">
+            <p style="font-size:var(--font-size-sm);color:var(--text-muted);margin-bottom:var(--space-2);">Read the question and answer out loud:</p>
+            ${imgHtml}
+            <p style="font-weight:800;font-size:var(--font-size-xl);color:var(--text-main);margin-bottom:var(--space-4);">${q.text}</p>
+            
+            <div id="mic-area">
+              <button id="btn-mic" class="btn btn-outline" style="border-radius:var(--radius-full);width:80px;height:80px;font-size:2rem;display:flex;align-items:center;justify-content:center;margin:0 auto var(--space-2);" onclick="App._toggleMic()">🎤</button>
+              <p id="mic-hint" style="font-size:var(--font-size-xs);color:var(--text-faint);font-weight:700;">Tap to answer</p>
+            </div>
+
+            <div id="speaking-feedback" style="display:none;margin-top:var(--space-4);text-align:left;background:var(--surface-2);padding:var(--space-3);border-radius:var(--radius-md);">
+               <p style="font-size:var(--font-size-xs);font-weight:800;color:var(--accent-700);margin-bottom:4px;">✅ Good job! Sample answer:</p>
+               <p style="font-size:var(--font-size-sm);font-weight:700;color:var(--text-main);margin-bottom:var(--space-2);">${q.sampleAnswer}</p>
+               ${audioHtml}
+               <button class="btn btn-primary btn-block" style="margin-top:var(--space-3);" onclick="App._nextSpeaking()">Continue ➔</button>
+            </div>
+          </div>
+          
+          <div style="display:flex;justify-content:flex-end;margin-top:var(--space-4);">
+            <button class="btn btn-outline" style="border-radius:var(--radius-full);font-size:var(--font-size-sm);" onclick="App._skipQuestion()">
+              Skip / Next ➔
+            </button>
+          </div>
+        `;
+      } else if (q.type === 'fill') {
+        questionHtml = `
+          ${readBoxHtml}
+          ${audioHtml}
+          ${imgHtml}
+          <p style="font-weight:700;font-size:var(--font-size-lg);margin-bottom:var(--space-4);text-align:center;line-height:1.4;">
+            ${q.text}
+          </p>
+          <div style="display:flex;flex-direction:column;gap:var(--space-2); align-items:center;">
+            <input type="text" id="fill-input" class="form-control" style="font-size:var(--font-size-lg); text-align:center; padding:var(--space-3); width:100%; max-width:300px; border:2px solid var(--border); border-radius:var(--radius-md);" placeholder="Type your answer here..." autocomplete="off">
+            <button class="btn btn-primary" style="margin-top:var(--space-2); padding:var(--space-2) var(--space-4); border-radius:var(--radius-full);" onclick="App._handleFillAns()">Submit Answer</button>
+          </div>
+          <div style="display:flex;justify-content:flex-end;margin-top:var(--space-4);">
+            <button class="btn btn-outline" style="border-radius:var(--radius-full);font-size:var(--font-size-sm);" onclick="App._skipQuestion()">
+              Skip / Next ➔
+            </button>
+          </div>
+        `;
+      } else {
+        questionHtml = `
+          ${readBoxHtml}
+          ${audioHtml}
+          ${imgHtml}
+          <p style="font-weight:700;font-size:var(--font-size-lg);margin-bottom:var(--space-4);text-align:center;line-height:1.4;">
+            ${q.text}
+          </p>
+          <div style="display:flex;flex-direction:column;gap:var(--space-2);" id="quiz-opts">
+            ${q.options.map((opt, i) => `
+              <button class="quiz-option" onclick="App._handleAns(${i})" aria-label="${opt}">
+                <span class="quiz-option-key">${keys[i]}</span>
+                <span class="quiz-option-text">${opt}</span>
+              </button>
+            `).join('')}
+          </div>
+          <div style="display:flex;justify-content:flex-end;margin-top:var(--space-4);">
+            <button class="btn btn-outline" style="border-radius:var(--radius-full);font-size:var(--font-size-sm);" onclick="App._skipQuestion()">
+              Skip / Next ➔
+            </button>
+          </div>
+        `;
+      }
+
+      document.getElementById('activity-area').innerHTML = `
+        <div style="display:flex;justify-content:space-between;margin-bottom:var(--space-3);align-items:center;">
+          <span class="act-tag">${s.emoji} Section ${this.sess+1}: ${s.title}</span>
+          <span style="font-size:var(--font-size-xs);color:var(--text-muted);font-weight:700;">Question ${this.qi+1} / ${s.questions.length}</span>
+        </div>
+        
+        <div class="card" style="padding:var(--space-5);">
+          ${questionHtml}
+        </div>
+      `;
+
+      // Auto play audio if exists and not speaking
+      if(q.audioText && q.type !== 'speaking') {
+        setTimeout(() => this._playAudio(q.audioText), 500);
+      }
+    },
+
+    _handleFillAns(){
+      const s = TEST_DATA[this.sess];
+      const q = s.questions[this.qi];
+      const input = document.getElementById('fill-input');
+      if(!input || !input.value.trim()) return;
+
+      const userAns = input.value.trim().toLowerCase();
+      const correctAns = q.answer.toLowerCase();
+      const ok = userAns === correctAns;
+
+      input.disabled = true;
+      if(ok) {
+        input.style.borderColor = 'var(--primary)';
+        input.style.backgroundColor = 'var(--primary-50)';
+      } else {
+        input.style.borderColor = 'var(--danger)';
+        input.style.backgroundColor = 'var(--danger-50)';
+      }
+
+      QuizStore.recordAnswer(this.quizSess, q.id, ok, 0, userAns);
+      if(ok){
+        this._addXP(25);
+        FeedbackEngine.showCorrect(q, -1);
+      } else {
+        this.wrongAnswers.push({ q, sel: -1, userText: userAns, section: s.title });
+        FeedbackEngine.showWrong(q, -1);
+      }
+    },
+
+    _handleAns(sel){
+      const s = TEST_DATA[this.sess];
+      const q = s.questions[this.qi];
+      const ok = sel === q.correct;
+
+      document.querySelectorAll('.quiz-option').forEach((btn, i) => {
+        btn.classList.add('quiz-option--disabled');
+        if(i === q.correct) btn.classList.add('quiz-option--correct');
+        else if(i === sel && !ok) btn.classList.add('quiz-option--wrong');
+      });
+
+      QuizStore.recordAnswer(this.quizSess, q.id, ok, 0, sel);
+      if(ok){
+        this._addXP(25);
+        FeedbackEngine.showCorrect(q, sel);
+      } else {
+        // Track wrong answer for review
+        this.wrongAnswers.push({ q, sel, section: s.title });
+        FeedbackEngine.showWrong(q, sel);
+      }
+    },
+
+    _nextQuestion(){
+      this.qi++;
+      this.render();
+    },
+
+    _skipQuestion(){
+      FeedbackEngine.dismiss();
+      const s = TEST_DATA[this.sess];
+      const q = s.questions[this.qi];
+      QuizStore.recordAnswer(this.quizSess, q.id, false, 0, -1);
+      this._nextQuestion();
+    },
+
+    _retryQuestion(){
+      document.querySelectorAll('.quiz-option').forEach(btn => {
+        btn.classList.remove('quiz-option--disabled','quiz-option--wrong','quiz-option--correct');
+      });
+    },
+
+    _playAudio(text){
+      if(!('speechSynthesis' in window)) return;
+      window.speechSynthesis.cancel();
+      const btn = document.getElementById('btn-audio');
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'en-US';
+      if(btn){
+        utterance.onstart = () => btn.classList.add('playing');
+        utterance.onend = () => btn.classList.remove('playing');
+        utterance.onerror = () => btn.classList.remove('playing');
+      }
+      window.speechSynthesis.speak(utterance);
+    },
+
+    _toggleMic(){
+      if(this._recognizing) {
+        if(this._rec) this._rec.stop();
+        return;
+      }
+      
+      const btn = document.getElementById('btn-mic');
+      const hint = document.getElementById('mic-hint');
+      
+      if(!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+        if(hint) hint.textContent = "Browser not supported. Click Skip.";
+        return;
+      }
+      
+      const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+      this._rec = new SpeechRec();
+      this._rec.lang = 'en-US';
+      this._rec.interimResults = false;
+      this._rec.maxAlternatives = 1;
+
+      this._rec.onstart = () => {
+        this._recognizing = true;
+        if(btn) {
+          btn.classList.add('pulse');
+          btn.style.borderColor = 'var(--danger)';
+          btn.style.color = 'var(--danger)';
+        }
+        if(hint) hint.textContent = "Listening...";
+      };
+
+      this._rec.onend = () => {
+        this._recognizing = false;
+        if(btn) {
+          btn.classList.remove('pulse');
+          btn.style.borderColor = 'var(--border)';
+          btn.style.color = 'var(--text-main)';
+        }
+        if(hint && hint.textContent === "Listening...") hint.textContent = "Tap to answer";
+      };
+      
+      this._rec.onerror = (e) => {
+        if(hint) hint.textContent = "Error: " + e.error;
+      };
+
+      this._rec.onresult = (e) => {
+        const tr = e.results[0][0].transcript.trim();
+        if(tr.length > 0) {
+          // Passed
+          document.getElementById('mic-area').style.display = 'none';
+          document.getElementById('speaking-feedback').style.display = 'block';
+          
+          const s = TEST_DATA[this.sess];
+          const q = s.questions[this.qi];
+          QuizStore.recordAnswer(this.quizSess, q.id, true, 0, tr);
+          this._addXP(25);
+        }
+      };
+      
+      this._rec.start();
+    },
+    
+    _nextSpeaking(){
+      this._nextQuestion();
+    },
+
+    /* ── RESULT PAGE ── */
+    _renderResultPage(){
+      // Calculate total average
+      const avgScore = Math.round(this.scores.reduce((a,b)=>a+b, 0) / 3);
+      try { localStorage.setItem('mantul_final_score', avgScore); } catch(e){}
+      
+      // Update global state
+      try {
+        const raw = localStorage.getItem('emodul_state');
+        if(raw){
+          const state = JSON.parse(raw);
+          const u = (state.units||[]).find(u=>u.id===4);
+          if(u){
+            u.progress = Math.max(u.progress||0, avgScore);
+            if(avgScore >= 60) u.status = 'done';
+            localStorage.setItem('emodul_state', JSON.stringify(state));
+          }
+        }
+      } catch{}
+
+      // Recommendation logic
+      let minScore = 100;
+      let lowestIndex = -1;
+      this.scores.forEach((sc, i) => {
+        if(sc < minScore) { minScore = sc; lowestIndex = i; }
+      });
+      let recText = '';
+      if(lowestIndex === 0) recText = 'Unit 1 (Vocabulary)';
+      else if(lowestIndex === 1) recText = 'Unit 2 (Speaking)';
+      else if(lowestIndex === 2) recText = 'Unit 3 (Reading)';
+
+      let recHtml = '';
+      if(minScore < 80 && lowestIndex !== -1) {
+        recHtml = `
+          <div style="background:var(--warm-50);border:1px solid var(--warm-200);border-left:3px solid var(--primary);border-radius:var(--radius-lg);padding:var(--space-3) var(--space-4);margin-top:var(--space-4);margin-bottom:var(--space-4);text-align:left;">
+            <p style="font-size:10px;font-weight:800;text-transform:uppercase;color:var(--warm-700);margin-bottom:4px;">💡 Rekomendasi Belajar</p>
+            <p style="font-size:var(--font-size-sm);color:var(--text-main);">Skor terendah Anda ada di bagian <strong>${TEST_DATA[lowestIndex].title}</strong>. Sebaiknya ulangi <strong>${recText}</strong> untuk memperkuat pemahaman Anda.</p>
+          </div>
+        `;
+      }
+
+      let html = `
+        <div class="card" style="padding:var(--space-6);text-align:center;border:2px solid var(--accent);margin-bottom:var(--space-5);">
+          <div style="font-size:3.5rem;animation:badgeBounce .6s ease both;margin-bottom:var(--space-3);" aria-hidden="true">🎓</div>
+          <h2 style="font-size:var(--font-size-2xl);font-weight:800;color:var(--accent-700);margin-bottom:var(--space-2);">
+            Test Complete!
+          </h2>
+          <p style="color:var(--text-body);margin-bottom:var(--space-3);line-height:1.5;">
+            Congratulations! You have completed the whole evaluation. Here is a summary of your skills:
+          </p>
+          <div style="font-size:var(--font-size-2xl);font-weight:900;color:var(--primary);margin-bottom:var(--space-4);">
+            Final Score: ${avgScore}%
+          </div>
+          ${recHtml}
+        </div>
+        
+        <h3 style="font-size:var(--font-size-sm);font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--text-faint);margin-bottom:var(--space-3);">
+          Skills Summary
+        </h3>
+      `;
+
+      TEST_DATA.forEach((s, i) => {
+        const sc = this.scores[i];
+        let msg = sc >= 80 ? '⭐ Excellent' : sc >= 60 ? '👍 Good' : '🔄 Needs Practice';
+        
+        html += `
+          <div class="skill-res-card">
+            <div class="skill-res-icon ${s.themeClass}">${s.emoji}</div>
+            <div class="skill-res-body">
+              <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+                <span style="font-weight:700;">${s.title}</span>
+                <span style="font-weight:800;color:var(--text-main);">${sc}%</span>
+              </div>
+              <div class="progress-bar-track progress-bar-track--thin" style="margin-bottom:6px;">
+                <div class="progress-bar-fill" style="width:${sc}%; background:var(--primary);"></div>
+              </div>
+              <p style="font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;">${msg}</p>
+            </div>
+          </div>
+        `;
+      });
+
+      // Wrong answer review section
+      const wa = this.wrongAnswers || [];
+      if(wa.length > 0){
+        html += `
+          <h3 style="font-size:var(--font-size-sm);font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--text-faint);margin-top:var(--space-5);margin-bottom:var(--space-3);">📝 Review My Mistakes (${wa.length})</h3>
+        `;
+        wa.forEach((item, idx) => {
+          const keys = ['A','B','C','D'];
+          html += `
+            <div style="background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--danger);border-radius:var(--radius-lg);padding:var(--space-3) var(--space-4);margin-bottom:var(--space-2);">
+              <p style="font-size:10px;font-weight:800;text-transform:uppercase;color:var(--text-faint);margin-bottom:4px;">${item.section} · Q${idx+1}</p>
+              <p style="font-size:var(--font-size-sm);font-weight:700;color:var(--text-main);margin-bottom:var(--space-2);">${item.q.text}</p>
+              <div style="display:flex;flex-direction:column;gap:4px;">
+                <div style="display:flex;align-items:center;gap:var(--space-2);">
+                  <span style="background:var(--danger-100);color:var(--danger);font-size:10px;font-weight:800;padding:2px 8px;border-radius:var(--radius-full);">YOUR ANSWER</span>
+                  <span style="font-size:var(--font-size-sm);color:#B91C1C;">${item.q.type==='fill' ? item.userText : keys[item.sel]+': '+item.q.options[item.sel]}</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:var(--space-2);">
+                  <span style="background:var(--accent-100);color:var(--accent-700);font-size:10px;font-weight:800;padding:2px 8px;border-radius:var(--radius-full);">CORRECT</span>
+                  <span style="font-size:var(--font-size-sm);color:#065F46;">${item.q.type==='fill' ? item.q.answer : keys[item.q.correct]+': '+item.q.options[item.q.correct]}</span>
+                </div>
+                <p style="font-size:var(--font-size-xs);color:var(--text-body);margin-top:4px;border-top:1px solid var(--border);padding-top:4px;">💡 ${item.q.whyCorrect}</p>
+              </div>
+            </div>
+          `;
+        });
+      }
+
+      html += `
+        <div style="margin-top:var(--space-5);display:flex;flex-direction:column;gap:var(--space-3);">
+          ${avgScore >= 60 ? '<a href="certificate-preview.html" class="btn btn-accent btn-block">🎓 Get Certificate</a>' : ''}
+          <a href="index.html" class="btn btn-primary btn-block">Back to Home 🏠</a>
+          <button class="btn btn-outline btn-block" onclick="App.wrongAnswers=[]; location.reload()">Retry Final Test ↺</button>
+        </div>
+      `;
+
+      document.getElementById('activity-area').innerHTML = html;
+      
+      if(avgScore >= 60 && typeof Utils !== 'undefined') Utils.showConfetti?.();
+    },
+
+    _addXP(n){
+      this.xp += n;
+      try{ localStorage.setItem('emodul_final_xp', this.xp); }catch{}
+      const el = document.getElementById('nav-xp');
+      if(el){
+        el.textContent = `${this.xp} XP`;
+        el.style.animation = 'none';
+        el.offsetHeight;
+        el.style.animation = 'heartbeat .4s ease both';
+      }
+    },
+    _loadXP(){
+      try{ this.xp = parseInt(localStorage.getItem('emodul_final_xp')||'0',10)||0; }catch{}
+    }
+  };
+
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded', ()=>App.init());
+  } else {
+    App.init();
+  }
+  </script>
+</body>
+</html>
